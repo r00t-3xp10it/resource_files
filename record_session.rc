@@ -1,0 +1,6 @@
+spool /root/logfile.log
+loadpath /root/msf-auxiliarys
+version
+sessions -v
+resource /root/handler.rc
+makerc /root/commands.rc
