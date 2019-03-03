@@ -6,10 +6,7 @@
 
 <br />
 
-## This repository contains various resource files to assiste in post-exploitation or metasploit database related issues.
-
-<br />
-
+**This repository contains various resource files to assiste in post-exploitation or metasploit database related issues.**
 #### [!] [Please read the article about rc scripting here:](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
 
 
