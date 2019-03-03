@@ -6,4 +6,4 @@
 
 <br />
 
-#### [!] [Please read the article here:](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
+#### [!] [Please read the article about rc scripting here:](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
