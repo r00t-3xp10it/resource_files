@@ -25,12 +25,15 @@
       end
 
       run_single("db_nmap -sV -Pn -T4 -O -p 21,22,23,80,110,445 --script=smb-os-discovery.nse,http-headers.nse,ip-geolocation-geoplugin.nse --open #{framework.datastore['RHOSTS']}")
+      run_single("spool /root/brute_force.log")
       run_single("services")
       print_good("Reading msfdb database for info.")
-      xname = framework.db.services.map(&:name).join(' ')
+      xname = framework.db.hosts.map(&:os_name).join(' ')
       xhost = framework.db.hosts.map(&:address).join(' ')
       xport = framework.db.services.map(&:port).join(' ')
+      print_status("Target systems detected: #{xname}")
       run_single("setg RHOSTS #{xhost}")
+      Rex::sleep(2.0)
 
          if xhost.nil? or xhost == ''
               print_error("db_nmap scan did not find any alive connections.")
@@ -128,6 +131,7 @@
       print_warning("please wait, Cleaning msfdb Database.")
       run_single("unsetg RHOSTS USERPASS_FILE")
       run_single("unset THREADS VERBOSE BRUTEFORCE_SPEED USERPASS_FILE STOP_ON_SUCCESS")
-     run_single("services -d")
-     run_single("hosts -d")
+      run_single("services -d")
+      run_single("hosts -d")
+      print_warning("Logfile stored under: /root/mysql_brute.log")
    </ruby>
