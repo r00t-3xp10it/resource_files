@@ -2,8 +2,8 @@
       help = %Q|
         Description:
           setg NSE_PATH /usr/share/nmap/scripts - The absoluct path of nmap nse scripts local folder.
-          setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with port 3306 open
-          setg RHOSTS 18.220.109.8 61.91.160.13 - To instruct db_nmap to check targets for port 3306 open
+          setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with ports 21:22:80 open
+          setg RHOSTS 18.220.109.8 61.91.160.13 - To instruct db_nmap to check targets for ports 21:22:80 open
           http_CVE will use nmap to search/check for ports 21:22:80 open, then it populates the msfdb with a
           list of hosts found, and run auxiliary modules + freevulnsearch.nse nmap script againts db targets.
           if none value (setg) has povided then this resource script will use is own default values.
