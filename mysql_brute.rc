@@ -38,6 +38,7 @@
       end
 
       run_single("spool /root/mysql_brute.log")
+      print_line("")
       run_single("services")
       print_good("Reading msfdb database for info.")
       xhost = framework.db.hosts.map(&:address).join(' ')
