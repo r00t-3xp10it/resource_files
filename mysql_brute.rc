@@ -2,7 +2,7 @@
       help = %Q|
         Description:
           setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with port 3306 open
-          setg RHOSTS 192.168.1.71 192.168.1.254 - To instruct db_nmap to check targets for port 3306 open
+          setg RHOSTS 212.8.247.171 213.171.197.190 - To instruct db_nmap to check targets for port 3306 open
           setg USERPASS_FILE /root/my_dicionary.txt - To instruct auxiliarys to use our own dicionary file
           mysql_brute will use nmap to search/check for port 3306 open, then it populates the msfdb with
           a list of hosts found, and run auxiliary modules to gather info and brute force mysql services.
@@ -48,15 +48,19 @@
               print_error("db_nmap scan did not find any alive connections.")
               print_error("Please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
+              print_line("")
               run_single("unsetg RHOSTS USERPASS_FILE RANDOM_HOSTS")
+              File.delete('/root/mysql_brute.log')
               return nil
          elsif xport.nil? or xport == ''
               print_error("db_nmap did not find any 3306 open ports.")
               print_error("Please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
+              print_line("")
               run_single("unsetg RHOSTS USERPASS_FILE RANDOM_HOSTS")
               run_single("services -d")
               run_single("hosts -d")
+              File.delete('/root/mysql_brute.log')
               return nil
          end
 
@@ -88,6 +92,7 @@
 
        print_warning("Please wait, Cleaning msfdb Database.")
        Rex::sleep(1.0)
+       print_line("")
        run_single("unsetg RHOSTS RANDOM_HOSTS USERPASS_FILE")
        run_single("unset THREADS VERBOSE USERNAME USERPASS_FILE PASSWORD STOP_ON_SUCCESS")
        run_single("services -d")

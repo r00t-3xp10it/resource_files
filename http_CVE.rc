@@ -3,7 +3,7 @@
         Description:
           setg NSE_PATH /usr/share/nmap/scripts - The absoluct path of nmap nse scripts local folder.
           setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with port 3306 open
-          setg RHOSTS 18.220.109.8 192.168.1.254 - To instruct db_nmap to check targets for port 3306 open
+          setg RHOSTS 18.220.109.8 61.91.160.13 - To instruct db_nmap to check targets for port 3306 open
           http_CVE will use nmap to search/check for ports 21:22:80 open, then it populates the msfdb with a
           list of hosts found, and run auxiliary modules + freevulnsearch.nse nmap script againts db targets.
           if none value (setg) has povided then this resource script will use is own default values.
@@ -28,6 +28,13 @@
       elsif (framework.datastore['RHOSTS'])
          print_line("RHOSTS => #{framework.datastore['RHOSTS']}")
       end
+      if (framework.datastore['NSE_PATH'] == nil or framework.datastore['NSE_PATH'] == '')
+         nse = "/usr/share/nmap/scripts/freevulnsearch.nse"
+         print_line("NSE_PATH => #{nse}")
+      else
+         nse = "#{framework.datastore['NSE_PATH']}/freevulnsearch.nse"
+         print_line("NSE_PATH => #{nse}")
+      end
       unless (framework.datastore['RANDOM_HOSTS'] == 'true')
          run_single("db_nmap -sV -Pn -T4 -O -p 21,22,80 --open --script=http-headers.nse #{framework.datastore['RHOSTS']}")
       else
@@ -47,38 +54,44 @@
            print_error("db_nmap scan did not find any alive connections.")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           run_single("unsetg RHOSTS RANDOM_HOSTS")
+           print_line("")
+           run_single("unsetg RHOSTS RANDOM_HOSTS NSE_PATH")
+           File.delete('/root/http_CVE.log')
            return nil
       elsif xport.nil? or xport == ''
-              print_error("db_nmap did not find any 21:22:80 open ports.")
+           print_error("db_nmap did not find any 21:22:80 open ports.")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           run_single("unsetg RHOSTS RANDOM_HOSTS")
+           print_line("")
+           run_single("unsetg RHOSTS RANDOM_HOSTS NSE_PATH")
            run_single("services -d")
            run_single("hosts -d")
+           File.delete('/root/http_CVE.log')
            return nil
       end
 
-      if (framework.datastore['NSE_PATH'] == nil or framework.datastore['NSE_PATH'] == '')
-           nse = "/usr/share/nmap/scripts/freevulnsearch.nse"
-      else
-           nse = "#{framework.datastore['NSE_PATH']}/freevulnsearch.nse"
-      end
+      print_status("Operative systems: #{xname}")
+      run_single("setg RHOSTS #{xhost}")
+      Rex::sleep(1.5)
       unless (File.exist?(nse))
            print_error("[ERROR] freevulnsearch.nse script not found in nmap db.")
            print_error("[ERROR] Download nse script and install it before running this rc file.")
            Rex::sleep(1.0)
-           print_warning("wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse")
-           print_warning("sudo cp freevulnsearch.nse #{nse}")
-           print_warning("sudo nmap --script-updatedb")
+           print_warning("[EXECUTE] wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse")
+           print_warning("[EXECUTE] sudo cp freevulnsearch.nse #{nse}")
+           print_warning("[EXECUTE] sudo nmap --script-updatedb")
+           print_error("Please wait, cleaning recent configurations.")
+           Rex::sleep(1.0)
+           print_line("")
+           run_single("unsetg RHOSTS RANDOM_HOSTS NSE_PATH")
+           run_single("services -d")
+           run_single("hosts -d")
+           File.delete('/root/http_CVE.log')
            return nil
       else
            print_good("freevulnsearch.nse script found.")
       end
 
-         print_status("Operative systems: #{xname}")
-         run_single("setg RHOSTS #{xhost}")
-         Rex::sleep(1.5)
          if xport =~ /21/i
               print_warning("Remote Target port 21 ftp found")
               Rex::sleep(1.0)
@@ -106,7 +119,8 @@
 
 print_warning("please wait, Cleaning msfdb Database.")
 Rex::sleep(1.5)
-run_single("unsetg NSE_PATH RHOSTS THREADS RANDOM_HOSTS")
+print_line("")
+run_single("unsetg RHOSTS THREADS RANDOM_HOSTS NSE_PATH")
 run_single("services -d")
 run_single("hosts -d")
 print_warning("Logfile stored under: /root/http_CVE.log")
