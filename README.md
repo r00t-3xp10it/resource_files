@@ -9,7 +9,7 @@
 **This repository contains various resource files to assiste in exploitation or metasploit database related issues.**
 #### [!] [Please read the article about rc scripting here:](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
 
-<br />
+<br /><br /><br />
 
 ### USING 'SETG' GLOBAL VARIABLES TO CONFIG RC SCRIPTS
 
@@ -33,7 +33,7 @@
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
 
-<br /><br />
+<br /><br /><br />
 
 > Adicionally to the described settings we can also combine diferent configurations at runtime.
 
