@@ -18,7 +18,8 @@
 > Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />
 > This means that users can run the resource script in 3 diferent ways:
 
-- execute the resource script with default settings (scan: 192.168.1.0/24)
+- execute the resource script with default settings
+( scan: 192.168.1.0/24 | Dont scan WAN | Use Default dicionary )
 
       msfconsole -r /root/mysql_brute.rc
 
