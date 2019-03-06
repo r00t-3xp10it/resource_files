@@ -41,7 +41,7 @@
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;setg RANDOM 300;resource /root/mysql_brute.rc'
 
-- instruct the resource script to search use your own dicionary file
+- instruct the resource script to use your own dicionary file (absoluct path required)
 
       msfconsole -q -x 'setg USERPASS_FILE /root/dicionary.txt;resource /root/mysql_brute.rc'
 
