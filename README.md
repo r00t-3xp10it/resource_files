@@ -13,7 +13,7 @@
 
 ### USING 'SETG' GLOBAL VARIABLES TO CONFIG RC SCRIPTS
 
-![pic](hgft)
+![pic](http://i67.tinypic.com/2wfi88h.png)
 
 > Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />
 > This means that users can run the resource script in 3 diferent ways:
