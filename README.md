@@ -11,7 +11,7 @@
 
 <br />
 
-### USE SETG GLOBAL VARIABLES TO CONFIG RC SCRIPTS
+### USING 'SETG' GLOBAL VARIABLES TO CONFIG RC SCRIPTS
 
 ![pic](hgft)
 
@@ -29,6 +29,10 @@ This means that users can run the resource script in 3 diferent ways:
 - instruct the resource script to search in WAN for rhosts with service port open
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
+
+<br />
+
+Adicionally to the described settings we can also combine diferent configurations at runtime.
 
 - instruct the resource script to search in WAN for rhosts with service port open and limit the search to 300 rhosts
 
