@@ -6,7 +6,7 @@
 
 <br />
 
-**This repository contains various resource files to assiste in post-exploitation or metasploit database related issues.**
+**This repository contains various resource files to assiste in exploitation or metasploit database related issues.**
 #### [!] [Please read the article about rc scripting here:](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
 
 <br />
@@ -15,7 +15,17 @@
 
 ![pic](hgft)
 
-Many of the this brute force rc scripts are written to accept user inputs (setg global variables)
+Many of the this brute force rc scripts are written to accept user inputs (setg global variables). This means that users can run the resource script in 3 diferent ways:
+
+1º - msfconsole -r /root/mysql_brute.rc
+- execute resource script with default settings (scan: 192.168.1.0/24)
+
+2º - msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
+- instruct resource script to search in WAN for rhosts with sellected port open
+
+3º - msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;resource /root/mysql_brute.rc'
+- instruct resource script to scan rhosts inputed by user
+
 
 setg RANDOM 300 | seach in 300 rhosts | msfconsole -q -x 'setg RANDOM 300;resource /root/msysql_brute.rc' |
 setg RANDOM_HOSTS true | search in WAN for rhosts | msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/msysql_brute.rc' |
