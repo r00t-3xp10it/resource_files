@@ -50,6 +50,7 @@
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;setg USERPASS_FILE /root/dicionary.txt;resource /root/mysql_brute.rc'
 
 
+> The resource script will also writte one logfile in /root/mysql_brute.log directory ..<br />
 
 <br />
 
