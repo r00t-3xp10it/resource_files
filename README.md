@@ -23,11 +23,13 @@
 
       msfconsole -r /root/mysql_brute.rc
 
-- instruct the resource script to scan rhosts inputed by user
+- instruct the resource script to scan rhosts inputed by user<br />
+**( scan: user input rhosts | Use Default dicionary )**
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;resource /root/mysql_brute.rc'
 
-- instruct the resource script to search in WAN for rhosts with service port open
+- instruct the resource script to search in WAN for rhosts with service port open<br />
+**( scan: WAN for rhosts | Use Default dicionary )**
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
 
