@@ -32,7 +32,7 @@ This means that users can run the resource script in 3 diferent ways:
 
 <br />
 
-Adicionally to the described settings we can also combine diferent configurations at runtime.
+> Adicionally to the described settings we can also combine diferent configurations at runtime.
 
 - instruct the resource script to search in WAN for rhosts with service port open and limit the search to 300 rhosts
 
