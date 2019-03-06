@@ -15,12 +15,12 @@
 
 ![pic](hgft)
 
-| command | description | execution |
-|---|---|---|
-|setg RANDOM 300 | seach in 300 rhosts | msfconsole -q -x 'setg RANDOM 300;resource /root/msysql_brute.rc' |
-|setg RANDOM_HOSTS true | search in WAN for rhosts | msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/msysql_brute.rc' |
-|setg RHOSTS | rhosts delimited by empty spaces | msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.10.2;resource /root/msysql_brute.rc' |
-|setg USERPASS_FILE | absoluct path to dicionary file | msfconsole -q -x 'setg USERPASS_FILE /root/dic.txt;resource /root/msysql_brute.rc' |
+Many of the this brute force rc scripts are written to accept user inputs (setg global variables)
+
+setg RANDOM 300 | seach in 300 rhosts | msfconsole -q -x 'setg RANDOM 300;resource /root/msysql_brute.rc' |
+setg RANDOM_HOSTS true | search in WAN for rhosts | msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/msysql_brute.rc' |
+setg RHOSTS | rhosts delimited by empty spaces | msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.10.2;resource /root/msysql_brute.rc' |
+setg USERPASS_FILE | absoluct path to dicionary file | msfconsole -q -x 'setg USERPASS_FILE /root/dic.txt;resource /root/msysql_brute.rc' |
 
 <br />
 
