@@ -51,7 +51,7 @@
 
 <br />
 
-### REMMENBER: The resource script will also writte one logfile in /root/mysql_brute.log directory ..
+#### REMMENBER: The resource script will also build one logfile in /root/mysql_brute.log directory ..
 
 <br />
 
