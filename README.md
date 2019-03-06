@@ -15,8 +15,8 @@
 
 ![pic](hgft)
 
-Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />
-This means that users can run the resource script in 3 diferent ways:
+> Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />
+> This means that users can run the resource script in 3 diferent ways:
 
 - execute the resource script with default settings (scan: Local Lan)
 
@@ -30,7 +30,7 @@ This means that users can run the resource script in 3 diferent ways:
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
 
-<br />
+<br /><br />
 
 > Adicionally to the described settings we can also combine diferent configurations at runtime.
 
