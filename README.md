@@ -21,7 +21,7 @@
 
 **Brute force resource scripts deletes msfconsole database at exit (default).**<br />
 - To continue populating database with scans, just instruct the rc script to not clean db (optional)<br />
-`msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg RANDOM 600;resource /root/brute_force.rc'`
+`msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg RANDOM 600;resource /root/brute_force.rc'`<br /><br />
 
 - To export database contents to database.xml local folder before executing any rc script (optional)<br />
 `msfconsole -q -x 'db_export -f xml database.xml;exit -y'`
