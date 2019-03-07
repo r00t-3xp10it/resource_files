@@ -89,7 +89,7 @@ cleans the database at exit, because at next time run if database contains any h
 will run the attacks againts database hosts (old hosts) and not the hosts found by current scans.
 
 - 5º To populate the database with scans, just instruct the rc script to not clean db (optional)<br />
-`msfconsole -q -x 'seg CLEAN false;setg RANDOM_HOSTS true;setg RANDOM 600;resource /root/brute_force.rc'`
+`msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg RANDOM 600;resource /root/brute_force.rc'`
 
 - 6º To export database contents to database.xml local folder (optional)<br />
 `msf > db_export -f xml database.xml`
