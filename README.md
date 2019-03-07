@@ -53,12 +53,14 @@
 
 #### FINAL NOTES:
 
-- The resource script will build one logfile in /root/mysql_brute.log directory.<br />
+- The resource script will build one logfile in /root directory.<br />
 `/root/<resource_script_name>.log`
 - Brute_force resource scripts delete msfconsole database at exit (default).<br />
 `setg CLEAN false  <-- instruct resource script to not delete database at exit`
 - The msfconsole database must be empty (clean) at resource script execution.<br />
 `msfconsole -q -x 'hosts -d;services -d;exit -y'`
+
+#### Suspicious Shell Activity RedTeam @2019
 
 <br />
 
