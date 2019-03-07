@@ -13,7 +13,7 @@
 
 <blockquote>Brute force rc scripts requires the msf database to be empty, thats the reason why the scripts cleans the database<br />at exit, because the next time it runs, if the database contains any hosts the script will run the attacks againts database<br />hosts (old hosts) and not the hosts found by current scans.</blockquote>
 
-- The msfconsole database must be empty (**clean**) at resource script execution (**first run**)<br />
+- The msfconsole database must be empty (**clean**) at resource script execution (**first-time-run**)<br />
 `msfconsole -q -x 'hosts -d;services -d;exit -y'`<br /><br />
 
 - Brute force resource scripts will build one logfile in **/root** directory.<br />
