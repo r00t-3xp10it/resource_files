@@ -52,7 +52,7 @@
           print_error("[IMPORT] #{check_import}")
           return nil
        end
-       import_txt = File.read("/root/rhosts.txt")
+       import_txt = File.read(check_import)
           parse_data = import_txt.split(' ')
           join_strings = parse_data.join(' ')
           print_line("List of hosts to import")
