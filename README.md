@@ -16,20 +16,20 @@
 ![pic](http://i67.tinypic.com/2wfi88h.png)
 
 > Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />
-> This means that users can run the resource script in 3 diferent ways:
+> This means that users can run the resource scripts in 3 diferent ways:
 
-- execute the resource script with default settings<br />
-**[ scan: 192.168.1.0/24 ]**
+- execute resource script (default).<br />
+**[ Local lan scan: 192.168.1.0/24 ]**
 
       msfconsole -r /root/mysql_brute.rc
 
-- instruct the resource script to scan rhosts inputed by user<br />
-**[ scan: user input rhosts ]**
+- instruct the resource script to scan rhosts input by attacker<br />
+**[ Attacker input scan: 10.10.10.1 10.10.11.2 ]**
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;resource /root/mysql_brute.rc'
 
 - instruct the resource script to search in WAN for rhosts with service port open<br />
-**[ scan: WAN for rhosts ]**
+**[ Random scan: WAN for rhosts ]**
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
 
@@ -37,7 +37,7 @@
 
 > Adicionally to the described settings we can also combine diferent configurations at runtime.
 
-- instruct the resource script to search in WAN for rhosts with service port open and limit the search to 300 rhosts
+- instruct the resource script to search in WAN for rhosts with service port open and limmit the search to 300 rhosts
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;setg RANDOM 300;resource /root/mysql_brute.rc'
 
@@ -51,7 +51,14 @@
 
 <br />
 
-#### REMMENBER: The resource script will also build one logfile in /root/mysql_brute.log directory ..
+#### FINAL NOTES:
+
+- The resource script will build one logfile in /root/mysql_brute.log directory.
+`/root/<resource_script_name>.log`
+- Brute_force resource scripts delete msfconsole database at exit (default).
+`setg CLEAN false  <-- instruct resource script to not delete database at exit`
+- The msfconsole database must be empty (clean) at resource script execution.
+`msfconsole -q -x 'hosts -d;services -d;exit -y'`
 
 <br />
 
