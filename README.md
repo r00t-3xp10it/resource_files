@@ -81,7 +81,7 @@
 **OR** export current database to database.xml (local)<br />
 `sudo msfconsole -q -x 'db_export -f xml database.xml;exit -y'`<br /><br />
 
-- 4º run brute_force.rc resource script to search hosts on WAN<br />
+- 4º run brute_force.rc resource script to search hosts on WAN (limmit to 300 searchs)<br />
 `sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/brute_force.rc'`<br /><br />
 
 <blockquote>Brute force rc scripts requires the msf database to be empty, thats the reason why the scripts cleans the database<br />at exit, because the next time it runs, if the database contains any hosts the script will run the attacks againts database<br />hosts (old hosts) and not the hosts found by current scans.</blockquote><br />
