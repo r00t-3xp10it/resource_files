@@ -66,6 +66,8 @@
     Rex::sleep(0.5)
     run_single("loot")
     Rex::sleep(0.5)
+    run_single("vulns")
+    Rex::sleep(0.5)
     print_line("")
     Rex::sleep(2.0)
 
@@ -82,8 +84,8 @@
       run_single("unsetg RHOSTS RECORD DBHOST XML_IMPORT XML_EXPORT WORKSPACE WORKSPACE_DEL")
       print_warning("Please wait, Cleaning database.")
       Rex::sleep(1.5)
-      run_single("services -d")
       run_single("hosts -d")
+      run_single("services -d")
       run_single("unsetg CLEAN")
       print_line("")
    else
