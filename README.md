@@ -53,13 +53,13 @@
 
 #### FINAL NOTES:
 
+- The msfconsole database must be empty (**clean**) at resource script execution.<br />
+`msfconsole -q -x 'hosts -d;services -d;exit -y'`<br /><br />
 - The resource script will build one logfile in /root directory.<br />
 `/root/<resource_script_name>.log`<br /><br />
 - Brute_force resource scripts deletes msfconsole database at exit (default).<br />
 `msfconsole -q -x 'setg CLEAN false;resource /root/mysql_brute.rc'`<br />
-**The above command instruct the rc script to not delete database at exit**<br /><br />
-- The msfconsole database must be empty (**clean**) at resource script execution.<br />
-`msfconsole -q -x 'hosts -d;services -d;exit -y'`
+**The above command instruct the rc script to not delete database at exit**<br />
 
 ### Suspicious Shell Activity RedTeam @2019
 
