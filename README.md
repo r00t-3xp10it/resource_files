@@ -4,19 +4,35 @@
 
 ![pic](http://i68.tinypic.com/21ovkfm.jpg)
 
-<br />
-
 **This repository contains various resource files to assiste in exploitation or metasploit database related issues.**
 #### [!] [Please read the article about rc scripting here:](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
 
 <br /><br /><br />
 
-### USING 'SETG' GLOBAL VARIABLES TO CONFIG RC SCRIPTS
+#### REMARKS:
+
+<blockquote>Brute force rc scripts requires the msf database to be empty, thats the reason why the scripts<br />cleans the database at exit, because at next time run if the database contains any hosts, the script<br />will run the attacks againts database hosts (old hosts) and not the hosts found by current scans.</blockquote>
+
+- The msfconsole database must be empty (**clean**) at resource script execution.<br />
+`msfconsole -q -x 'hosts -d;services -d;exit -y'`<br /><br />
+
+- Brute force resource scripts will build one logfile in **/root** directory.<br />
+`/root/<resource_script_name>.log`<br /><br />
+
+**Brute force resource scripts deletes msfconsole database at exit (default).**<br />
+- To continue populating database with scans, just instruct the rc script to not clean db (optional)<br />
+`msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg RANDOM 600;resource /root/brute_force.rc'`
+
+- To export database contents to database.xml local folder (optional)<br />
+`msfconsole -q -x 'db_export -f xml database.xml;exit -y'`
 
 ![pic](http://i67.tinypic.com/2wfi88h.png)
 
-> Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />
-> This means that users can run the resource scripts in 3 diferent ways:
+<br /><br /><br />
+
+### USING 'SETG' GLOBAL VARIABLES TO CONFIG RC SCRIPTS
+
+<blockquote>Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />This means that users can run the resource scripts in 3 diferent ways:</blockquote>
 
 - execute resource script **( Scan: 192.168.1.0/24 )**<br />
 
@@ -52,20 +68,6 @@
 
 <br /><br /><br />
 
-#### FINAL NOTES (warnings):
-
-- The msfconsole database must be empty (**clean**) at resource script execution.<br />
-`msfconsole -q -x 'hosts -d;services -d;exit -y'`<br /><br />
-- The best technic to use brute force scripts its to:<br />
-`msfconsole -q -x 'hosts -d;services -d;resource /root/<resource_script_name>.rc`<br /><br />
-- Brute force resource scripts will build one logfile in /root directory.<br />
-`/root/<resource_script_name>.log`<br /><br />
-- Brute force resource scripts deletes msfconsole database at exit (default).<br />
-`msfconsole -q -x 'setg CLEAN false;resource /root/<resource_script_name>.rc'`<br />
-**The above command instruct the rc script to not delete database at exit**<br /><br />
-
-<br /><br /><br />
-
 #### Step-By-Step how to run brute_force.rc script
 
 - 1º download resource script to **/root** folder<br />
@@ -93,6 +95,8 @@ will run the attacks againts database hosts (old hosts) and not the hosts found 
 
 - 6º To export database contents to database.xml local folder (optional)<br />
 `msf > db_export -f xml database.xml`
+
+![pic](http://i67.tinypic.com/2wfi88h.png)
 
 ### Suspicious Shell Activity RedTeam @2019
 
