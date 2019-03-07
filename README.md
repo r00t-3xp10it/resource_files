@@ -86,7 +86,7 @@
 
 <blockquote>Brute force rc scripts requires the msf database to be empty, thats the reason why the scripts cleans the database<br />at exit, because the next time it runs, if the database contains any hosts the script will run the attacks againts database<br />hosts (old hosts) and not the hosts found by current db_nmap scans.</blockquote><br />
 
-- 5º To populate the database with scans, just instruct the rc script to not clean db (**optional not-adviced**)<br />
+- 5º To populate the database with scans, just instruct the rc script to not clean db (**optional | not-adviced**)<br />
 `msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/brute_force.rc'`<br /><br />
 
 - 6º To export database contents to database.xml local folder (**optional**)<br />
