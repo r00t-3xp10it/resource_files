@@ -78,7 +78,9 @@
 `sudo service postgresql start`
 
 - 3º clean msfconsole database before runing rc script<br />
-`sudo msfconsole -q -x 'hosts -d;services -d;exit -y'`
+`sudo msfconsole -q -x 'hosts -d;services -d;exit -y'`<br />
+**OR** export current database to database.xml (local)<br />
+`sudo msfconsole -q -x 'db_export -f xml database.xml'`
 
 - 4º run brute_force.rc resource script to search hosts on WAN<br />
 `sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg RANDOM 300;resource /root/brute_force.rc'`
