@@ -10,7 +10,7 @@
 <br /><br /><br />
 
 #### REMARKS:
-**Brute force resource scripts deletes my msfconsole database at exit (default).**<br />
+**Brute force resource scripts deletes my msfconsole database at exit (default behavior).**<br />
 
 <blockquote>Brute force rc scripts requires the msf database to be empty, thats the reason why the scripts cleans the database<br />at exit, because the next time it runs, if the database contains any hosts the script will run the attacks againts database<br />hosts (old hosts) and not the hosts found by current scans.</blockquote>
 
