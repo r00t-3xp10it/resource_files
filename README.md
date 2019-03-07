@@ -15,13 +15,13 @@
 <blockquote>Brute force rc scripts requires the msf database to be empty, thats the reason why the scripts cleans the database<br />at exit, because the next time it runs, if the database contains any hosts the script will run the attacks againts database<br />hosts (old hosts) and not the hosts found by resource script db_nmap scans.</blockquote>
 
 - The msfconsole database must be empty (**clean**) at resource script execution (**first-time-run**)<br />
-`msfconsole -q -x 'hosts -d;services -d;exit -y'`<br /><br />
+`sudo msfconsole -q -x 'hosts -d;services -d;exit -y'`<br /><br />
 
-- To continue populating database with scans, just instruct the rc script to not clean db (optional)<br />
-`msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/brute_force.rc'`<br /><br />
+- To continue populating database with scans, just instruct the rc script to not clean db (**optional**)<br />
+`sudo msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/brute_force.rc'`<br /><br />
 
-- To export database contents to database.xml local folder before executing any rc script (optional)<br />
-`msfconsole -q -x 'db_export -f xml database.xml;exit -y'`<br /><br />
+- To export database contents to database.xml local folder before executing any rc script (**optional | adviced**)<br />
+`sudo msfconsole -q -x 'db_export -f xml database.xml;exit -y'`<br /><br />
 
 - All brute force resource scripts will build one logfile in **/root** directory.<br />
 `/root/<resource_script_name>.log`<br /><br />
@@ -33,6 +33,7 @@
 ![pic](http://i67.tinypic.com/2wfi88h.png)
 
 <blockquote>Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />This means that users can run the resource scripts in 3 diferent ways:</blockquote>
+**Remark: If the database contains any hosts previous to this scans, then rc script will run attacks againts all hosts in db**<br />
 
 - execute resource script **( Default scan: 192.168.1.0/24 )**<br />
 
