@@ -32,9 +32,7 @@
 
 ![pic](http://i67.tinypic.com/2wfi88h.png)
 
-<blockquote>Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />This means that users can run the resource scripts in 3 diferent ways:</blockquote>
-
-**Remark: If the database contains any hosts previous to this scans, then rc script will run attacks againts all hosts in db**<br />
+<blockquote>Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />This means that users can run this resource scripts in 3 diferent ways:</blockquote>
 
 - execute resource script **( Default scan: 192.168.1.0/24 )**<br />
 
@@ -47,6 +45,8 @@
 - instruct the resource script to search in WAN for rhosts with service port open **( Search: WAN for hosts )**<br />
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
+
+**Remark: If the database contains any hosts previous to this scans, then rc script will run attacks againts all hosts in db**<br />
 
 <br /><br /><br />
 
