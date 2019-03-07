@@ -76,7 +76,7 @@
 - 2º start postgresql service (**local**)<br />
 `sudo service postgresql start`<br /><br />
 
-- 3º clean msfconsole database before runing rc script<br />
+- 3º clean (**or export**) msfconsole database before runing rc script<br />
 `sudo msfconsole -q -x 'hosts -d;services -d;exit -y'`<br />
 **OR** export current database to database.xml (local)<br />
 `sudo msfconsole -q -x 'db_export -f xml database.xml;exit -y'`<br /><br />
