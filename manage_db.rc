@@ -53,11 +53,10 @@
           return nil
        end
        import_txt = File.read(check_import)
-          parse_data = import_txt.split(' ')
-          join_strings = parse_data.join(' ')
+          parse_data = import_txt.split(' ').join(' ')
           print_line("List of hosts to import")
           print_line("=======================")
-          run_single("hosts -a #{join_strings}")
+          run_single("hosts -a #{parse_data}")
           print_line("")
           Rex::sleep(1.5)
     end
