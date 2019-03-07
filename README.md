@@ -18,11 +18,11 @@
 > Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />
 > This means that users can run the resource scripts in 3 diferent ways:
 
-- execute resource script [ Scan: 192.168.1.0/24 ]<br />
+- execute resource script **( Scan: 192.168.1.0/24 )**<br />
 
       msfconsole -r /root/mysql_brute.rc
 
-- instruct the resource script to scan rhosts input by attacker ( Scan: 10.10.10.1 10.10.11.2 ])<br />
+- instruct the resource script to scan rhosts input by attacker **( Scan: 10.10.10.1 10.10.11.2 )**<br />
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;resource /root/mysql_brute.rc'
 
