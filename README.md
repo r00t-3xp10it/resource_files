@@ -58,8 +58,8 @@
 #### FINAL NOTES:
 
 - The msfconsole database must be empty (**clean**) at resource script execution.<br />
-`msfconsole -q -x 'hosts -d;services -d;exit -y'`<br />
-The best technic to use brute force scripts its to:<br />
+`msfconsole -q -x 'hosts -d;services -d;exit -y'`<br /><br />
+- The best technic to use brute force scripts its to:<br />
 `msfconsole -q -x 'hosts -d;services -d;resource /root/<resource_script_name>.rc`<br /><br />
 - Brute force resource scripts will build one logfile in /root directory.<br />
 `/root/<resource_script_name>.log`<br /><br />
