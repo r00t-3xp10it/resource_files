@@ -1,14 +1,6 @@
 <ruby>
    help = %Q|
     Description:
-       setg REBUILD true - Rebuild msfconsole database.
-       setg WORKSPACE pentesting - create new workspace.
-       setg WORKSPACE_DEL pentesting - Delete workspace.
-       setg CLEAN true - Clean msfconsole database at exit.
-       setg DBHOST 192.168.1.254 - Add hosts to msfconsole database.
-       setg XML_EXPORT true - Export msfconsole database to database.xml
-       setg RECORD true - To instruct rc script to record msfconsole activity.
-       setg XML_IMPORT /root/nmap_scan.xml - Instruct rc script to import xml files.
        This Metasploit RC file can be used to manage msfconsole database sutch as:
        display database data, record msfconsole activity, add hosts to database,
        import nmap_scan.xml (or any xml file) and clean all database data at exit.
@@ -16,7 +8,6 @@
     Execute in msfconsole:
        setg CLEAN <true-or-blank>
        setg RECORD <true-or-blank>
-       setg REBUILD <true-or-blank>
        setg XML_EXPORT <true-or-blank>
        setg WORKSPACE <new-workspace-name>
        setg WORKSPACE_DEL <delete-workspace-name>
@@ -28,19 +19,12 @@
        r00t-3xp10it  <pedroubuntu10[at]gmail.com>
     |
     print_line(help)
-    Rex::sleep(1.5)
+    Rex::sleep(2.0)
 
 
     if (framework.datastore['RECORD'] == "true")
        run_single("spool /root/database.log")
        Rex::sleep(1.0)
-    end
-
-    if (framework.datastore['REBUILD'] == "true")
-       print_status("Please wait, rebuilding database.")
-       Rex::sleep(1.0)
-       run_single("msfdb reinit")
-       return nil
     end
 
     unless (framework.datastore['WORKSPACE'] == nil or framework.datastore['WORKSPACE'] == '')
@@ -62,35 +46,29 @@
        xml_file = "#{framework.datastore['XML_IMPORT']}"
        print_status("import: #{xml_file}")
        unless (File.exist?(xml_file))
-          print_error("Script can not find the path inputed.")
+          print_error("Abort: Script can not find the path inputed.")
           return nil
        end
        run_single("db_import #{framework.datastore['XML_IMPORT']}")
        Rex::sleep(1.0)
     end
 
-         print_status("checking database connection")
-         Rex::sleep(1.5)
-         run_single("db_status")
-         print_status("checking database workspace")
-         Rex::sleep(1.5)
-         run_single("workspace -v")
-         print_status("checking database sessions")
-         Rex::sleep(1.5)
-         run_single("sessions -v")
-         print_status("checking database hosts")
-         Rex::sleep(1.5)
-         run_single("hosts")
-         print_status("checking database sevices")
-         Rex::sleep(1.5)
-         run_single("services")
-         print_status("checking database creds")
-         Rex::sleep(1.5)
-         run_single("creds")
-         print_status("checking database loot")
-         Rex::sleep(1.5)
-         run_single("loot")
-         Rex::sleep(2.0)
+
+    run_single("workspace -v")
+    Rex::sleep(0.5)
+    run_single("hosts -c address,os_name,purpose")
+    Rex::sleep(0.5)
+    run_single("services -c name,port,state")
+    Rex::sleep(0.5)
+    run_single("sessions -v")
+    Rex::sleep(0.5)
+    run_single("creds")
+    Rex::sleep(0.5)
+    run_single("loot")
+    Rex::sleep(0.5)
+    print_line("")
+    Rex::sleep(2.0)
+
 
    if (framework.datastore['XML_EXPORT'] == "true")
       print_warning("Exporting database to: database.xml")
@@ -100,10 +78,8 @@
 
    print_warning("Please wait, Cleaning global variables.")
    Rex::sleep(1.5)
-   print_line("")
    if (framework.datastore['CLEAN'] == "true")
-      run_single("unsetg HELP RHOSTS RECORD DBHOST XML_IMPORT XML_EXPORT WORKSPACE WORKSPACE_DEL")
-      print_line("")
+      run_single("unsetg RHOSTS RECORD DBHOST XML_IMPORT XML_EXPORT WORKSPACE WORKSPACE_DEL")
       print_warning("Please wait, Cleaning database.")
       Rex::sleep(1.5)
       run_single("services -d")
@@ -111,7 +87,29 @@
       run_single("unsetg CLEAN")
       print_line("")
    else
-      run_single("unsetg HELP RHOSTS CLEAN RECORD DBHOST XML_IMPORT XML_EXPORT WORKSPACE WORKSPACE_DEL")
+      run_single("unsetg RHOSTS CLEAN RECORD DBHOST XML_IMPORT XML_EXPORT WORKSPACE WORKSPACE_DEL")
       print_line("")
    end
+
+   print_line("")
+   print_line("Database Commands              Description")
+   print_line("-----------------              -----------")
+   print_line("hosts                          Display hosts database")
+   print_line("hosts -d                       Delete all hosts from database")
+   print_line("hosts -d 10.10.10.2            Delete address from database")
+   print_line("hosts -a 10.10.10.3            Add address to database")
+   print_line("services                       Display services database")
+   print_line("services -d                    Delete services from database")
+   print_line("")
+   print_line("Resource Commands              Description")
+   print_line("-----------------              -----------")
+   print_line("setg CLEAN true                Clean database at exit")
+   print_line("setg RECORD true               Record msfconsole activity")
+   print_line("setg DBHOST 10.10.10.3         Add RHOSTS to database")
+   print_line("setg WORKSPACE pedro           Add workspace to database")
+   print_line("setg WORKSPACE_DEL pedro       Delete workspace from database")
+   print_line("setg XML_EXPORT true           Export database.xml (local)")
+   print_line("setg XML_IMPORT /root/dic.xml  Import database.xml (local)")
+   print_line("resource /root/manage_db.rc    Execute resource script")
+   print_line("")
 </ruby>
