@@ -23,14 +23,14 @@
 - To continue populating database with scans, just instruct the rc script to not clean db (optional)<br />
 `msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg RANDOM 600;resource /root/brute_force.rc'`
 
-- To export database contents to database.xml local folder (optional)<br />
+- To export database contents to database.xml local folder before executing any rc script (optional)<br />
 `msfconsole -q -x 'db_export -f xml database.xml;exit -y'`
-
-![pic](http://i67.tinypic.com/2wfi88h.png)
 
 <br /><br /><br />
 
 ### USING 'SETG' GLOBAL VARIABLES TO CONFIG RC SCRIPTS
+
+![pic](http://i67.tinypic.com/2wfi88h.png)
 
 <blockquote>Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />This means that users can run the resource scripts in 3 diferent ways:</blockquote>
 
