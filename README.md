@@ -9,6 +9,15 @@
 
 <br /><br /><br />
 
+#### HOW TO RUN SCRIPTS?
+
+      msfconsole -r /<absoluct-path-to-script>/<script_name>.rc
+      msfconsole -q -x 'resource /<absoluct-path-to-script>/<script_name>.rc'
+      msf5 exploit(multi/handler) > resource /<absoluct-path-to-script>/<script_name>.rc
+      meterpreter > resource /<absoluct-path-to-script>/<script_name>.rc
+
+<br /><br /><br />
+
 #### REMARKS:
 **Brute force resource scripts deletes my msfconsole database data at exit (delete host list).**<br />
 
