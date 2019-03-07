@@ -12,7 +12,7 @@
 #### REMARKS:
 **Brute force resource scripts deletes my msfconsole database data at exit (delete host list).**<br />
 
-<blockquote>Brute force rc scripts requires the msf database to be empty, thats the reason why the scripts cleans the database<br />at exit, because the next time it runs, if the database contains any hosts the script will run the attacks againts database<br />hosts (old hosts) and not the hosts found by current db_nmap scans.</blockquote>
+<blockquote>Brute force rc scripts requires the msf database to be empty, thats the reason why the scripts cleans the database<br />at exit, because the next time it runs, if the database contains any hosts the script will run the attacks againts database<br />hosts (old hosts) and not the hosts found by resource script db_nmap scans.</blockquote>
 
 - The msfconsole database must be empty (**clean**) at resource script execution (**first-time-run**)<br />
 `msfconsole -q -x 'hosts -d;services -d;exit -y'`<br /><br />
@@ -84,7 +84,7 @@
 - 4º run brute_force.rc resource script to search hosts on WAN (**limmit to 300 searchs**)<br />
 `sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/brute_force.rc'`<br /><br />
 
-<blockquote>Brute force rc scripts requires the msf database to be empty, thats the reason why the scripts cleans the database<br />at exit, because the next time it runs, if the database contains any hosts the script will run the attacks againts database<br />hosts (old hosts) and not the hosts found by current db_nmap scans.</blockquote><br />
+<blockquote>Brute force rc scripts requires the msf database to be empty, thats the reason why the scripts cleans the database<br />at exit, because the next time it runs, if the database contains any hosts the script will run the attacks againts database<br />hosts (old hosts) and not the hosts found by resource script db_nmap scans.</blockquote><br />
 
 - 5º To populate the database with scans, just instruct the rc script to not clean db (**optional | not-adviced**)<br />
 `msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/brute_force.rc'`<br /><br />
