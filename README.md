@@ -84,11 +84,7 @@
 - 4º run brute_force.rc resource script to search hosts on WAN<br />
 `sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/brute_force.rc'`<br /><br />
 
-<br />
-
-**HINT:** Brute force rc scripts requires the database to be empty, thats the reason why the script
-cleans the database at exit, because at next time run if database contains any hosts, the script
-will run the attacks againts database hosts (old hosts) and not the hosts found by current scans.
+<blockquote>Brute force rc scripts requires the msf database to be empty, thats the reason why the scripts cleans the database<br />at exit, because the next time it runs, if the database contains any hosts the script will run the attacks againts database<br />hosts (old hosts) and not the hosts found by current scans.</blockquote>
 
 - 5º To populate the database with scans, just instruct the rc script to not clean db (optional)<br />
 `msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/brute_force.rc'`<br /><br />
