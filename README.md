@@ -18,18 +18,15 @@
 > Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />
 > This means that users can run the resource scripts in 3 diferent ways:
 
-- execute resource script (default).<br />
-**[ Local lan scan: 192.168.1.0/24 ]**
+- execute resource script.**[ Local lan scan: 192.168.1.0/24 ]**<br />
 
       msfconsole -r /root/mysql_brute.rc
 
-- instruct the resource script to scan rhosts input by attacker<br />
-**[ Attacker input scan: 10.10.10.1 10.10.11.2 ]**
+- instruct the resource script to scan rhosts input by attacker.**[ Scan input: 10.10.10.1 10.10.11.2 ]**<br />
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;resource /root/mysql_brute.rc'
 
-- instruct the resource script to search in WAN for rhosts with service port open<br />
-**[ Random scan: WAN for rhosts ]**
+- instruct the resource script to search in WAN for rhosts with service port open.**[ Random search: WAN for rhosts ]**<br />
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
 
@@ -87,14 +84,14 @@
 
 <br />
 
-HINT: Brute force rc scripts requires the database to be empty, thats the reason why the script
+**HINT:** Brute force rc scripts requires the database to be empty, thats the reason why the script
 cleans the database at exit, because at next time run if database contains any hosts, the script
 will run the attacks againts database hosts (old hosts) and not the hosts found by current scans.
 
 - 5º To populate the database with scans, just instruct the rc script to not clean db (optional)<br />
 `msfconsole -q -x 'seg CLEAN false;setg RANDOM_HOSTS true;setg RANDOM 600;resource /root/brute_force.rc'`
 
-- 6º export database contents to database.xml local folder (optional)<br />
+- 6º To export database contents to database.xml local folder (optional)<br />
 `msf > db_export -f xml database.xml`
 
 ### Suspicious Shell Activity RedTeam @2019
