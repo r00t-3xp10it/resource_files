@@ -49,18 +49,18 @@
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;setg USERPASS_FILE /root/dicionary.txt;resource /root/mysql_brute.rc'
 
-<br />
+<br /><br /><br />
 
 #### FINAL NOTES:
 
 - The resource script will build one logfile in /root directory.<br />
 `/root/<resource_script_name>.log`
 - Brute_force resource scripts delete msfconsole database at exit (default).<br />
-`setg CLEAN false  <-- instruct resource script to not delete database at exit`
+`msfconsole -q -x 'setg CLEAN false;resource /root/mysql_brute.rc'` (instruct rc script to not delete database at exit)
 - The msfconsole database must be empty (clean) at resource script execution.<br />
 `msfconsole -q -x 'hosts -d;services -d;exit -y'`
 
-#### Suspicious Shell Activity RedTeam @2019
+### Suspicious Shell Activity RedTeam @2019
 
 <br />
 
