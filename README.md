@@ -48,7 +48,7 @@
 
 <br /><br /><br />
 
-> Adicionally to the described settings we can also combine diferent configurations at runtime.
+> Adicionally to the described settings we can also combine diferent configurations at runtime execution.
 
 - instruct the resource script to search in WAN for rhosts with service port open and limmit the search to 300 rhosts
 
