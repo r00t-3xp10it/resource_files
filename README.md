@@ -18,7 +18,7 @@
 `msfconsole -q -x 'hosts -d;services -d;exit -y'`<br /><br />
 
 - To continue populating database with scans, just instruct the rc script to not clean db (**optional**)<br />
-`sudo msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/brute_force.rc'`<br /><br />
+`msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/brute_force.rc'`<br /><br />
 
 - To export database contents to database.xml local folder before executing any rc script (**optional | adviced**)<br />
 `msfconsole -q -x 'db_export -f xml database.xml;exit -y'`<br /><br />
