@@ -55,7 +55,7 @@
 
 <br /><br /><br />
 
-#### FINAL NOTES:
+#### FINAL NOTES (warnings):
 
 - The msfconsole database must be empty (**clean**) at resource script execution.<br />
 `msfconsole -q -x 'hosts -d;services -d;exit -y'`<br /><br />
