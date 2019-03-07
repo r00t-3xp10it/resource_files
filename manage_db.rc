@@ -3,7 +3,8 @@
     Description:
        This Metasploit RC file can be used to manage msfconsole database sutch as:
        display database data, record msfconsole activity, add hosts to database,
-       import nmap_scan.xml (or any xml file) and clean all database data at exit.
+       import nmap_scan.xml (or any xml file), import a list of hosts contain inside
+       a text file (one-per-line-entrys) and clean all database data at exit.
 
     Execute in msfconsole:
        setg CLEAN <true-or-blank>
@@ -13,6 +14,7 @@
        setg WORKSPACE_DEL <delete-workspace-name>
        setg DBHOST <add-host-ip-to-database>
        setg XML_IMPORT <absoluct-path-of-nmap.xml-to-import>
+       setg TXT_IMPORT <absoluct-path-of-hosts-list-to-import>
        resource <path-to-script>/manage_db.rc
 
     Author:
@@ -20,6 +22,7 @@
     |
     print_line(help)
     Rex::sleep(2.0)
+    print_line("")
 
 
     if (framework.datastore['RECORD'] == "true")
@@ -42,6 +45,23 @@
        Rex::sleep(1.0)
     end
 
+    unless (framework.datastore['TXT_IMPORT'] == nil or framework.datastore['TXT_IMPORT'] == '')
+       check_import = "#{framework.datastore['TXT_IMPORT']}"
+       unless (File.exist?(check_import))
+          print_error("[ERROR] File to import not found.")
+          print_error("[IMPORT] #{check_import}")
+          return nil
+       end
+       import_txt = File.read("/root/rhosts.txt")
+          parse_data = import_txt.split(' ')
+          join_strings = parse_data.join(' ')
+          print_line("List of hosts to import")
+          print_line("=======================")
+          run_single("hosts -a #{join_strings}")
+          print_line("")
+          Rex::sleep(1.5)
+    end
+
     unless (framework.datastore['XML_IMPORT'] == nil or framework.datastore['XML_IMPORT'] == '')
        xml_file = "#{framework.datastore['XML_IMPORT']}"
        print_status("import: #{xml_file}")
@@ -57,10 +77,12 @@
     run_single("workspace -v")
     Rex::sleep(0.5)
     run_single("hosts -c address,os_name,purpose")
+    print_line("")
     Rex::sleep(0.5)
     run_single("services -c name,port,state")
     Rex::sleep(0.5)
     run_single("sessions -v")
+    print_line("")
     Rex::sleep(0.5)
     run_single("creds")
     Rex::sleep(0.5)
@@ -81,15 +103,14 @@
    print_warning("Please wait, Cleaning global variables.")
    Rex::sleep(1.5)
    if (framework.datastore['CLEAN'] == "true")
-      run_single("unsetg RHOSTS RECORD DBHOST XML_IMPORT XML_EXPORT WORKSPACE WORKSPACE_DEL")
+      run_single("unsetg RHOSTS CLEAN RECORD DBHOST TXT_IMPORT XML_IMPORT XML_EXPORT WORKSPACE WORKSPACE_DEL")
       print_warning("Please wait, Cleaning database.")
       Rex::sleep(1.5)
       run_single("hosts -d")
       run_single("services -d")
-      run_single("unsetg CLEAN")
       print_line("")
    else
-      run_single("unsetg RHOSTS CLEAN RECORD DBHOST XML_IMPORT XML_EXPORT WORKSPACE WORKSPACE_DEL")
+      run_single("unsetg RHOSTS CLEAN RECORD DBHOST TXT_IMPORT XML_IMPORT XML_EXPORT WORKSPACE WORKSPACE_DEL")
       print_line("")
    end
 
@@ -112,6 +133,8 @@
    print_line("setg WORKSPACE_DEL pedro       Delete workspace from database")
    print_line("setg XML_EXPORT true           Export database.xml (local)")
    print_line("setg XML_IMPORT /root/dic.xml  Import database.xml (local)")
+   print_line("setg TXT_IMPORT /root/dic.txt  Import hosts list (local)")
    print_line("resource /root/manage_db.rc    Execute resource script")
    print_line("")
+
 </ruby>
