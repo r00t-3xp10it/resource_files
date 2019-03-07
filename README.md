@@ -16,7 +16,7 @@
 - The msfconsole database must be empty (**clean**) at resource script execution (**first-time-run**)<br />
 `msfconsole -q -x 'hosts -d;services -d;exit -y'`<br /><br />
 
-- Brute force resource scripts will build one logfile in **/root** directory.<br />
+- All brute force resource scripts will build one logfile in **/root** directory.<br />
 `/root/<resource_script_name>.log`<br /><br />
 
 **Brute force resource scripts deletes msfconsole database at exit (default).**<br />
