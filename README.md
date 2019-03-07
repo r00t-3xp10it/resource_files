@@ -38,7 +38,7 @@ The msfconsole database must be empty (**clean**) at resource script execution (
 
       msfconsole -q -x 'hosts -d;services -d;exit -y'
 
-To continue populating database with scans, just instruct the rc script to not clean db (**optional**)
+To continue populating database with scans, just instruct the rc script to not clean db (**optional | not-adviced**)
 
       msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/brute_force.rc'
 
