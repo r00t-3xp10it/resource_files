@@ -1,7 +1,8 @@
    <ruby>
       help = %Q|
         Description:
-          setg RANDOM 1000 - Limit number of random rhosts to search
+          setg CLEAN false - Do not clean database at script exit.
+          setg RANDOM 1000 - Limit the number of random rhosts to search
           setg NSE_PATH /usr/share/nmap/scripts - The absoluct path of nmap nse scripts local folder.
           setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with ports 21:22:80 open
           setg RHOSTS 192.162.84.14 61.91.160.13 - To instruct db_nmap to check targets for ports 21:22:80 open
@@ -58,6 +59,7 @@
       print_good("Reading msfdb database for info.")
       xhost = framework.db.hosts.map(&:address).join(' ')
       xport = framework.db.services.map(&:port).join(' ')
+      proto = framework.db.services.map(&:proto).join(' ')
       xname = framework.db.hosts.map(&:os_name).join(' ').gsub(' ',', ')
 
       if xhost.nil? or xhost == ''
@@ -101,7 +103,7 @@
            print_good("freevulnsearch.nse script found.")
       end
 
-         if xport =~ /21/i
+         if xport =~ /21/i or proto =~ /ftp/i
               print_warning("Remote Target port 21 ftp found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/ftp/ftp_version")
@@ -111,7 +113,7 @@
               run_single("exploit")
          end
 
-         if xport =~ /80/i
+         if xport =~ /80/i or proto =~ /http/i
               print_warning("Remote Target port 80 http found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/http/dir_listing")
@@ -126,13 +128,23 @@
          print_warning("Running CVE checks againts: #{framework.datastore['RHOSTS']}")
          run_single("db_nmap -sV -T4 -Pn --script=freevulnsearch.nse #{framework.datastore['RHOSTS']}")
 
-print_warning("please wait, Cleaning msfdb Database.")
-Rex::sleep(1.5)
-print_line("")
-run_single("unsetg RHOSTS THREADS RANDOM RANDOM_HOSTS NSE_PATH")
-print_line("")
-run_single("services -d")
-run_single("hosts -d")
+
+      print_warning("Please wait, Cleaning global variables.")
+      Rex::sleep(1.5)
+      if (framework.datastore['CLEAN'] == "false")
+           run_single("unsetg CLEAN RHOSTS RANDOM RANDOM_HOSTS NSE_PATH")
+           run_single("unset THREADS")
+           print_line("")
+      else
+           run_single("unsetg CLEAN RHOSTS RANDOM RANDOM_HOSTS NSE_PATH")
+           run_single("unset THREADS")
+           print_warning("Please wait, Cleaning database.")
+           Rex::sleep(1.5)
+           run_single("hosts -d")
+           run_single("services -d")
+           print_line("")
+      end
+
 print_warning("Logfile stored under: /root/http_CVE.log")
 print_status("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
 </ruby>

