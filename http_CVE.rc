@@ -69,7 +69,6 @@
            print_error("db_nmap scan did not find any alive connections.")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           print_line("")
            run_single("unsetg SAVE_DB RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
            File.delete('/root/http_CVE.log')
            run_single("workspace -d redteam")
@@ -78,7 +77,6 @@
            print_error("db_nmap did not find any 21:22:80 open ports.")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           print_line("")
            run_single("unsetg SAVE_DB RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
            File.delete('/root/http_CVE.log')
            run_single("workspace -d redteam")
@@ -97,7 +95,6 @@
            print_warning("[EXEC] sudo nmap --script-updatedb")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           print_line("")
            run_single("unsetg SAVE_DB RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
            run_single("workspace -d redteam")
            return nil
@@ -109,9 +106,11 @@
               print_warning("Remote Target port 21 ftp found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/ftp/ftp_version")
+              run_single("services -c name -S ftp -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/ftp/anonymous")
               run_single("set THREADS 35")
+              run_single("services -c name -S ftp -R")
               run_single("exploit")
          end
 
@@ -120,9 +119,11 @@
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/http/dir_listing")
               run_single("set THREADS 55")
+              run_single("services -c name -S http -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/http/dir_scanner")
               run_single("set THREADS 16")
+              run_single("services -c name -S http -R")
               run_single("exploit")
          end
 
@@ -144,5 +145,5 @@
       run_single("workspace -d redteam")
 
 print_warning("Logfile stored under: /root/http_CVE.log")
-print_status("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
+print_warning("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
 </ruby>

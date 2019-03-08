@@ -82,7 +82,7 @@
 
     run_single("workspace -v")
     Rex::sleep(0.5)
-    run_single("hosts -c address,name,os_name,purpose")
+    run_single("hosts -c address,name,os_name,os_flavor,os_sp,purpose")
     print_line("")
     Rex::sleep(0.5)
     run_single("services -c port,proto,name,state")

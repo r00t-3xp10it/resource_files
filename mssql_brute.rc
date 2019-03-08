@@ -72,7 +72,6 @@
            print_error("db_nmap scan did not find any alive connections.")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           print_line("")
            run_single("unsetg SAVE_DB RHOSTS RANDOM_HOSTS USER_FILE PASS_FILE LIMMIT")
            File.delete('/root/mssql_brute.log')
            run_single("workspace -d redteam")
@@ -81,7 +80,6 @@
            print_error("db_nmap did not find any 1433 open ports.")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           print_line("")
            run_single("unsetg SAVE_DB RHOSTS RANDOM_HOSTS USER_FILE PASS_FILE LIMMIT")
            File.delete('/root/mssql_brute.log')
            run_single("workspace -d redteam")
@@ -96,7 +94,6 @@
            print_warning("Example: setg PASS_FILE /root/dicionary.txt")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           print_line("")
            run_single("unsetg SAVE_DB RHOSTS RANDOM_HOSTS USER_FILE PASS_FILE LIMMIT")
            File.delete('/root/mssql_brute.log')
            run_single("workspace -d redteam")
@@ -111,7 +108,6 @@
            print_warning("Example: setg USER_FILE /root/dicionary.txt")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           print_line("")
            run_single("unsetg SAVE_DB RHOSTS RANDOM_HOSTS USER_FILE PASS_FILE LIMMIT")
            File.delete('/root/mssql_brute.log')
            run_single("workspace -d redteam")
@@ -126,8 +122,10 @@
            Rex::sleep(1.0)
            run_single("use auxiliary/scanner/mssql/mssql_ping")
            run_single("set THREADS 16")
+           run_single("services -c name -S mssql -R")
            run_single("exploit")
            run_single("use auxiliary/scanner/mssql/mssql_login")
+           run_single("services -c name -S mssql -R")
            run_single("exploit")
       end
 
@@ -145,5 +143,5 @@
       run_single("workspace -d redteam")
 
 print_warning("Logfile stored under: /root/mssql_brute.log")
-print_status("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
+print_warning("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
 </ruby>
