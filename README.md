@@ -9,26 +9,6 @@
 
 <br /><br /><br />
 
-#### HOW TO RUN SCRIPTS?
-
-To run resource script at **msfconsole startup** execute the follow command in your terminal:<br />
-
-      msfconsole -r /<absoluct-path-to-script>/<script_name>.rc
-
-To run resource script **inside msfconsole** execute the follow command in msfconsole prompt:
-
-      resource /<absoluct-path-to-script>/<script_name>.rc
-
-To run resource script **inside meterpreter** execute the follow command in meterpreter prompt:
-
-      resource /<absoluct-path-to-script>/<script_name>.rc
-
-To set a **global variable** (erb) and run resource script at **msfconsole startup** execute the follow command:
-
-      msfconsole -q -x 'setg RANDOM_HOSTS true;resource /<absoluct-path-to-script>/<script_name>.rc'
-
-<br /><br /><br />
-
 #### REMARKS:
 **Brute force resource scripts deletes my msfconsole database data at exit (delete host list).**<br />
 
