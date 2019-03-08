@@ -9,25 +9,10 @@
 
 <br /><br /><br />
 
-#### REMARKS:
-**Brute force resource scripts deletes my msfconsole database data at exit (delete host list).**<br />
-
-<blockquote>Brute force rc scripts requires the msf database to be empty, thats the reason why the scripts cleans the database<br />at exit, because the next time it runs, if the database contains any hosts the script will run the attacks againts database<br />hosts (old hosts) and not the hosts found by resource script db_nmap scans.</blockquote>
-
-The msfconsole database must be empty (**clean**) at resource script execution (**first-time-run**)
-
-      msfconsole -q -x 'hosts -d;services -d;exit -y'
-
-To export database contents to database.xml local folder before executing any rc script (**optional | adviced**)
-
-      msfconsole -q -x 'db_export -f xml database.xml;exit -y'
-
-<br /><br /><br />
-
 ### USING 'SETG' GLOBAL VARIABLES TO CONFIG RC SCRIPTS
 
 ![pic](http://i67.tinypic.com/2wfi88h.png)
-**Remark: If the database contains any hosts previous to this scans, then rc script will run attacks againts all hosts in db**<br />
+Brute force rc scripts requires the msf database to be empty of hosts and services data. Thats the main reason why the scripts creates a new workspace named **redteam** and stores all data inside that workspace and at exit it will delete redteam workspace/data
 
 <blockquote>Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />This means that users can run this resource scripts in 3 diferent ways:</blockquote>
 
