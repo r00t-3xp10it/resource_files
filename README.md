@@ -16,15 +16,15 @@ Brute force rc scripts requires the msf database to be empty of hosts and servic
 
 Many of the this brute force resource scripts are written to accept **user inputs** (setg global variables).<br />This means that users can run this kind of resource scripts in 3 diferent ways:
 
-1º Execute resource script
+Execute resource script
 
       msfconsole -r /root/mysql_brute.rc
 
-2º Instruct the resource script to scan rhosts input by attacker
+Instruct the resource script to scan rhosts input by attacker
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;resource /root/mysql_brute.rc'
 
-3º Instruct the resource script to search in WAN for rhosts with service port open
+Instruct the resource script to search in WAN for rhosts with service port open
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
 
@@ -46,10 +46,6 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;setg USERPASS_FILE /root/dicionary.txt;resource /root/mysql_brute.rc'
 
-Instruct the resource script to not clean database at exit, scan WAN for rhosts and limmit search to 600 rhosts
-
-      msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/mysql_brute.rc'
-
 <br /><br /><br />
 
 #### Step-By-Step how to run brute_force.rc script
@@ -62,23 +58,16 @@ Instruct the resource script to not clean database at exit, scan WAN for rhosts 
 
       sudo service postgresql start
 
-3º clean (**or export**) msfconsole database before runing rc script<br />
-
-      sudo msfconsole -q -x 'hosts -d;services -d;exit -y'
-
-- **OR** export current database to database.xml (local)<br />
-
-      sudo msfconsole -q -x 'db_export -f xml database.xml;exit -y'`<br /><br />
-
-4º run brute_force.rc resource script to search hosts on WAN (**limmit to 300 searchs**)<br />
+3º run brute_force.rc resource script to search hosts on WAN (**limmit to 300 searchs**)<br />
 
       sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/brute_force.rc'
 
-<blockquote>Brute force rc scripts requires the msf database to be empty, thats the reason why the scripts cleans the database<br />at exit, because the next time it runs, if the database contains any hosts the script will run the attacks againts database<br />hosts (old hosts) and not the hosts found by resource script db_nmap scans.</blockquote><br />
 
-5º To populate the database with scans, just instruct the rc script to not clean db (**optional | not-adviced**)<br />
+Brute force rc scripts requires the msf database to be empty of hosts and services data. Thats the main reason why the scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace. At exit the rc script it will delete redteam workspace/data to be abble to accept new data inputs.
 
-      sudo msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/brute_force.rc'
+Instruct rc scripts to export **redteam** workspace database to a local file **/root/database_gfvte.xml**
+
+      sudo msfconsole -q -x 'setg SAVE_DB true;resource /root/brute_force.rc'
 
 ### Suspicious Shell Activity RedTeam @2019
 
