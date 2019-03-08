@@ -77,6 +77,9 @@ This database.xml file can now be 'imported' to your default workspace with the 
 
       sudo msfconsole -q -x 'db_import /root/database_gfvte.xml'
 
+REMARK: importing this database.xml files **appends** data to your default workspace database making it larger.
+It will **not** delete any entrys that you have before on your default workspace database (it appends data).
+
 ### Suspicious Shell Activity RedTeam @2019
 
 <br />
