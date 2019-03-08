@@ -63,8 +63,10 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
       sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/brute_force.rc'
 
 <br />
+
 Brute force rc scripts requires the msf database to be empty of hosts and services data. Thats the main reason why the scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace. At exit the rc script it will delete redteam workspace/data to be abble to accept new data inputs.
-<br />
+
+<br /><br />
 
 
 Instruct rc scripts to export **redteam** workspace database to a local file **/root/database_gfvte.xml** (optional)<br />
