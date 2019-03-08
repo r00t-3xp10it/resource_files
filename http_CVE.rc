@@ -1,7 +1,7 @@
    <ruby>
       help = %Q|
         Description:
-          setg CLEAN false - Do not clean database at script exit.
+          setg SAVE_DB true - Save workspace redteam to database.xml
           setg LIMMIT 1000 - Limit the number of random rhosts to search
           setg NSE_PATH /usr/share/nmap/scripts - The absoluct path of nmap nse scripts local folder.
           setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with ports 21:22:80 open
@@ -11,6 +11,7 @@
           if none value (setg) has povided then this resource script will use is own default values.
 
         Execute in msfconsole:
+          setg SAVE_DB <true-or-blank>
           setg LIMMIT <number-of-rhosts>
           setg RANDOM_HOSTS <true-or-blank>
           setg RHOSTS <hosts-separated-by-spaces>
@@ -22,10 +23,12 @@
       |
       print_line(help)
       Rex::sleep(2.0)
+      print_line("")
 
 
+      run_single("workspace -a redteam")
       if (framework.datastore['RANDOM_HOSTS'] == 'true')
-         if (framework.datastore['RANDOM'] == nil or framework.datastore['RANDOM'] == '')
+         if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 300")
            print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=http-headers.nse")
          else
@@ -67,18 +70,18 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            print_line("")
-           run_single("unsetg RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
+           run_single("unsetg SAVE_DB RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
            File.delete('/root/http_CVE.log')
+           run_single("workspace -d redteam")
            return nil
       elsif xport.nil? or xport == ''
            print_error("db_nmap did not find any 21:22:80 open ports.")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            print_line("")
-           run_single("unsetg RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
-           run_single("services -d")
-           run_single("hosts -d")
+           run_single("unsetg SAVE_DB RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
            File.delete('/root/http_CVE.log')
+           run_single("workspace -d redteam")
            return nil
       end
 
@@ -89,15 +92,14 @@
            print_error("[ERROR] freevulnsearch.nse script not found in nmap db.")
            print_error("[ERROR] Download nse script and install it before running this rc file.")
            Rex::sleep(1.0)
-           print_warning("wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse")
-           print_warning("sudo cp freevulnsearch.nse #{nse}")
-           print_warning("sudo nmap --script-updatedb")
+           print_warning("[EXEC] sudo wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse")
+           print_warning("[EXEC] sudo cp freevulnsearch.nse #{nse}")
+           print_warning("[EXEC] sudo nmap --script-updatedb")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            print_line("")
-           run_single("unsetg RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
-           run_single("services -d")
-           run_single("hosts -d")
+           run_single("unsetg SAVE_DB RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
+           run_single("workspace -d redteam")
            return nil
       else
            print_good("freevulnsearch.nse script found.")
@@ -129,21 +131,17 @@
          run_single("db_nmap -sV -T4 -Pn --script=freevulnsearch.nse #{framework.datastore['RHOSTS']}")
 
 
+      if (framework.datastore['SAVE_DB'] == "true")
+         rand = Rex::Text.rand_text_alpha(5)
+         print_warning("Exporting database to: database_#{rand}.xml")
+         run_single("db_export -f xml -a /root/database_#{rand}.xml")
+      end
+
       print_warning("Please wait, Cleaning global variables.")
       Rex::sleep(1.5)
-      if (framework.datastore['CLEAN'] == "false")
-           run_single("unsetg CLEAN RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
-           run_single("unset THREADS")
-           print_line("")
-      else
-           run_single("unsetg CLEAN RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
-           run_single("unset THREADS")
-           print_warning("Please wait, Cleaning database.")
-           Rex::sleep(1.5)
-           run_single("hosts -d")
-           run_single("services -d")
-           print_line("")
-      end
+      run_single("unsetg CLEAN RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
+      run_single("unset THREADS")
+      run_single("workspace -d redteam")
 
 print_warning("Logfile stored under: /root/http_CVE.log")
 print_status("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")

