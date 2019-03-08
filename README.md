@@ -65,9 +65,10 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 
 Brute force rc scripts requires the msf database to be empty of hosts and services data. Thats the main reason why the scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace. At exit the rc script it will delete redteam workspace/data to be abble to accept new data inputs.
 
+**If you wish to store scan results then execute this command insted of the 3º step descibeb above**<br />
 Instruct rc scripts to export **redteam** workspace database to a local file **/root/database_gfvte.xml** (optional)
 
-      sudo msfconsole -q -x 'setg SAVE_DB true;resource /root/brute_force.rc'
+      sudo msfconsole -q -x 'setg SAVE_DB true;setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/brute_force.rc'
 
 This database.xml file can now be 'imported' to your default workspace with the follow command:
 
