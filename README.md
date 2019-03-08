@@ -48,7 +48,7 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 
 <br /><br /><br />
 
-#### Step-By-Step how to run brute_force.rc script
+#### Step-By-Step how to download/run 'brute_force.rc' script
 
 1º download resource script to **/root** folder<br />
 
@@ -58,7 +58,7 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 
       sudo service postgresql start
 
-3º run brute_force.rc resource script to search hosts on WAN (**limmit the search to 300**)<br />
+3º run brute_force.rc resource script to search hosts in WAN (**limmit the search to 300**)<br />
 
       sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/brute_force.rc'
 
