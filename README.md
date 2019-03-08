@@ -12,7 +12,7 @@
 ### USING 'SETG' GLOBAL VARIABLES TO CONFIG RC SCRIPTS
 
 ![pic](http://i67.tinypic.com/2wfi88h.png)
-Brute force rc scripts requires the msf database to be empty of hosts and services data. Thats the main reason why the scripts creates a new workspace named **redteam** and stores all data inside that workspace and at exit it will delete redteam workspace/data
+Brute force rc scripts requires the msf database to be empty of hosts and services data. Thats the main reason why the scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace. At exit it will delete redteam workspace/data to be abble to accept new data inputs.
 
 <blockquote>Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />This means that users can run this resource scripts in 3 diferent ways:</blockquote>
 
