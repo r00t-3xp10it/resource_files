@@ -27,7 +27,7 @@
 
 
       run_single("workspace -a redteam")
-      if (framework.datastore['RANDOM_HOSTS'] == 'true')
+      if (framework.datastore['RANDOM_HOSTS'] == "true")
          if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 800")
            print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 3306 --open --script=mysql-info.nse")
@@ -43,7 +43,7 @@
       if (framework.datastore['USERPASS_FILE'] == nil or framework.datastore['USERPASS_FILE'] == '')
          run_single("setg USERPASS_FILE /usr/share/metasploit-framework/data/wordlists/piata_ssh_userpass.txt")
       end
-      unless (framework.datastore['RANDOM_HOSTS'] == 'true')
+      unless (framework.datastore['RANDOM_HOSTS'] == "true")
          run_single("db_nmap -sV -Pn -T4 -O -p 3306 --script=mysql-info.nse --open #{framework.datastore['RHOSTS']}")
       else
          print_warning("db_nmap: search for random remote targets with port 3306 open (mysql)")

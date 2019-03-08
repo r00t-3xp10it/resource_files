@@ -29,7 +29,7 @@
 
 
       run_single("workspace -a redteam")
-      if (framework.datastore['RANDOM_HOSTS'] == 'true')
+      if (framework.datastore['RANDOM_HOSTS'] == "true")
          if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 1000")
            print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -p T:1433 --open -iR #{framework.datastore['LIMMIT']} --script=ms-sql-info.nse")
@@ -52,7 +52,7 @@
          nse_users = "#{framework.datastore['USER_FILE']}"
       end
 
-      unless (framework.datastore['RANDOM_HOSTS'] == 'true')
+      unless (framework.datastore['RANDOM_HOSTS'] == "true")
          run_single("db_nmap -sV -Pn -T4 -O -p T:1433 --open --script=ms-sql-info.nse #{framework.datastore['RHOSTS']}")
       else
          print_warning("db_nmap: search for random remote targets with port 1433 open (mssql)")

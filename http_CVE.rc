@@ -27,7 +27,7 @@
 
 
       run_single("workspace -a redteam")
-      if (framework.datastore['RANDOM_HOSTS'] == 'true')
+      if (framework.datastore['RANDOM_HOSTS'] == "true")
          if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 300")
            print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=http-headers.nse")
@@ -49,7 +49,7 @@
          print_line("NSE_PATH => #{nse}")
       end
 
-      unless (framework.datastore['RANDOM_HOSTS'] == 'true')
+      unless (framework.datastore['RANDOM_HOSTS'] == "true")
          run_single("db_nmap -sV -Pn -T4 -O -p 21,22,80 --open --script=http-headers.nse #{framework.datastore['RHOSTS']}")
       else
          print_warning("db_nmap: search for random remote targets with ports 21:22:80 open (ftp,ssh,http)")
