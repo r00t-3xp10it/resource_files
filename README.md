@@ -68,7 +68,7 @@ Brute force rc scripts requires the msf database to be empty of hosts and servic
 
 <br /><br />
 
-Instruct rc scripts to export **redteam** workspace database to a local file **/root/database_gfvte.xml** (optional)<br />
+How to instruct scripts to export **redteam** workspace database to a local file (database_gfvte.xml) at exit?<br />
 **If you wish to store scan results, then execute this command insted of the 3º step described above**<br />
 
       msfconsole -q -x 'setg SAVE_DB true;setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/brute_force.rc'
