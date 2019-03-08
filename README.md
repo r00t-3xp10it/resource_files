@@ -18,17 +18,9 @@ The msfconsole database must be empty (**clean**) at resource script execution (
 
       msfconsole -q -x 'hosts -d;services -d;exit -y'
 
-To continue populating database with scans, just instruct the rc script to not clean db (**optional | not-adviced**)
-
-      msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/brute_force.rc'
-
 To export database contents to database.xml local folder before executing any rc script (**optional | adviced**)
 
       msfconsole -q -x 'db_export -f xml database.xml;exit -y'
-
-All brute force resource scripts will build one logfile in **/root** directory.
-
-      /root/<resource_script_name>.log
 
 <br /><br /><br />
 
@@ -100,10 +92,6 @@ Instruct the resource script to not clean database at exit, scan WAN for rhosts 
 5º To populate the database with scans, just instruct the rc script to not clean db (**optional | not-adviced**)<br />
 
       sudo msfconsole -q -x 'setg CLEAN false;setg RANDOM_HOSTS true;setg LIMMIT 600;resource /root/brute_force.rc'
-
-6º To export database contents to database.xml local folder (**optional**)<br />
-
-      msf > db_export -f xml database.xml
 
 ### Suspicious Shell Activity RedTeam @2019
 
