@@ -2,7 +2,7 @@
       help = %Q|
         Description:
           setg CLEAN false - Do not clean database at script exit.
-          setg RANDOM 1000 - Limit the number of random rhosts to search
+          setg LIMMIT 1000 - Limit the number of random rhosts to search
           setg NSE_PATH /usr/share/nmap/scripts - The absoluct path of nmap nse scripts local folder.
           setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with ports 21:22:80 open
           setg RHOSTS 192.162.84.14 61.91.160.13 - To instruct db_nmap to check targets for ports 21:22:80 open
@@ -11,7 +11,7 @@
           if none value (setg) has povided then this resource script will use is own default values.
 
         Execute in msfconsole:
-          setg RANDOM <number-of-rhosts>
+          setg LIMMIT <number-of-rhosts>
           setg RANDOM_HOSTS <true-or-blank>
           setg RHOSTS <hosts-separated-by-spaces>
           setg NSE_PATH <absoluct-path-of-nmap-scripts-folder>
@@ -26,11 +26,11 @@
 
       if (framework.datastore['RANDOM_HOSTS'] == 'true')
          if (framework.datastore['RANDOM'] == nil or framework.datastore['RANDOM'] == '')
-           run_single("setg RANDOM 300")
-           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['RANDOM']} -p 21,22,80 --open --script=http-headers.nse")
+           run_single("setg LIMMIT 300")
+           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=http-headers.nse")
          else
-           print_line("RANDOM => #{framework.datastore['RANDOM']}")
-           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['RANDOM']} -p 21,22,80 --open --script=http-headers.nse")
+           print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
+           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=http-headers.nse")
          end
       elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
          run_single("setg RHOSTS 192.168.1.0/24")
@@ -50,7 +50,7 @@
          run_single("db_nmap -sV -Pn -T4 -O -p 21,22,80 --open --script=http-headers.nse #{framework.datastore['RHOSTS']}")
       else
          print_warning("db_nmap: search for random remote targets with ports 21:22:80 open (ftp,ssh,http)")
-         run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['RANDOM']} -p 21,22,80 --open --script=http-headers.nse")
+         run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=http-headers.nse")
       end
 
       run_single("spool /root/http_CVE.log")
@@ -67,7 +67,7 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            print_line("")
-           run_single("unsetg RHOSTS RANDOM RANDOM_HOSTS NSE_PATH")
+           run_single("unsetg RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
            File.delete('/root/http_CVE.log')
            return nil
       elsif xport.nil? or xport == ''
@@ -75,7 +75,7 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            print_line("")
-           run_single("unsetg RHOSTS RANDOM RANDOM_HOSTS NSE_PATH")
+           run_single("unsetg RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
            run_single("services -d")
            run_single("hosts -d")
            File.delete('/root/http_CVE.log')
@@ -95,7 +95,7 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            print_line("")
-           run_single("unsetg RHOSTS RANDOM RANDOM_HOSTS NSE_PATH")
+           run_single("unsetg RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
            run_single("services -d")
            run_single("hosts -d")
            return nil
@@ -132,11 +132,11 @@
       print_warning("Please wait, Cleaning global variables.")
       Rex::sleep(1.5)
       if (framework.datastore['CLEAN'] == "false")
-           run_single("unsetg CLEAN RHOSTS RANDOM RANDOM_HOSTS NSE_PATH")
+           run_single("unsetg CLEAN RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
            run_single("unset THREADS")
            print_line("")
       else
-           run_single("unsetg CLEAN RHOSTS RANDOM RANDOM_HOSTS NSE_PATH")
+           run_single("unsetg CLEAN RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
            run_single("unset THREADS")
            print_warning("Please wait, Cleaning database.")
            Rex::sleep(1.5)

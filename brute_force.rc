@@ -2,7 +2,7 @@
       help = %Q|
         Description:
           setg CLEAN false - Do not clean database at script exit.
-          setg RANDOM 1000 - Limit the number of random rhosts to search
+          setg LIMMIT 1000 - Limmit the number of random rhosts to search
           setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with ports open
           setg RHOSTS 216.15.177.33 186.210.228.3 - To instruct db_nmap to check targets for ports open
           setg USERPASS_FILE /root/my_dicionary.txt - To instruct auxiliarys to use our own dicionary file
@@ -11,7 +11,7 @@
           this module probes for 21:22:23:80:110:445:3306 remote TCP ports open.
 
         Execute in msfconsole:
-          setg RANDOM <number-of-rhosts>
+          setg LIMMIT <number-of-rhosts>
           setg RANDOM_HOSTS <true-or-blank>
           setg RHOSTS <hosts-separated-by-spaces>
           setg USERPASS_FILE <absoluct-path-to-dicionary.txt>
@@ -25,12 +25,12 @@
 
 
       if (framework.datastore['RANDOM_HOSTS'] == 'true')
-         if (framework.datastore['RANDOM'] == nil or framework.datastore['RANDOM'] == '')
+         if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg RANDOM 500")
-           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['RANDOM']} -p 21,22,23,80,110,445,3306 --open --script=smb-os-discovery.nse,http-headers.nse")
+           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,23,80,110,445,3306 --open --script=smb-os-discovery.nse,http-headers.nse")
          else
-           print_line("RANDOM => #{framework.datastore['RANDOM']}")
-           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['RANDOM']} -p 21,22,23,80,110,445,3306 --open --script=smb-os-discovery.nse,http-headers.nse")
+           print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
+           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,23,80,110,445,3306 --open --script=smb-os-discovery.nse,http-headers.nse")
          end
       elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
          run_single("setg RHOSTS 192.168.1.0/24")
@@ -44,7 +44,7 @@
          run_single("db_nmap -sV -Pn -T4 -O -p 21,22,23,80,110,445,3306 --open --script=smb-os-discovery.nse,http-headers.nse #{framework.datastore['RHOSTS']}")
       else
          print_warning("db_nmap: search for random remote targets with ports 21,22,23,80,110,445,3306 open")
-         run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['RANDOM']} -p 21,22,23,80,110,445,3306 --open --script=smb-os-discovery.nse,http-headers.nse")
+         run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,23,80,110,445,3306 --open --script=smb-os-discovery.nse,http-headers.nse")
       end
 
       run_single("spool /root/brute_force.log")
@@ -64,7 +64,7 @@
               print_error("please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
               print_line("")
-              run_single("unsetg RANDOM RANDOM_HOSTS RHOSTS USERPASS_FILE")
+              run_single("unsetg LIMMIT RANDOM_HOSTS RHOSTS USERPASS_FILE")
               File.delete('/root/brute_force.log')
               return nil
          elsif xport.nil? or xport == ''
@@ -72,7 +72,7 @@
               print_error("please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
               print_line("")
-              run_single("unsetg RANDOM RANDOM_HOSTS RHOSTS USERPASS_FILE")
+              run_single("unsetg LIMMIT RANDOM_HOSTS RHOSTS USERPASS_FILE")
               run_single("services -d")
               run_single("hosts -d")
               File.delete('/root/brute_force.log')
@@ -185,11 +185,11 @@
       print_warning("Please wait, Cleaning global variables.")
       Rex::sleep(1.5)
       if (framework.datastore['CLEAN'] == "false")
-           run_single("unsetg CLEAN RHOSTS RANDOM RANDOM_HOSTS USERPASS_FILE")
+           run_single("unsetg CLEAN RHOSTS LIMMIT RANDOM_HOSTS USERPASS_FILE")
            run_single("unset THREADS VERBOSE BRUTEFORCE_SPEED BLANK_PASSWORDS USERPASS_FILE STOP_ON_SUCCESS")
            print_line("")
       else
-           run_single("unsetg CLEAN RHOSTS RANDOM RANDOM_HOSTS USERPASS_FILE")
+           run_single("unsetg CLEAN RHOSTS LIMMIT RANDOM_HOSTS USERPASS_FILE")
            run_single("unset THREADS VERBOSE BRUTEFORCE_SPEED BLANK_PASSWORDS USERPASS_FILE STOP_ON_SUCCESS")
            print_warning("Please wait, Cleaning database.")
            Rex::sleep(1.5)
