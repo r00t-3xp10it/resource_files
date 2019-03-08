@@ -16,15 +16,15 @@ Brute force rc scripts requires the msf database to be empty of hosts and servic
 
 <blockquote>Many of the this brute force rc scripts are written to accept user inputs (setg global variables).<br />This means that users can run this resource scripts in 3 diferent ways:</blockquote>
 
-Execute resource script **( Default scan: 192.168.1.0/24 )**<br />
+Execute resource script
 
       msfconsole -r /root/mysql_brute.rc
 
-Instruct the resource script to scan rhosts input by attacker **( Scan: 10.10.10.1 10.10.11.2 )**<br />
+Instruct the resource script to scan rhosts input by attacker
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;resource /root/mysql_brute.rc'
 
-Instruct the resource script to search in WAN for rhosts with service port open **( Search: WAN for hosts )**<br />
+Instruct the resource script to search in WAN for rhosts with service port open
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
 
