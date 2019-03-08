@@ -5,7 +5,7 @@
 **This repository contains various resource files to assiste in exploitation or metasploit database related issues.**<br />
 ![pic](http://i68.tinypic.com/21ovkfm.jpg)
 
-#### [!] Please read the article about resource scripting [here](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
+#### [!] Please read this article about Resource Files scripting [here](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
 
 <br /><br /><br />
 
