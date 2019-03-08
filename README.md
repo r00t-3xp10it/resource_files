@@ -69,6 +69,10 @@ Instruct rc scripts to export **redteam** workspace database to a local file **/
 
       sudo msfconsole -q -x 'setg SAVE_DB true;resource /root/brute_force.rc'
 
+This database.xml file can now be 'imported' to your default workspace with the follow command:
+
+      sudo msfconsole -q -x 'db_import /root/database_gfvte.xml'
+
 ### Suspicious Shell Activity RedTeam @2019
 
 <br />
