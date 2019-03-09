@@ -2,9 +2,9 @@
    help = %Q|
     Description:
        This Metasploit RC file can be used to manage msfconsole database tasks:
-       Display database data, record msfconsole activity, adds hosts to database,
-       import files.xml import list of hosts inside a text file (one-per-line-entrys)
-       auto-exploit service name (DB_EXPLOIT) and clean all database data at exit.
+       Display database data, record msfconsole activity, add hosts to database,
+       import files.xml import list of hosts inside a text file (one-per-line-entries)
+       auto-exploit db hosts by service name and clean all database data at exit.
 
     Execute in msfconsole:
        setg CLEAN <true-or-blank>
@@ -13,10 +13,10 @@
        setg XML_EXPORT <true-or-blank>
        setg WORKSPACE <new-workspace-name>
        setg WORKSPACE_DEL <delete-workspace-name>
-       setg DBHOST <add-host-ip-to-database>
-       setg XML_IMPORT <absoluct-path-of-nmap.xml-to-import>
-       setg TXT_IMPORT <absoluct-path-of-hosts-list-to-import>
-       resource /<path-to-script>/managedb.rc
+       setg DBHOST <asign-RHOSTS-var-to-msfconsole>
+       setg XML_IMPORT <absoluct-path-of-file.xml-to-import>
+       setg TXT_IMPORT <absoluct-path-of-hosts-list.txt-to-import>
+       resource <path-to-script>/managedb.rc
 
     Author:
        r00t-3xp10it  <pedroubuntu10[at]gmail.com>
@@ -49,8 +49,8 @@
     unless (framework.datastore['TXT_IMPORT'] == nil or framework.datastore['TXT_IMPORT'] == '')
        check_import = "#{framework.datastore['TXT_IMPORT']}"
        unless (File.exist?(check_import))
-          print_error("[ERROR] File to import not found.")
-          print_error("[IMPORT] #{check_import}")
+          print_error("[ERROR] File to be imported not found.")
+          print_error("[ERROR] #{check_import}")
           return nil
        end
        import_txt = File.read(check_import)
@@ -60,6 +60,7 @@
           run_single("hosts -a #{parse_data}")
           Rex::sleep(1.5)
           print_status("Scanning new targets (syn scan)")
+          Rex::sleep(1.0)
           run_single("use auxiliary/scanner/portscan/syn")
           run_single("set VERBOSE true")
           run_single("set THREADS 16")
@@ -71,15 +72,15 @@
 
     unless (framework.datastore['XML_IMPORT'] == nil or framework.datastore['XML_IMPORT'] == '')
        xml_file = "#{framework.datastore['XML_IMPORT']}"
-       print_status("import: #{xml_file}")
+       print_status("Import xml: #{xml_file}")
        unless (File.exist?(xml_file))
-          print_error("Abort: Script can not find the path inputed.")
+          print_error("[ERROR] Script can not find the path inputed.")
+          print_error("[ERROR] #{xml_file}")
           return nil
        end
        run_single("db_import #{framework.datastore['XML_IMPORT']}")
        Rex::sleep(1.0)
     end
-
 
     run_single("workspace -v")
     Rex::sleep(0.5)
@@ -88,7 +89,7 @@
     Rex::sleep(0.5)
     run_single("services -c port,proto,name,state")
     Rex::sleep(2.0)
-
+    print_line("")
 
     unless (framework.datastore['DB_EXPLOIT'] == nil or framework.datastore['DB_EXPLOIT'] == '')
        xport = framework.db.services.map(&:port).join(' ')
@@ -96,7 +97,7 @@
        unless proto =~ /#{framework.datastore['DB_EXPLOIT']}/i
             print_error("[ERROR] Service: [#{framework.datastore['DB_EXPLOIT']}] not found in db")
             Rex::sleep(2.5)
-            run_single("unsetg DB_EXPLOIT")
+            run_single("unsetg RHOSTS CLEAN RECORD DBHOST TXT_IMPORT XML_IMPORT XML_EXPORT WORKSPACE WORKSPACE_DEL DB_EXPLOIT")
             return nil
        end
        run_single("setg USERPASS_FILE /usr/share/metasploit-framework/data/wordlists/piata_ssh_userpass.txt")
@@ -236,7 +237,7 @@
 
 
    if (framework.datastore['XML_EXPORT'] == "true")
-      print_warning("Exporting database to: database.xml")
+      print_warning("Exporting database to: /root/database.xml")
       Rex::sleep(1.5)
       run_single("db_export -f xml /root/database.xml")
    end
@@ -258,27 +259,18 @@
    end
 
    print_line("")
-   print_line("Database Commands              Description")
-   print_line("-----------------              -----------")
-   print_line("hosts                          Display hosts database")
-   print_line("hosts -d                       Delete all hosts from database")
-   print_line("hosts -d 10.10.10.2            Delete address from database")
-   print_line("hosts -a 10.10.10.3            Add address to database")
-   print_line("services                       Display services database")
-   print_line("services -d                    Delete services from database")
-   print_line("")
    print_line("Resource Commands              Description")
    print_line("-----------------              -----------")
    print_line("setg CLEAN true                Clean database at exit")
    print_line("setg RECORD true               Record msfconsole activity")
-   print_line("setg DBHOST 10.10.10.3         Add RHOSTS to database")
-   print_line("setg WORKSPACE pedro           Add workspace to database")
-   print_line("setg WORKSPACE_DEL pedro       Delete workspace from database")
-   print_line("setg XML_EXPORT true           Export database.xml (local)")
-   print_line("setg XML_IMPORT /root/dic.xml  Import database.xml (local)")
-   print_line("setg TXT_IMPORT /root/dic.txt  Import hosts list (local)")
-   print_line("setg DB_EXPLOIT smb            Auto-Exploit hosts in db")
-   print_line("resource /root/managedb.rc     Execute resource script")
+   print_line("setg DBHOST 10.10.10.3         Asign RHOSTS var to msfconsole")
+   print_line("setg WORKSPACE pedro           Add workspace pedro to database")
+   print_line("setg WORKSPACE_DEL pedro       Delete workspace pedro from database")
+   print_line("setg XML_EXPORT true           Export contents of db to database.xml")
+   print_line("setg XML_IMPORT /root/dic.xml  Import database.xml file to db")
+   print_line("setg TXT_IMPORT /root/dic.txt  Import text hosts list (one-per-line)")
+   print_line("setg DB_EXPLOIT smb            Auto-Exploit db hosts based on service name")
+   print_line("resource /root/managedb.rc     Execute this resource script")
    print_line("")
 
 </ruby>
