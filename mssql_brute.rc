@@ -72,7 +72,7 @@
            print_error("db_nmap scan did not find any alive connections.")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           run_single("unsetg SAVE_DB RHOSTS RANDOM_HOSTS USER_FILE PASS_FILE LIMMIT")
+           run_single("unsetg all")
            File.delete('/root/mssql_brute.log')
            run_single("workspace -d redteam")
            return nil
@@ -80,7 +80,7 @@
            print_error("db_nmap did not find any 1433 open ports.")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           run_single("unsetg SAVE_DB RHOSTS RANDOM_HOSTS USER_FILE PASS_FILE LIMMIT")
+           run_single("unsetg all")
            File.delete('/root/mssql_brute.log')
            run_single("workspace -d redteam")
            return nil
@@ -94,7 +94,7 @@
            print_warning("Example: setg PASS_FILE /root/dicionary.txt")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           run_single("unsetg SAVE_DB RHOSTS RANDOM_HOSTS USER_FILE PASS_FILE LIMMIT")
+           run_single("unsetg all")
            File.delete('/root/mssql_brute.log')
            run_single("workspace -d redteam")
            return nil
@@ -108,7 +108,7 @@
            print_warning("Example: setg USER_FILE /root/dicionary.txt")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           run_single("unsetg SAVE_DB RHOSTS RANDOM_HOSTS USER_FILE PASS_FILE LIMMIT")
+           run_single("unsetg all")
            File.delete('/root/mssql_brute.log')
            run_single("workspace -d redteam")
            return nil
@@ -138,8 +138,8 @@
 
       print_warning("Please wait, Cleaning global variables.")
       Rex::sleep(1.5)
-      run_single("unsetg CLEAN RHOSTS THREADS RANDOM_HOSTS USER_FILE PASS_FILE LIMMIT")
-      run_single("unset THREADS")
+      run_single("unsetg all")
+      run_single("unset all")
       run_single("workspace -d redteam")
 
 print_warning("Logfile stored under: /root/mssql_brute.log")

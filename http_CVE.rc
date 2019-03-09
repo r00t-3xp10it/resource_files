@@ -69,7 +69,7 @@
            print_error("db_nmap scan did not find any alive connections.")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           run_single("unsetg SAVE_DB RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
+           run_single("unsetg all")
            File.delete('/root/http_CVE.log')
            run_single("workspace -d redteam")
            return nil
@@ -77,7 +77,7 @@
            print_error("db_nmap did not find any 21:22:80 open ports.")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           run_single("unsetg SAVE_DB RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
+           run_single("unsetg all")
            File.delete('/root/http_CVE.log')
            run_single("workspace -d redteam")
            return nil
@@ -95,7 +95,7 @@
            print_warning("[EXEC] sudo nmap --script-updatedb")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
-           run_single("unsetg SAVE_DB RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
+           run_single("unsetg all")
            run_single("workspace -d redteam")
            return nil
       else
@@ -140,8 +140,8 @@
 
       print_warning("Please wait, Cleaning global variables.")
       Rex::sleep(1.5)
-      run_single("unsetg CLEAN RHOSTS LIMMIT RANDOM_HOSTS NSE_PATH")
-      run_single("unset THREADS")
+      run_single("unsetg all")
+      run_single("unset all")
       run_single("workspace -d redteam")
 
 print_warning("Logfile stored under: /root/http_CVE.log")

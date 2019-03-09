@@ -63,7 +63,7 @@
               print_error("db_nmap scan did not find any alive connections.")
               print_error("Please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
-              run_single("unsetg SAVE_DB RHOSTS USERPASS_FILE LIMMIT RANDOM_HOSTS")
+              run_single("unsetg all")
               File.delete('/root/mysql_brute.log')
               run_single("workspace -d redteam")
               return nil
@@ -71,7 +71,7 @@
               print_error("db_nmap did not find any 3306 open ports.")
               print_error("Please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
-              run_single("unsetg SAVE_DB RHOSTS USERPASS_FILE LIMMIT RANDOM_HOSTS")
+              run_single("unsetg all")
               File.delete('/root/mysql_brute.log')
               run_single("workspace -d redteam")
               return nil
@@ -115,8 +115,8 @@
 
       print_warning("Please wait, Cleaning global variables.")
       Rex::sleep(1.5)
-      run_single("unsetg SAVE_DB CLEAN RHOSTS LIMMIT RANDOM_HOSTS USERPASS_FILE")
-      run_single("unset THREADS VERBOSE USERNAME USERPASS_FILE PASSWORD STOP_ON_SUCCESS")
+      run_single("unsetg all")
+      run_single("unset all")
       run_single("workspace -d redteam")
 
 print_warning("Logfile stored under: /root/mysql_brute.log")
