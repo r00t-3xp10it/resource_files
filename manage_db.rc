@@ -4,7 +4,8 @@
        This Metasploit RC file can be used to manage msfconsole database tasks:
        Display database data, record msfconsole activity, add hosts to database,
        import files.xml import list of hosts inside a text file (one-per-line-entries)
-       auto-exploit db hosts by service name and clean all database data at exit.
+       auto-exploit db hosts by service name, auto-search compatible auxiliarys based
+       on db hosts service name inputed and clean all database data at script exit.
 
     Execute in msfconsole:
        setg CLEAN <true-or-blank>
@@ -12,7 +13,7 @@
        setg DB_AUX <service-name>
        setg DB_BRUTE <service-name>
        setg XML_EXPORT <true-or-blank>
-       setg DBHOST <asign-RHOSTS-var-to-msfconsole>
+       setg DBHOST <asign-RHOSTS-to-msfconsole>
        setg XML_IMPORT <absoluct-path-of-file.xml-to-import>
        setg TXT_IMPORT <absoluct-path-of-hosts-list.txt-to-import>
        setg RUN_RC /root/script.rc <absoluct-path-of-rc-to-execute>
@@ -331,7 +332,7 @@
    print_line("setg TXT_IMPORT /root/dic.txt  Import text hosts list (one-per-line)")
    print_line("setg DB_BRUTE smb              Auto-Exploit db hosts based on service name")
    print_line("setg DB_AUX ssh                Auto-search auxiliarys based on host service name")
-   print_line("setg RUN_RC /root/script.rc    Execute script.rc after manage_db.rc execution")
+   print_line("setg RUN_RC /root/script.rc    Execute script.rc after manage_db.rc end execution")
    print_line("resource /root/manage_db.rc    Execute this resource script")
    print_line("")
 
