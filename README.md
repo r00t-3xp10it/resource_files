@@ -19,7 +19,7 @@ This brute force resource scripts requires that the msf database to be empty of 
 ### USING 'SETG' GLOBAL VARIABLES TO CONFIG THIS KIND OF RC SCRIPTS
 
 ![pic](http://i67.tinypic.com/2iu59g7.png)
-Many of the this brute force resource scripts are written to accept **user inputs** (msfconsole setg global variables).<br />This means that users can run this kind of resource scripts in 3 diferent ways:
+Many of the this brute force resource scripts are written to accept **user inputs** (msfconsole setg global variable).<br />This means that i have written this resource scripts to work in 3 diferent ways:
 
 Execute resource script againts local lan
 
