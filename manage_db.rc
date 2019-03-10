@@ -12,6 +12,7 @@
        setg DB_AUX <true-or-blank>
        setg RECORD <true-or-blank>
        setg DB_BRUTE <service-name>
+       setg CSV_EXPORT <service-name>
        setg XML_EXPORT <true-or-blank>
        setg DBHOST <asign-RHOSTS-to-msfconsole>
        setg RUN_RC <absoluct-path-of-rc-to-execute>
@@ -91,10 +92,11 @@
 
 
     if (framework.datastore['DB_AUX'] == "true")
-    print_warning("Sellect auxiliary modules based on db service names.")
+    print_line("   Sellect auxiliary modules based on db service names:")
+    print_line("   ----------------------------------------------------")
     Rex::sleep(1.5)
        unless proto =~ /ftp/i or proto =~ /ssh/i or proto =~ /telnet/i or proto =~ /smb/i or proto =~ /microsoft-ds/i or proto =~ /netbios-ssn/i or proto =~ /msrcp/i or proto =~ /pop3/i or proto =~ /mssql/i or proto =~ /mysql/i or proto =~ /http/i or proto =~ /smtp/i or proto =~ /imap/i
-          print_error("[ERROR] None service name found in current database.")
+          print_error("[ERROR] None service names found in current database.")
           Rex::sleep(2.0)
           run_single("unsetg all")
           return nil
@@ -129,6 +131,8 @@
        if proto =~ /imap/i
             run_single("grep -m 5 scanner search name:imap type:auxiliary")
        end
+    print_line("   ----------------------------------------------------")
+    print_line("")
     end
 
 
@@ -321,53 +325,71 @@
          end
     end
 
-   unless (framework.datastore['RUN_RC'] == nil or framework.datastore['RUN_RC'] == '')
-      exec_rc = "#{framework.datastore['RUN_RC']}"
-      unless (File.exist?(exec_rc))
-         print_error("[ERROR] resource script to execute not found.")
-         print_warning("[ERROR] #{exec_rc}")
-         run_single("unsetg all")
-         return nil
-      end
-      run_single("resource #{exec_rc}")
-   end
+    unless (framework.datastore['CSV_EXPORT'] == nil or framework.datastore['CSV_EXPORT'] == '')
+       xport = framework.db.services.map(&:port).join(' ')
+       proto = framework.db.services.map(&:name).join(' ')
+       unless proto =~ /#{framework.datastore['CSV_EXPORT']}/i
+            print_error("[ERROR] Service [#{framework.datastore['CSV_EXPORT']}] not found in database.")
+            Rex::sleep(2.5)
+            run_single("unsetg all")
+            return nil
+       end
+       print_warning("Exporting hosts with service #{framework.datastore['CSV_EXPORT']}")
+       print_line("")
+       run_single("services -c port,proto,name -S #{framework.datastore['CSV_EXPORT']}")
+       print_line("")
+       Rex::sleep(1.0)
+       run_single("services -c port,name -S #{framework.datastore['CSV_EXPORT']} -o #{framework.datastore['CSV_EXPORT']}.CSV")
+    end
 
-   if (framework.datastore['XML_EXPORT'] == "true")
-      print_warning("Exporting database to: database.xml")
-      Rex::sleep(1.5)
-      run_single("db_export -f xml database.xml")
-   end
+    unless (framework.datastore['RUN_RC'] == nil or framework.datastore['RUN_RC'] == '')
+       exec_rc = "#{framework.datastore['RUN_RC']}"
+       unless (File.exist?(exec_rc))
+          print_error("[ERROR] resource script to execute not found.")
+          print_warning("[ERROR] #{exec_rc}")
+          run_single("unsetg all")
+          return nil
+       end
+       run_single("resource #{exec_rc}")
+    end
 
-   print_warning("Cleaning global variables.")
-   Rex::sleep(1.5)
-   if (framework.datastore['CLEAN'] == "true")
-      run_single("unsetg all")
-      run_single("unset all")
-      print_warning("Cleaning current database.")
-      Rex::sleep(1.5)
-      run_single("hosts -d")
-      run_single("services -d")
-      print_line("")
-   else
-      run_single("unsetg all")
-      run_single("unset all")
-      print_line("")
-   end
+    if (framework.datastore['XML_EXPORT'] == "true")
+       print_warning("Exporting database to: database.xml")
+       Rex::sleep(1.5)
+       run_single("db_export -f xml database.xml")
+    end
 
-   print_line("")
-   print_line("Resource Commands              Description")
-   print_line("-----------------              -----------")
-   print_line("setg CLEAN true                Clean database at exit")
-   print_line("setg RECORD true               Record msfconsole activity")
-   print_line("setg DBHOST 10.10.10.3         Asign RHOSTS manually to database")
-   print_line("setg XML_IMPORT /root/dic.xml  Import database.xml file to database")
-   print_line("setg TXT_IMPORT /root/dic.txt  Import text hosts list (one-per-line)")
-   print_line("setg XML_EXPORT true           Export contents of db to database.xml")
-   print_line("setg DB_BRUTE smb              Auto-Exploit db hosts based on service name")
-   print_line("setg DB_AUX true               Auto-search auxiliarys based on db service names")
-   print_line("setg RUN_RC /root/script.rc    Execute script.rc before manage_db.rc ends execution")
-   print_line("resource /root/manage_db.rc    Execute this resource script")
-   print_line("")
-   run_single("back")
+    print_warning("Cleaning global variables.")
+    Rex::sleep(1.5)
+    if (framework.datastore['CLEAN'] == "true")
+       run_single("unsetg all")
+       run_single("unset all")
+       print_warning("Cleaning current database.")
+       Rex::sleep(1.5)
+       run_single("hosts -d")
+       run_single("services -d")
+       print_line("")
+    else
+       run_single("unsetg all")
+       run_single("unset all")
+       print_line("")
+    end
+
+    print_line("")
+    print_line("Resource Commands              Description")
+    print_line("-----------------              -----------")
+    print_line("setg CLEAN true                Clean database at exit")
+    print_line("setg RECORD true               Record msfconsole activity")
+    print_line("setg DBHOST 10.10.10.3         Asign RHOSTS manually to database")
+    print_line("setg XML_IMPORT /root/dic.xml  Import database.xml file to database")
+    print_line("setg TXT_IMPORT /root/dic.txt  Import text hosts list (one-per-line)")
+    print_line("setg XML_EXPORT true           Export contents of db to database.xml")
+    print_line("setg CSV_EXPORT http           Export list of hosts based in service name")
+    print_line("setg DB_BRUTE smb              Auto-Exploit db hosts based on service name")
+    print_line("setg DB_AUX true               Auto-search auxiliarys based on db service names")
+    print_line("setg RUN_RC /root/script.rc    Execute script.rc before manage_db.rc ends execution")
+    print_line("resource /root/manage_db.rc    Execute this resource script")
+    print_line("")
+    run_single("back")
 
 </ruby>
