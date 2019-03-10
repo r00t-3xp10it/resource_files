@@ -56,7 +56,7 @@
          run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=http-headers.nse")
       end
 
-      run_single("spool /root/http_CVE.log")
+      run_single("spool http_CVE.log")
       print_line("")
       run_single("services")
       print_good("Reading msfdb database for info.")
@@ -70,7 +70,7 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            run_single("unsetg all")
-           File.delete('/root/http_CVE.log')
+           File.delete('http_CVE.log')
            run_single("workspace -d redteam")
            return nil
       elsif xport.nil? or xport == ''
@@ -78,7 +78,7 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            run_single("unsetg all")
-           File.delete('/root/http_CVE.log')
+           File.delete('http_CVE.log')
            run_single("workspace -d redteam")
            return nil
       end
@@ -139,7 +139,7 @@
       if (framework.datastore['SAVE_DB'] == "true")
          rand = Rex::Text.rand_text_alpha(5)
          print_warning("Exporting database to: database_#{rand}.xml")
-         run_single("db_export -f xml -a /root/database_#{rand}.xml")
+         run_single("db_export -f xml -a database_#{rand}.xml")
       end
 
       print_warning("Please wait, Cleaning global variables.")
@@ -147,7 +147,9 @@
       run_single("unsetg all")
       run_single("unset all")
       run_single("workspace -d redteam")
+      run_single("back")
 
-print_warning("Logfile stored under: /root/http_CVE.log")
+print_warning("Logfile stored under: http_CVE.log")
 print_warning("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
 </ruby>
+

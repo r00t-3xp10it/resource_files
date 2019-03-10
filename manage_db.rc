@@ -28,7 +28,7 @@
 
 
     if (framework.datastore['RECORD'] == "true")
-       run_single("spool /root/database.log")
+       run_single("spool database.log")
        Rex::sleep(1.0)
     end
 
@@ -333,9 +333,9 @@
    end
 
    if (framework.datastore['XML_EXPORT'] == "true")
-      print_warning("Exporting database to: /root/database.xml")
+      print_warning("Exporting database to: database.xml")
       Rex::sleep(1.5)
-      run_single("db_export -f xml /root/database.xml")
+      run_single("db_export -f xml database.xml")
    end
 
    print_warning("Cleaning global variables.")
@@ -368,5 +368,6 @@
    print_line("setg RUN_RC /root/script.rc    Execute script.rc before manage_db.rc ends execution")
    print_line("resource /root/manage_db.rc    Execute this resource script")
    print_line("")
+   run_single("back")
 
 </ruby>

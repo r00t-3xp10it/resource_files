@@ -88,11 +88,11 @@ It does **'not'** delete any entries that you have before on your *default works
 
 ### CREDITS
 
-About 10 years ago (2009) I heard the creator of metasploit say: **'automation is the pentesters game'**.<br />
-Days later this statement led me to read this article [rapid7-@hdmoore](https://blog.rapid7.com/2011/12/08/six-ways-to-automate-metasploit/)..<br/>
+About 10 years ago (2009) I heard the creator of metasploit say: **'Automation is the name of the pentest game'**.<br />
+Then in 2011 i have found this article [rapid7-@hdmoore](https://blog.rapid7.com/2011/12/08/six-ways-to-automate-metasploit/) and everything have changed for me since that day (metasploit scripting addicted)<br/>
 
 **thank you for the inspiration l33t @hdmoore** ..
-"My love for scripting and understanding have done all the rest" ..
+"My love for scripting and understanding, have done all the rest" ..
 ![pic](http://i64.tinypic.com/210g9bp.gif)
 
 
