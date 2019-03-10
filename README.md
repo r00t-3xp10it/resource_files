@@ -7,10 +7,8 @@
 
 #### [!] Please read this article about Resource Files scripting [here](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
 
-<br />
-
 ### REMARK
-Brute force rc scripts requires the msf database to be empty of hosts and services data. Thats the main reason why the scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace. At exit the rc script it will delete redteam workspace/data to be abble to accept new data inputs.
+This brute force resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace while working, then the resource script deletes the **'redteam'** workspace in the end of execution. (This action allow us to mantain the attacker *default workspace database intact)
 
 ---
 
@@ -84,7 +82,7 @@ This database.xml file can now be 'imported' to your default workspace with the 
       sudo msfconsole -q -x 'db_import /root/database_gfvte.xml'
 
 REMARK: importing this database.xml files **appends** data to your default workspace database making it larger.
-It will **not** delete any entrys that you have before on your default workspace database (it appends data).
+It will **not** delete any entries that you have before on your default workspace database (it appends data).
 
 ### Suspicious Shell Activity RedTeam @2019
 
