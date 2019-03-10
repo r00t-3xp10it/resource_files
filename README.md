@@ -78,11 +78,12 @@ This database.xml file can now be **'imported'** to your *default workspace with
       sudo msfconsole -q -x 'db_import /root/database.xml'
 
 ### REMARK
-importing this database.xml files **appends** data to your default workspace database making it larger.<br />
+importing this database.xml files **appends** data to your *default workspace database making it larger.<br />
 It does **not** delete any entries that you have before on your *default workspace database (it only appends data).
 
 #### [!] Jump to readme file index (beginning) [here](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
-### Suspicious Shell Activity RedTeam @2019
 
-<br />
+<br /><br />
+
+### Suspicious Shell Activity RedTeam @2019
 
