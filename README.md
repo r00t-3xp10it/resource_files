@@ -52,8 +52,9 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 
 <br /><br /><br />
 
-#### EXAMPLE: Step-By-Step how to download/run 'brute_force.rc' script
+#### EXAMPLE
 
+**Step-By-Step how to download/run 'brute_force.rc' script**<br />
 1º download the resource script to your **/root** folder<br />
 
       sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/brute_force.rc
