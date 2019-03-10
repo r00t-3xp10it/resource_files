@@ -7,13 +7,18 @@
 
 #### [!] Please read this article about Resource Files scripting [here](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
 
+<br />
+
+### REMARK
+Brute force rc scripts requires the msf database to be empty of hosts and services data. Thats the main reason why the scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace. At exit the rc script it will delete redteam workspace/data to be abble to accept new data inputs.
+
+---
+
 <br /><br /><br />
 
 ### USING 'SETG' GLOBAL VARIABLES TO CONFIG THIS KIND OF RC SCRIPTS
 
 ![pic](http://i67.tinypic.com/2iu59g7.png)
-Brute force rc scripts requires the msf database to be empty of hosts and services data. Thats the main reason why the scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace. At exit the rc script it will delete redteam workspace/data to be abble to accept new data inputs.
-
 Many of the this brute force resource scripts are written to accept **user inputs** (setg global variables).<br />This means that users can run this kind of resource scripts in 3 diferent ways:
 
 Execute resource script
@@ -28,12 +33,9 @@ Instruct the resource script to search in WAN for rhosts with service port open
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
 
-<br /><br /><br />
+<br /><br />
 
 **Adicionally to the described settings, we can also combine diferent configurations at runtime execution.**<br />
-
----
-
 Instruct the resource script to search in WAN for rhosts with service port open and limmit the search to 300 rhosts
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/mysql_brute.rc'
@@ -45,6 +47,8 @@ Instruct the resource script to use attackers dicionary file (absoluct path requ
 Instruct the resource script to scan rhosts input by attacker, and use the attacker dicionary file 
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;setg USERPASS_FILE /root/dicionary.txt;resource /root/mysql_brute.rc'
+
+---
 
 <br /><br /><br />
 
@@ -64,11 +68,11 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 
       sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/brute_force.rc'
 
-<br /><br />
+### REMARK
 
 Brute force rc scripts requires the msf database to be empty of hosts and services data. Thats the main reason why the scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace. At exit the rc script it will delete redteam workspace/data to be abble to accept new data inputs.
 
-<br /><br />
+<br />
 
 How to instruct scripts to export **redteam** workspace database to a local file (database_gfvte.xml) at exit?<br />
 **If you wish to store scan results, then execute this command insted of the 3º step described above**<br />
