@@ -67,7 +67,6 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
       sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 200;resource /root/brute_force.rc'
 
 ### REMARK
-
 This brute force resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace while working, then the resource script deletes the **'redteam'** workspace in the end of execution. (This action allow us to mantain the attacker *default workspace database intact).
 
 How to instruct this scripts to export **redteam** workspace database to a local file at execution end?<br />
@@ -78,11 +77,11 @@ This database.xml file can now be **'imported'** to your *default workspace with
 
       sudo msfconsole -q -x 'db_import /root/database.xml'
 
-REMARK: importing this database.xml files **appends** data to your default workspace database making it larger.<br />
+### REMARK
+importing this database.xml files **appends** data to your default workspace database making it larger.<br />
 It does **not** delete any entries that you have before on your *default workspace database (it only appends data).
 
 #### [!] Jump to readme file index (beginning) [here](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
-
 ### Suspicious Shell Activity RedTeam @2019
 
 <br />
