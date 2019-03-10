@@ -339,7 +339,7 @@
        run_single("services -c port,proto,name -S #{framework.datastore['CSV_EXPORT']}")
        print_line("")
        Rex::sleep(1.0)
-       run_single("services -c port,name -S #{framework.datastore['CSV_EXPORT']} -o #{framework.datastore['CSV_EXPORT']}.CSV")
+       run_single("services -c port,name -S #{framework.datastore['CSV_EXPORT']} -o #{framework.datastore['CSV_EXPORT']}_hosts.CSV")
     end
 
     unless (framework.datastore['RUN_RC'] == nil or framework.datastore['RUN_RC'] == '')

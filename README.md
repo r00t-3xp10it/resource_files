@@ -5,7 +5,10 @@
 **This repository contains various resource files to assiste in exploitation or metasploit database related issues.**<br />
 ![pic](http://i68.tinypic.com/21ovkfm.jpg)
 
-#### [!] Please read this article about Resource Files scripting [here](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
+<br />
+
+### DISCLAMER
+The resource scripts that this repository contains serve as proof of concept (**POC**) of this [article](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files) published on resource files scripting. This repository is designed to demonstrate what resource files (**erb scripts**) can accomplish when automating tasks in msfconsole, and they are written to take advantage of multi-hosts-exploitation-scan tasks (manage large databases of hosts) from scanning the local lan for alive hosts, scan attackers input rhosts or scan wan networks in search of rhosts to exploit/brute-force.
 
 <br />
 
