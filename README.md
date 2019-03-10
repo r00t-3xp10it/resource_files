@@ -10,7 +10,7 @@
 <br />
 
 ### REMARK
-This brute force resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace while working, then the resource script deletes the **'redteam'** workspace in the end of execution. (This action allow us to mantain the attacker *default workspace database intact). The only script that does not create **redteam** workspace its manage_db.rc
+This brute force resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace while working, then the resource script deletes the **'redteam'** workspace in the end of execution. (This action allow us to mantain the attacker *default workspace database intact). The only script that does not create **redteam** workspace its **manage_db.rc**
 
 ---
 
@@ -19,24 +19,24 @@ This brute force resource scripts requires that the msf database to be empty of 
 ### USING 'SETG' GLOBAL VARIABLES TO CONFIG THIS KIND OF RC SCRIPTS
 
 ![pic](http://i67.tinypic.com/2iu59g7.png)
-Many of the this brute force resource scripts are written to accept **user inputs** (setg global variables).<br />This means that users can run this kind of resource scripts in 3 diferent ways:
+Many of the this brute force resource scripts are written to accept **user inputs** (msfconsole setg global variables).<br />This means that users can run this kind of resource scripts in 3 diferent ways:
 
-Execute resource script
+Execute resource script againts local lan
 
       msfconsole -r /root/mysql_brute.rc
 
-Instruct the resource script to scan rhosts input by attacker
+Instruct the resource script to scan hosts input by the attacker
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;resource /root/mysql_brute.rc'
 
-Instruct the resource script to search in WAN for rhosts with service port open
+Instruct the resource script to search in WAN for hosts with the service port open (mysql port/service)
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
 
 <br /><br />
 
 **Adicionally to the described settings, we can also combine diferent configurations at runtime execution.**<br />
-Instruct the resource script to search in WAN for rhosts with service port open and limmit the search to 300 rhosts
+Instruct the resource script to search in WAN for rhosts with service port open and limmit the search to 300 hosts
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/mysql_brute.rc'
 
@@ -52,39 +52,34 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 
 <br /><br /><br />
 
-#### Step-By-Step how to download/run 'brute_force.rc' script
+#### EXAMPLE: Step-By-Step how to download/run 'brute_force.rc' script
 
-![pic](http://i63.tinypic.com/k2eo93.png)
-
-1º download resource script to **/root** folder<br />
+1º download the resource script to your **/root** folder<br />
 
       sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/brute_force.rc
 
-2º start postgresql service (**local**)<br />
+2º start postgresql service (**local machine**)<br />
 
       sudo service postgresql start
 
-3º run brute_force.rc resource script to search hosts in WAN (**limmit the search to 300**)<br />
+3º run brute_force.rc resource script to search hosts in WAN (**limmit the search to 200 hosts**)<br />
 
-      sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/brute_force.rc'
+      sudo msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 200;resource /root/brute_force.rc'
 
 ### REMARK
 
-Brute force rc scripts requires the msf database to be empty of hosts and services data. Thats the main reason why the scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace. At exit the rc script it will delete redteam workspace/data to be abble to accept new data inputs.
+This brute force resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new workspace named **'redteam'** and stores all the data inside that workspace while working, then the resource script deletes the **'redteam'** workspace in the end of execution. (This action allow us to mantain the attacker *default workspace database intact).
 
-<br />
+How to instruct this scripts to export **redteam** workspace database to a local file at execution end?<br />
 
-How to instruct scripts to export **redteam** workspace database to a local file (database_gfvte.xml) at exit?<br />
-**If you wish to store scan results, then execute this command insted of the 3º step described above**<br />
+      msfconsole -q -x 'setg SAVE_DB true;setg RANDOM_HOSTS true;setg LIMMIT 200;resource /root/brute_force.rc'
 
-      msfconsole -q -x 'setg SAVE_DB true;setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/brute_force.rc'
+This database.xml file can now be **'imported'** to your *default workspace with the follow command:
 
-This database.xml file can now be 'imported' to your default workspace with the follow command:
+      sudo msfconsole -q -x 'db_import /root/database.xml'
 
-      sudo msfconsole -q -x 'db_import /root/database_gfvte.xml'
-
-REMARK: importing this database.xml files **appends** data to your default workspace database making it larger.
-It will **not** delete any entries that you have before on your default workspace database (it appends data).
+REMARK: importing this database.xml files **appends** data to your default workspace database making it larger.<br />
+It does **not** delete any entries that you have before on your *default workspace database (it only appends data).
 
 ### Suspicious Shell Activity RedTeam @2019
 
