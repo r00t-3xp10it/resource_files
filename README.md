@@ -85,5 +85,15 @@ It does **'not'** delete any entries that you have before on your *default works
 
 <br /><br />
 
+### CREDITS
+
+About 10 years ago (2009) I heard the creator of metasploit say:**automation is the pentesters game**.<br />
+Days later this statement led me to read this article [rapid7-@hdmoore](https://blog.rapid7.com/2011/12/08/six-ways-to-automate-metasploit/)..<br/>
+
+**thank you for the inspiration l33t @hdmoore** ..
+"My love for scripting and understanding have done all the rest" ..
+![pic](http://i64.tinypic.com/210g9bp.gif)
+
+
 ### Suspicious Shell Activity RedTeam @2019
 

@@ -1,4 +1,5 @@
    <ruby>
+      run_single("workspace -a redteam")
       help = %Q|
         Description:
           setg SAVE_DB true - Save workspace redteam to database.xml
@@ -28,7 +29,6 @@
       print_line("")
 
 
-      run_single("workspace -a redteam")
       if (framework.datastore['RANDOM_HOSTS'] == "true")
          if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 1000")
@@ -122,9 +122,11 @@
            Rex::sleep(1.0)
            run_single("use auxiliary/scanner/mssql/mssql_ping")
            run_single("set THREADS 16")
+           print_line("")
            run_single("services -c name -S mssql -R")
            run_single("exploit")
            run_single("use auxiliary/scanner/mssql/mssql_login")
+           print_line("")
            run_single("services -c name -S mssql -R")
            run_single("exploit")
       end

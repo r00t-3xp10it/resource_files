@@ -1,4 +1,5 @@
    <ruby>
+      run_single("workspace -a redteam")
       help = %Q|
         Description:
           setg SAVE_DB true - Save workspace redteam to database.xml
@@ -26,7 +27,6 @@
       print_line("")
 
 
-      run_single("workspace -a redteam")
       if (framework.datastore['RANDOM_HOSTS'] == "true")
          if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 300")
@@ -43,6 +43,7 @@
       if (framework.datastore['USERPASS_FILE'] == nil or framework.datastore['USERPASS_FILE'] == '')
          run_single("setg USERPASS_FILE /usr/share/metasploit-framework/data/wordlists/piata_ssh_userpass.txt")
       end
+
       unless (framework.datastore['RANDOM_HOSTS'] == "true")
          run_single("db_nmap -sV -Pn -T4 -O -p 21,22,23,80,110,445,3306 --open --script=smb-os-discovery.nse,http-headers.nse #{framework.datastore['RHOSTS']}")
       else
@@ -84,6 +85,7 @@
               print_warning("Remote Target port: 21 ftp found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/ftp/ftp_version")
+              print_line("")
               run_single("services -c name -S ftp -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/ftp/anonymous")
@@ -95,6 +97,7 @@
               run_single("set STOP_ON_SUCCESS true")
               run_single("set BRUTEFORCE_SPEED 4")
               run_single("set THREADS 70")
+              print_line("")
               run_single("services -c name -S ftp -R")
               run_single("exploit")
          end
@@ -107,6 +110,7 @@
               run_single("set STOP_ON_SUCCESS true")
               run_single("set VERBOSE true")
               run_single("set THREADS 30")
+              print_line("")
               run_single("services -c name -S ssh -R")
               run_single("exploit")
          end
@@ -120,6 +124,7 @@
               run_single("set USERPASS_FILE #{framework.datastore['USERPASS_FILE']}")
               run_single("set STOP_ON_SUCCESS true")
               run_single("set THREADS 16")
+              print_line("")
               run_single("services -c name -S telnet -R")
               run_single("exploit")
          end
@@ -134,6 +139,7 @@
               run_single("use auxiliary/scanner/pop3/pop3_login")
               run_single("set STOP_ON_SUCCESS true")
               run_single("set THREADS 16")
+              print_line("")
               run_single("services -c name -S pop3 -R")
               run_single("exploit")
          end
@@ -143,20 +149,24 @@
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/smb/smb_version")
               run_single("set THREADS 16")
+              print_line("")
               run_single("services -c name -S smb -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/smb/smb_enumusers")
               run_single("set THREADS 16")
+              print_line("")
               run_single("services -c name -S smb -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/smb/smb_enumshares")
               run_single("set THREADS 16")
+              print_line("")
               run_single("services -c name -S smb -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/smb/smb_login")
               run_single("set USERPASS_FILE #{framework.datastore['USERPASS_FILE']}")
               run_single("set STOP_ON_SUCCESS true")
               run_single("set THREADS 16")
+              print_line("")
               run_single("services -c name -S smb -R")
               run_single("exploit")
          end
@@ -166,6 +176,7 @@
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/mysql/mysql_version")
               run_single("set THREADS 20")
+              print_line("")
               run_single("services -c name -S mysql -R")
               run_single("exploit")
               Rex::sleep(1.5)
@@ -175,6 +186,7 @@
               run_single("set BLANK_PASSWORDS true")
               run_single("set VERBOSE true")
               run_single("set THREADS 100")
+              print_line("")
               run_single("services -c name -S mysql -R")
               run_single("exploit")
               Rex::sleep(1.5)
@@ -184,10 +196,12 @@
               print_warning("Remote Target port: 80 http found")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/http/title")
+              print_line("")
               run_single("services -c name -S http -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/http/options")
               run_single("set THREADS 11")
+              print_line("")
               run_single("services -c name -S http -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/http/dir_scanner")
@@ -195,6 +209,7 @@
               run_single("use auxiliary/scanner/http/http_login")
               run_single("set STOP_ON_SUCCESS true")
               run_single("set THREADS 16")
+              print_line("")
               run_single("services -c name -S http -R")
               run_single("exploit")
          end
