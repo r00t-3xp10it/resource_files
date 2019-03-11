@@ -91,7 +91,7 @@ It does **'not'** delete any entries that you have before on your *default works
 <br /><br />
 
 ### manage_db.rc
-Adicionally to all brute force rc scripts and core commands rc scripts, i have written one resource file to manage database common tasks like: Display database stored data, record msfconsole activity (Logfile.log), add hosts to database, import/export files.xml import list of hosts contained on a text file (one-per-line-entries), auto_brute force db hosts by service name, auto_search compatible auxiliarys modules based on db hosts service names input, export database data to one CSV file, the RUN_RC option that allow us to execute another script.rc before manage_db.rc ends execution and clean all database data at script exit.
+Adicionally to all brute force rc scripts and core commands rc scripts, i have written one resource file to manage database common tasks like: Display database stored data, record msfconsole activity (Logfile.log), add hosts to database, import/export files.xml import list of hosts contained on a text file (one-per-line-entries), auto_brute force db hosts by service name, auto search compatible auxiliarys modules based on db hosts service names input, export database data to one CSV file, the RUN_RC option that allow us to execute another script.rc before manage_db.rc ends execution and clean all database data at script exit.
 ![pic](http://i65.tinypic.com/opwwig.gif)
 
 <br /><br />
