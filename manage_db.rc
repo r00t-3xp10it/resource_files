@@ -3,9 +3,9 @@
     Description:
        This Metasploit RC file can be used to manage msfconsole database tasks:
        Display database data, record msfconsole activity, add hosts to database,
-       import files.xml import list of hosts inside a text file (one-per-line-entries)
-       auto-brute-force db hosts by service name, auto-search compatible auxiliarys modules
-       based on db hosts service name inputed and clean all database data at script exit.
+       import files.xml import list of hosts contained on a text file (one-per-line-entries)
+       auto_brute-force db hosts by service name, auto_search compatible auxiliarys modules
+       based on db hosts service names input and clean all database data at script exit.
 
     Execute in msfconsole:
        setg CLEAN <true-or-blank>
@@ -29,23 +29,28 @@
     print_line("")
 
 
+    ## Record msfconsole activity
     if (framework.datastore['RECORD'] == "true")
        run_single("spool database.log")
        Rex::sleep(1.0)
     end
 
+    ## Adds manually hosts to database and asign RHOSTS global var
     unless (framework.datastore['DBHOST'] == nil or framework.datastore['DBHOST'] == '')
        run_single("hosts -a #{framework.datastore['DBHOST']}")
        Rex::sleep(1.0)
     end
 
+    ## Import to current database a text list of hosts (one-per-line-entries)
     unless (framework.datastore['TXT_IMPORT'] == nil or framework.datastore['TXT_IMPORT'] == '')
        check_import = "#{framework.datastore['TXT_IMPORT']}"
+       ## Make sure that file to import exists
        unless (File.exist?(check_import))
           print_error("[ERROR] File to be imported not found.")
           print_error("[ERROR] #{check_import}")
           return nil
        end
+       ## Read contents of file to import, parse data and start msf portscanner
        import_txt = File.read(check_import)
           parse_data = import_txt.split(' ').join(' ')
           print_line("List of hosts to import")
@@ -63,9 +68,12 @@
           Rex::sleep(2.5)
     end
 
+
+    ## Import to database one xml file (nmap, wireshark or metasploit supported)
     unless (framework.datastore['XML_IMPORT'] == nil or framework.datastore['XML_IMPORT'] == '')
        xml_file = "#{framework.datastore['XML_IMPORT']}"
        print_status("Import xml: #{xml_file}")
+       ## Make sure that the file to import exists
        unless (File.exist?(xml_file))
           print_error("[ERROR] Script can not find the path inputed.")
           print_error("[ERROR] #{xml_file}")
@@ -76,11 +84,13 @@
     end
 
 
+    ## Read current database and declare local vars
     run_single("workspace -v")
     Rex::sleep(0.5)
     xhost = framework.db.hosts.map(&:address).join(' ')
     xport = framework.db.services.map(&:port).join(' ')
     proto = framework.db.services.map(&:name).join(' ')
+    ## Do not display the next menu IF database does not contain any hosts
     unless xhost.nil? or xhost == '' or xhost == ' '
        run_single("hosts -c address,name,os_name,os_flavor,os_sp,purpose")
        print_line("")
@@ -91,6 +101,7 @@
     print_line("")
 
 
+    ## Scan current database hosts with nmap framework
     if (framework.datastore['DB_SCAN'] == "true")
        print_warning("Scanning database hosts with nmap.")
        unless xhost.nil? or xhost == '' or xhost == ' '
@@ -113,10 +124,13 @@
        end
     end
 
+
+    ## Displays auxiliary modules based on db service names
     if (framework.datastore['DB_AUX'] == "true")
     print_line("   Sellect auxiliary modules based on db service names:")
     print_line("   ----------------------------------------------------")
     Rex::sleep(1.5)
+       ## List of service names supported by this function
        unless proto =~ /ftp/i or proto =~ /ssh/i or proto =~ /telnet/i or proto =~ /smb/i or proto =~ /microsoft-ds/i or proto =~ /netbios-ssn/i or proto =~ /msrcp/i or proto =~ /pop3/i or proto =~ /mssql/i or proto =~ /mysql/i or proto =~ /http/i or proto =~ /smtp/i or proto =~ /imap/i
           print_error("[ERROR] None service names found in current database.")
           Rex::sleep(2.0)
@@ -158,16 +172,18 @@
     end
 
 
+    ## Brute force database hosts based on service names
     unless (framework.datastore['DB_BRUTE'] == nil or framework.datastore['DB_BRUTE'] == '')
        xport = framework.db.services.map(&:port).join(' ')
        proto = framework.db.services.map(&:name).join(' ')
+       ## Make sure the protocol sellected exists
        unless proto =~ /#{framework.datastore['DB_BRUTE']}/i
             print_error("[ERROR] Service [#{framework.datastore['DB_BRUTE']}] not found in database.")
             Rex::sleep(2.5)
             run_single("unsetg all")
             return nil
        end
-
+       ## List of service names supported by this function
        unless (framework.datastore['DB_BRUTE'] == "ftp" or framework.datastore['DB_BRUTE'] == "ssh" or framework.datastore['DB_BRUTE'] == "telnet" or framework.datastore['DB_BRUTE'] == "smb" or framework.datastore['DB_BRUTE'] == "microsoft-ds" or framework.datastore['DB_BRUTE'] == "netbios-ssn" or framework.datastore['DB_BRUTE'] == "msrpc" or framework.datastore['DB_BRUTE'] == "pop3" or framework.datastore['DB_BRUTE'] == "mssql" or framework.datastore['DB_BRUTE'] == "mysql" or framework.datastore['DB_BRUTE'] == "http")
           print_error("[ERROR] This option does not accept [#{framework.datastore['DB_BRUTE']}] service names.")
           print_warning("Service names supported: ftp|ssh|telnet|smb|microsoft-ds|netbios-ssn|msrpc|pop3|mssql|ms-sql-s|mssql-m|mysql|http")
@@ -175,7 +191,7 @@
           run_single("unsetg all")
           return nil
        end
-
+       ## Start brute force based on current database hosts service names
        run_single("setg USERPASS_FILE /usr/share/metasploit-framework/data/wordlists/piata_ssh_userpass.txt")
          if xport =~ /21/i or proto =~ /ftp/i
            if (framework.datastore['DB_BRUTE'] == "ftp")
@@ -347,9 +363,12 @@
          end
     end
 
+
+    ## Export list of services/hosts to one csv file (eg: ssh_hosts.CSV)
     unless (framework.datastore['CSV_EXPORT'] == nil or framework.datastore['CSV_EXPORT'] == '')
        xport = framework.db.services.map(&:port).join(' ')
        proto = framework.db.services.map(&:name).join(' ')
+       ## Make sure the protocol sellected exists
        unless proto =~ /#{framework.datastore['CSV_EXPORT']}/i
             print_error("[ERROR] Service [#{framework.datastore['CSV_EXPORT']}] not found in database.")
             Rex::sleep(2.5)
@@ -364,23 +383,52 @@
        run_single("services -c port,name -S #{framework.datastore['CSV_EXPORT']} -o #{framework.datastore['CSV_EXPORT']}_hosts.CSV")
     end
 
+
+    ## Execute another script.rc before manage_db.rc ends execution
     unless (framework.datastore['RUN_RC'] == nil or framework.datastore['RUN_RC'] == '')
        exec_rc = "#{framework.datastore['RUN_RC']}"
        unless (File.exist?(exec_rc))
           print_error("[ERROR] resource script to execute not found.")
-          print_warning("[ERROR] #{exec_rc}")
+          print_warning("[SCRIPT] #{exec_rc}")
           run_single("unsetg all")
           return nil
        end
-       run_single("resource #{exec_rc}")
+       ## 'handler.rc' and 'record_session.rc' does not require any special confs
+       xhost = framework.db.hosts.map(&:address).join(' ')
+       if (framework.datastore['RUN_RC'] =~ /handler.rc/i or framework.datastore['RUN_RC'] =~ /record_session.rc/i)
+          run_single("resource #{framework.datastore['RUN_RC']}")
+       end
+       ## Brute force scripts requires 'current database with hosts' or 'setg random_hosts true' option active
+       ## or else the script to be executed through 'run_rc' only scans local lan (eg: 192.168.1.0/24)
+       if (framework.datastore['RUN_RC'] =~ /brute_force.rc/i or framework.datastore['RUN_RC'] =~ /http_CVE.rc/i or framework.datastore['RUN_RC'] =~ /mysql_brute.rc/i or framework.datastore['RUN_RC'] =~ /mysql_brute.rc/i)
+         if (framework.datastore['RANDOM_HOSTS'] == "true")
+            run_single("resource #{framework.datastore['RUN_RC']}")
+         else
+            ## If random_hosts == nil then set rhosts global var
+            unless xhost.nil? or xhost == '' or xhost == ' '
+               run_single("setg RHOSTS #{xhost}")
+               run_single("resource #{framework.datastore['RUN_RC']}")
+            else
+               print_error("[ERROR] This function requires hosts present in db")
+               Rex::sleep(1.0)
+               print_warning("[OR ELSE EXECUTE] 'setg RANDOM_HOSTS true' to use this function.")
+               run_single("unsetg all")
+               return nil
+            end
+         end
+       end
     end
 
+
+    ## Export all database data to database.xml local file 
     if (framework.datastore['XML_EXPORT'] == "true")
        print_warning("Exporting database to: database.xml")
        Rex::sleep(1.5)
        run_single("db_export -f xml database.xml")
     end
 
+
+    ## Cleaning global vars or all database
     print_warning("Cleaning global variables.")
     Rex::sleep(1.5)
     if (framework.datastore['CLEAN'] == "true")
@@ -397,6 +445,8 @@
        print_line("")
     end
 
+
+    ## resource file main menu
     print_line("")
     print_line("Resource Commands              Description")
     print_line("-----------------              -----------")
