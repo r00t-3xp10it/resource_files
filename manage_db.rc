@@ -11,6 +11,7 @@
        setg CLEAN <true-or-blank>
        setg DB_AUX <true-or-blank>
        setg RECORD <true-or-blank>
+       setg DB_SCAN <true-or-blank>
        setg DB_BRUTE <service-name>
        setg CSV_EXPORT <service-name>
        setg XML_EXPORT <true-or-blank>
@@ -80,7 +81,7 @@
     xhost = framework.db.hosts.map(&:address).join(' ')
     xport = framework.db.services.map(&:port).join(' ')
     proto = framework.db.services.map(&:name).join(' ')
-    unless xhost.nil? or xhost == ''
+    unless xhost.nil? or xhost == '' or xhost == ' '
        run_single("hosts -c address,name,os_name,os_flavor,os_sp,purpose")
        print_line("")
        Rex::sleep(0.5)
@@ -90,6 +91,27 @@
     print_line("")
 
 
+    if (framework.datastore['DB_SCAN'] == "true")
+       print_warning("Scanning database hosts with nmap.")
+       unless xhost.nil? or xhost == '' or xhost == ' '
+          print_status("RHOSTS: #{xhost}")
+          run_single("db_nmap -sV -Pn -T4 -O --open #{xhost}")
+          print_line("")
+          run_single("hosts -c address,name,os_name,purpose")
+          print_line("")
+          run_single("services -c port,proto,name,state -u")
+          print_line("")
+          Rex::sleep(1.0)
+       else
+          print_error("[ERROR] None hosts found in current database.")
+          Rex::sleep(2.0)
+          print_line("")
+          run_single("workspace -v")
+          print_line("")
+          run_single("unsetg all")
+          return nil
+       end
+    end
 
     if (framework.datastore['DB_AUX'] == "true")
     print_line("   Sellect auxiliary modules based on db service names:")
@@ -381,6 +403,7 @@
     print_line("setg CLEAN true                Clean database at exit")
     print_line("setg RECORD true               Record msfconsole activity")
     print_line("setg DBHOST 10.10.10.3         Asign RHOSTS manually to database")
+    print_line("setg DB_SCAN true              Auto-Scan database hosts with nmap")
     print_line("setg XML_IMPORT /root/dic.xml  Import database.xml file to database")
     print_line("setg TXT_IMPORT /root/dic.txt  Import text hosts list (one-per-line)")
     print_line("setg XML_EXPORT true           Export contents of db to database.xml")
