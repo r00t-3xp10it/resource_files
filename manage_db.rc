@@ -90,7 +90,7 @@
     xhost = framework.db.hosts.map(&:address).join(' ')
     xport = framework.db.services.map(&:port).join(' ')
     proto = framework.db.services.map(&:name).join(' ')
-    ## Do not display the next menu IF database does not contain any hosts
+    ## Do not display the next table IF database does not contain any hosts
     unless xhost.nil? or xhost == '' or xhost == ' '
        run_single("hosts -c address,name,os_name,os_flavor,os_sp,purpose")
        print_line("")
