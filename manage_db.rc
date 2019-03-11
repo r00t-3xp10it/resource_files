@@ -62,7 +62,7 @@
           run_single("use auxiliary/scanner/portscan/syn")
           run_single("set VERBOSE true")
           run_single("set THREADS 16")
-          run_single("set PORTS 21-23,53,80,110,139,443,445,1433,3306,8080-8083")
+          run_single("set PORTS 21-23,53,80,110,139,443,445,1433,3306,5432,5900,8080-8083")
           run_single("hosts -R")
           run_single("exploit")
           Rex::sleep(2.5)
@@ -131,7 +131,7 @@
     print_line("   ----------------------------------------------------")
     Rex::sleep(1.5)
        ## List of service names supported by this function
-       unless proto =~ /ftp/i or proto =~ /ssh/i or proto =~ /telnet/i or proto =~ /smb/i or proto =~ /microsoft-ds/i or proto =~ /netbios-ssn/i or proto =~ /msrcp/i or proto =~ /pop3/i or proto =~ /mssql/i or proto =~ /mysql/i or proto =~ /http/i or proto =~ /smtp/i or proto =~ /imap/i
+       unless proto =~ /ftp/i or proto =~ /ssh/i or proto =~ /telnet/i or proto =~ /smb/i or proto =~ /microsoft-ds/i or proto =~ /netbios-ssn/i or proto =~ /msrcp/i or proto =~ /pop3/i or proto =~ /mssql/i or proto =~ /mysql/i or proto =~ /http/i or proto =~ /smtp/i or proto =~ /imap/i or proto =~ /postgresql/i or proto =~ /vnc/i
           print_error("[ERROR] None service names found in current database.")
           Rex::sleep(2.0)
           run_single("unsetg all")
@@ -167,6 +167,12 @@
        if proto =~ /imap/i
             run_single("grep -m 5 scanner search name:imap type:auxiliary")
        end
+       if proto =~ /postgresql/i
+            run_single("grep -m 5 scanner search name:postgresql type:auxiliary")
+       end
+       if proto =~ /vnc/i
+            run_single("grep -m 5 scanner search name:vnc type:auxiliary")
+       end
     print_line("   ----------------------------------------------------")
     print_line("")
     end
@@ -184,9 +190,9 @@
             return nil
        end
        ## List of service names supported by this function
-       unless (framework.datastore['DB_BRUTE'] == "ftp" or framework.datastore['DB_BRUTE'] == "ssh" or framework.datastore['DB_BRUTE'] == "telnet" or framework.datastore['DB_BRUTE'] == "smb" or framework.datastore['DB_BRUTE'] == "microsoft-ds" or framework.datastore['DB_BRUTE'] == "netbios-ssn" or framework.datastore['DB_BRUTE'] == "msrpc" or framework.datastore['DB_BRUTE'] == "pop3" or framework.datastore['DB_BRUTE'] == "mssql" or framework.datastore['DB_BRUTE'] == "mysql" or framework.datastore['DB_BRUTE'] == "http")
+       unless (framework.datastore['DB_BRUTE'] == "ftp" or framework.datastore['DB_BRUTE'] == "ssh" or framework.datastore['DB_BRUTE'] == "telnet" or framework.datastore['DB_BRUTE'] == "smb" or framework.datastore['DB_BRUTE'] == "microsoft-ds" or framework.datastore['DB_BRUTE'] == "netbios-ssn" or framework.datastore['DB_BRUTE'] == "msrpc" or framework.datastore['DB_BRUTE'] == "pop3" or framework.datastore['DB_BRUTE'] == "mssql" or framework.datastore['DB_BRUTE'] == "mysql" or framework.datastore['DB_BRUTE'] == "http" or framework.datastore['DB_BRUTE'] == "postgresql" or framework.datastore['DB_BRUTE'] == "postgres" or framework.datastore['DB_BRUTE'] == "vnc")
           print_error("[ERROR] This option does not accept [#{framework.datastore['DB_BRUTE']}] service names.")
-          print_warning("Service names supported: ftp|ssh|telnet|smb|microsoft-ds|netbios-ssn|msrpc|pop3|mssql|ms-sql-s|mssql-m|mysql|http")
+          print_warning("Service names supported: ftp|ssh|telnet|smb|microsoft-ds|netbios-ssn|msrpc|pop3|mssql|ms-sql-s|mssql-m|mysql|postgresql|vnc|http")
           Rex::sleep(2.0)
           run_single("unsetg all")
           return nil
@@ -330,6 +336,40 @@
               run_single("set VERBOSE true")
               run_single("set THREADS 16")
               run_single("services -c name -S mssql -R")
+              run_single("exploit")
+           end
+         end
+
+         if xport =~ /5432/i or proto =~ /postgresql/i or proto =~ /postgres/i
+           if (framework.datastore['DB_BRUTE'] == "postgresql" or framework.datastore['DB_BRUTE'] == "postgres")
+              print_warning("Remote Target port 5432 postgresql found")
+              Rex::sleep(1.0)
+              run_single("use auxiliary/scanner/postgres/postgres_version")
+              run_single("set VERBOSE true")
+              run_single("set THREADS 10")
+              run_single("services -c name -S postgresql -S postgres -R")
+              run_single("exploit")
+              run_single("use auxiliary/scanner/postgres/postgres_login")
+              run_single("set STOP_ON_SUCCESS true")
+              run_single("set BLANK_PASSWORDS true")
+              run_single("set THREADS 20")
+              run_single("services -c name -S postgresql -S postgres -R")
+              run_single("exploit")
+           end
+         end
+
+         if xport =~ /5900/i or proto =~ /vnc/i
+           if (framework.datastore['DB_BRUTE'] == "vnc")
+              print_warning("Remote Target port 5900 vnc found")
+              Rex::sleep(1.0)
+              run_single("use auxiliary/scanner/vnc/vnc_none_auth")
+              run_single("set THREADS 10")
+              run_single("services -c name -S vnc -R")
+              run_single("exploit")
+              run_single("use auxiliary/scanner/vnc/vnc_login")
+              run_single("set STOP_ON_SUCCESS true")
+              run_single("set THREADS 16")
+              run_single("services -c name -S vnc -R")
               run_single("exploit")
            end
          end
