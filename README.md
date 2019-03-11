@@ -86,8 +86,6 @@ This database.xml file can now be **'imported'** to your *default workspace with
 importing this database.xml files **appends** data to your *default workspace database making it larger.<br />
 It does **'not'** delete any entries that you have before on your *default workspace database (it only appends data).
 
-#### [!] Jump to readme file index (beginning) [here](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
-
 <br /><br />
 
 ### manage_db.rc
@@ -104,6 +102,8 @@ Then in 2011 i have read this article [rapid7-@hdmoore](https://blog.rapid7.com/
 "My love for scripting and understanding, have done all the rest" ..
 ![pic](http://i64.tinypic.com/210g9bp.gif)
 
+
+#### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
 
 ### Suspicious Shell Activity RedTeam @2019
 
