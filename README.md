@@ -92,6 +92,50 @@ It does **'not'** delete any entries that you have before on your *default works
 Adicionally to all brute force rc scripts and core commands rc scripts, i have written one resource file to manage database common tasks like: Display database stored data, record msfconsole activity (Logfile.log), add hosts to database, import/export files.xml import list of hosts contained on a text file (one-per-line-entries), auto_brute force db hosts by service name, auto search compatible auxiliarys modules based on db hosts service names, export database data to one CSV file, the RUN_RC option that allow us to execute another script.rc before manage_db.rc ends execution and clean all database data at script exit.
 ![pic](http://i65.tinypic.com/opwwig.gif)
 
+**Step-By-Step how to download/run 'manage_db.rc' script**<br />
+1º download demonstration hosts list (txt)
+
+      wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/remote_hosts.txt
+
+2º download manage_db.rc script to your **/root** folder<br />
+
+      sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/manage_db.rc
+
+3º download http_CVE.rc script to your **/root** folder<br />
+
+      wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/http_CVE.rc
+
+4º download freevulnsearch.nse and port it to nmap
+
+      wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/freevulnsearch.nse
+      sudo cp freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
+      sudo nmap --script-updated
+
+5º start postgresql service (**local machine**)<br />
+
+      sudo service postgresql start
+
+6º execute manage_db.rc and http_CVE.rc together (setg run_rc http_CVE.rc)
+
+      msfconsole -q -x 'setg txt_import remote_hosts.txt;setg db_scan true;setg run_rc http_CVE.rc;setg save_db true;resource manage_db.rc'
+
+7º import the scan made by:http_CVE.rc to *default workspace database
+
+      setg xml_import database_<random-letters>.xml
+      resource manage_db.rc
+
+8º viewing database notes
+
+      notes
+      notes -S '(WWW_AUTHENTICATE|nmap.nse.http-headers.tcp.80)'
+      notes -S '(nmap.nse.freevulnsearch.tcp.22|nmap.nse.freevulnsearch.tcp.53)'
+
+9º clean *default workspace database
+
+      setg clean true
+      resource manage_db.rc
+      exit -y
+
 <br /><br />
 
 ### CREDITS
