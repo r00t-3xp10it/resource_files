@@ -135,9 +135,10 @@ Adicionally to all brute force rc scripts and core commands rc scripts, i have w
       setg clean true
       resource manage_db.rc
       exit -y
+      service postgesql stop
 
 #### Final note:
-Remmenber that we can 'abort' scans simple by pressing the **[CTRL+C]** in command prompt, that hotkey will abort msf auxiliary execution and jump to resource script next funtion (another auxiliary module scan or another funtion inside rc script).
+Remmenber that we can **'abort'** scans simple by pressing the **[CTRL+C]** in command prompt, that hotkey will abort msf auxiliary execution and jump to resource script next funtion (another auxiliary module scan or another funtion inside rc script).
 
 <br /><br />
 
