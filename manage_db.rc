@@ -6,19 +6,10 @@
        import files.xml import list of hosts contained on a text file (one-per-line-entries)
        auto_brute-force db hosts by service name, auto_search compatible auxiliarys modules
        based on db hosts service names input and clean all database data at script exit.
+       'Execute this script without any args (setg) to display script options available'
+
 
     Execute in msfconsole:
-       setg CLEAN <true-or-blank>
-       setg DB_AUX <true-or-blank>
-       setg RECORD <true-or-blank>
-       setg DB_SCAN <true-or-blank>
-       setg DB_BRUTE <service-name>
-       setg CSV_EXPORT <service-name>
-       setg XML_EXPORT <true-or-blank>
-       setg DBHOST <asign-RHOSTS-to-msfconsole>
-       setg RUN_RC <absoluct-path-of-rc-to-execute>
-       setg XML_IMPORT <absoluct-path-of-file.xml-to-import>
-       setg TXT_IMPORT <absoluct-path-of-hosts-list.txt-to-import>
        resource <path-to-script>/manage_db.rc
 
     Author:
@@ -28,6 +19,17 @@
     Rex::sleep(2.0)
     print_line("")
 
+
+    ## Make sure we are connected to db
+    unless framework.db.active
+      print_error("Database not connected to postgresql.")
+      print_warning("[execute] service postgresql start")
+      run_single("exit")
+      return nil
+    else
+      print_good("Database connected to postgresql.")
+      Rex::sleep(1.0)
+    end
 
     ## Record msfconsole activity
     if (framework.datastore['RECORD'] == "true")
@@ -48,11 +50,13 @@
        unless (File.exist?(check_import))
           print_error("[ERROR] File to be imported not found.")
           print_error("[ERROR] #{check_import}")
+          run_single("unsetg all")
           return nil
        end
        ## Read contents of file to import, parse data and start msf portscanner
        import_txt = File.read(check_import)
           parse_data = import_txt.split(' ').join(' ')
+          print_line("")
           print_line("List of hosts to import")
           print_line("=======================")
           run_single("hosts -a #{parse_data}")
@@ -77,6 +81,7 @@
        unless (File.exist?(xml_file))
           print_error("[ERROR] Script can not find the path inputed.")
           print_error("[ERROR] #{xml_file}")
+          run_single("unsetg all")
           return nil
        end
        run_single("db_import #{framework.datastore['XML_IMPORT']}")
@@ -84,29 +89,45 @@
     end
 
 
+
+    if (framework.datastore['LOCAL_SCAN'] == "true")
+       print_warning("Scanning local lan for alive hosts (21:22:23:80:110:445:3306)")
+       run_single("db_nmap -sV -Pn -T4 -p 21,22,23,80,110,445,3306 --open 192.168.1.0/24")
+    end
+
+
     ## Read current database and declare local vars
     run_single("workspace -v")
-    Rex::sleep(0.5)
+    Rex::sleep(1.0)
     xhost = framework.db.hosts.map(&:address).join(' ')
     xport = framework.db.services.map(&:port).join(' ')
     proto = framework.db.services.map(&:name).join(' ')
     ## Do not display the next table IF database does not contain any hosts
     unless xhost.nil? or xhost == '' or xhost == ' '
-       run_single("hosts -c address,name,os_name,os_flavor,os_sp,purpose")
+       run_single("hosts -c address,os_name,os_flavor,vulns")
        print_line("")
-       Rex::sleep(0.5)
+       Rex::sleep(1.0)
        run_single("services -c port,proto,name,state -u")
-       Rex::sleep(2.0)
+       print_line("")
+       Rex::sleep(1.0)
     end
+
+
     print_line("")
-
-
     ## Scan current database hosts with nmap framework
     if (framework.datastore['DB_SCAN'] == "true")
        print_warning("Scanning database hosts with nmap.")
        unless xhost.nil? or xhost == '' or xhost == ' '
           print_status("RHOSTS: #{xhost}")
-          run_single("db_nmap -sV -Pn -T4 -O --open #{xhost}")
+          ## setting speend of scan based on nº of hosts
+          len = xhost.length()
+          if xhost.length() > 200
+               print_warning("LENGTH: #{len} => -T5 (scan speed)")
+               run_single("db_nmap -sV -Pn -T5 --open #{xhost}")
+          else
+               print_status("LENGTH: #{len} => -T4 (scan speed)")
+               run_single("db_nmap -sV -Pn -T4 -O --open #{xhost}")
+          end
           print_line("")
           run_single("hosts -c address,name,os_name,purpose")
           print_line("")
@@ -116,9 +137,6 @@
        else
           print_error("[ERROR] None hosts found in current database.")
           Rex::sleep(2.0)
-          print_line("")
-          run_single("workspace -v")
-          print_line("")
           run_single("unsetg all")
           return nil
        end
@@ -132,7 +150,8 @@
     Rex::sleep(1.5)
        ## List of service names supported by this function
        unless proto =~ /ftp/i or proto =~ /ssh/i or proto =~ /telnet/i or proto =~ /smb/i or proto =~ /microsoft-ds/i or proto =~ /netbios-ssn/i or proto =~ /msrcp/i or proto =~ /pop3/i or proto =~ /mssql/i or proto =~ /mysql/i or proto =~ /http/i or proto =~ /smtp/i or proto =~ /imap/i or proto =~ /postgresql/i or proto =~ /vnc/i
-          print_error("[ERROR] None service names found in current database.")
+          print_error("[ERROR] None services names found in current database.")
+          print_line("   ----------------------------------------------------")
           Rex::sleep(2.0)
           run_single("unsetg all")
           return nil
@@ -192,7 +211,7 @@
        ## List of service names supported by this function
        unless (framework.datastore['DB_BRUTE'] == "ftp" or framework.datastore['DB_BRUTE'] == "ssh" or framework.datastore['DB_BRUTE'] == "telnet" or framework.datastore['DB_BRUTE'] == "smb" or framework.datastore['DB_BRUTE'] == "microsoft-ds" or framework.datastore['DB_BRUTE'] == "netbios-ssn" or framework.datastore['DB_BRUTE'] == "msrpc" or framework.datastore['DB_BRUTE'] == "pop3" or framework.datastore['DB_BRUTE'] == "mssql" or framework.datastore['DB_BRUTE'] == "mysql" or framework.datastore['DB_BRUTE'] == "http" or framework.datastore['DB_BRUTE'] == "postgresql" or framework.datastore['DB_BRUTE'] == "postgres" or framework.datastore['DB_BRUTE'] == "vnc")
           print_error("[ERROR] This option does not accept [#{framework.datastore['DB_BRUTE']}] service names.")
-          print_warning("Service names supported: ftp|ssh|telnet|smb|microsoft-ds|netbios-ssn|msrpc|pop3|mssql|ms-sql-s|mssql-m|mysql|postgresql|vnc|http")
+          print_warning("Service names supported: ftp|ssh|telnet|smb|microsoft-ds|netbios-ssn|msrpc|pop3|mssql|ms-sql-s|mssql-m|mysql|postgresql|postgres|vnc|http")
           Rex::sleep(2.0)
           run_single("unsetg all")
           return nil
@@ -410,7 +429,7 @@
        proto = framework.db.services.map(&:name).join(' ')
        ## Make sure the protocol sellected exists
        unless proto =~ /#{framework.datastore['CSV_EXPORT']}/i
-            print_error("[ERROR] Service [#{framework.datastore['CSV_EXPORT']}] not found in database.")
+            print_error("[ERROR] Service name [#{framework.datastore['CSV_EXPORT']}] not found in database.")
             Rex::sleep(2.5)
             run_single("unsetg all")
             return nil
@@ -433,38 +452,33 @@
           run_single("unsetg all")
           return nil
        end
-       ## 'handler.rc' and 'record_session.rc' does not require any special confs
-       xhost = framework.db.hosts.map(&:address).join(' ')
-       if (framework.datastore['RUN_RC'] =~ /handler.rc/i or framework.datastore['RUN_RC'] =~ /record_session.rc/i)
+       if (framework.datastore['RANDOM_HOSTS'] == "true")
           run_single("resource #{framework.datastore['RUN_RC']}")
-       end
-       ## Brute force scripts requires 'current database with hosts' or 'setg random_hosts true' option active
-       ## or else the script to be executed through 'run_rc' only scans local lan (eg: 192.168.1.0/24)
-       if (framework.datastore['RUN_RC'] =~ /brute_force.rc/i or framework.datastore['RUN_RC'] =~ /http_CVE.rc/i or framework.datastore['RUN_RC'] =~ /mysql_brute.rc/i or framework.datastore['RUN_RC'] =~ /mysql_brute.rc/i)
-         if (framework.datastore['RANDOM_HOSTS'] == "true")
-            run_single("resource #{framework.datastore['RUN_RC']}")
-         else
-            ## If random_hosts == nil then set rhosts global var
-            unless xhost.nil? or xhost == '' or xhost == ' '
-               run_single("setg RHOSTS #{xhost}")
-               run_single("resource #{framework.datastore['RUN_RC']}")
-            else
-               print_error("[ERROR] This function requires hosts present in db")
-               Rex::sleep(1.0)
-               print_warning("[OR ELSE EXECUTE] 'setg RANDOM_HOSTS true' to use this function.")
-               run_single("unsetg all")
-               return nil
-            end
-         end
+       else
+          ## If random_hosts == nil then set rhosts global var
+          unless xhost.nil? or xhost == '' or xhost == ' '
+             run_single("setg RHOSTS #{xhost}")
+             run_single("resource #{framework.datastore['RUN_RC']}")
+          else
+             run_single("resource #{framework.datastore['RUN_RC']}")
+          end
        end
     end
 
 
     ## Export all database data to database.xml local file 
     if (framework.datastore['XML_EXPORT'] == "true")
-       print_warning("Exporting database to: database.xml")
-       Rex::sleep(1.5)
-       run_single("db_export -f xml database.xml")
+       xhost = framework.db.hosts.map(&:address).join(' ')
+       unless xhost.nil? or xhost == '' or xhost == ' '
+          print_warning("Exporting database to: database.xml")
+          Rex::sleep(1.5)
+          run_single("db_export -f xml database.xml")
+       else
+          print_error("[ERROR] None data present in current db to be exported.")
+          Rex::sleep(1.0)
+          run_single("unsetg all")
+          return nil
+       end
     end
 
 
@@ -494,6 +508,7 @@
     print_line("setg RECORD true               Record msfconsole activity")
     print_line("setg DBHOST 10.10.10.3         Asign RHOSTS manually to database")
     print_line("setg DB_SCAN true              Auto-Scan database hosts with nmap")
+    print_line("setg LOCAL_SCAN true           nmap scan local lan for alive hosts")
     print_line("setg XML_IMPORT /root/dic.xml  Import database.xml file to database")
     print_line("setg TXT_IMPORT /root/dic.txt  Import text hosts list (one-per-line)")
     print_line("setg XML_EXPORT true           Export contents of db to database.xml")

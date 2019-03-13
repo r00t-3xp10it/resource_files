@@ -27,6 +27,18 @@
       print_line("")
 
 
+      ## Make sure we are connected to db
+      unless framework.db.active
+        print_error("Database not connected to postgresql.")
+        print_warning("[execute] service postgresql start")
+        run_single("exit")
+        return nil
+      else
+        print_good("Database connected to postgresql.")
+        Rex::sleep(1.0)
+      end
+
+      ## Sellect the type of nmap scan to use
       if (framework.datastore['RANDOM_HOSTS'] == "true")
          if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 300")
@@ -41,6 +53,7 @@
          print_line("RHOSTS => #{framework.datastore['RHOSTS']}")
       end
 
+      ## Nmap freevulnsearch.nse absoluct path
       if (framework.datastore['NSE_PATH'] == nil or framework.datastore['NSE_PATH'] == '')
          nse = "/usr/share/nmap/scripts/freevulnsearch.nse"
          print_line("NSE_PATH => #{nse}")
@@ -49,13 +62,15 @@
          print_line("NSE_PATH => #{nse}")
       end
 
+      ## db_nmap WAN or RHOSTS scan settings
       unless (framework.datastore['RANDOM_HOSTS'] == "true")
-         run_single("db_nmap -sV -Pn -T4 -O -p 21,22,80 --open --script=http-headers.nse #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sV -Pn -T4 -O -p 21,22,80 --open --script=http-headers.nse,http-ntlm-info.nse #{framework.datastore['RHOSTS']}")
       else
          print_warning("db_nmap: search for random remote targets with ports 21:22:80 open (ftp,ssh,http)")
-         run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=http-headers.nse")
+         run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=http-headers.nse,http-ntlm-info.nse")
       end
 
+      ## Read the database 
       run_single("spool http_CVE.log")
       print_line("")
       run_single("services")
@@ -65,6 +80,7 @@
       proto = framework.db.services.map(&:proto).join(' ')
       xname = framework.db.hosts.map(&:os_name).join(' ').gsub(' ',', ')
 
+      ## Make sure that exists hosts/ports (open) in database
       if xhost.nil? or xhost == ''
            print_error("db_nmap scan did not find any alive connections.")
            print_error("Please wait, cleaning recent configurations.")
@@ -83,6 +99,7 @@
            return nil
       end
 
+      ## Make sure that freevulnseach.nse exists
       print_status("Operative systems: #{xname}")
       run_single("setg RHOSTS #{xhost}")
       Rex::sleep(2.0)
@@ -131,17 +148,19 @@
               run_single("exploit")
          end
 
+         ## Running freevulnsearch.nse (scan for CVE's)
          Rex::sleep(1.5)
          print_warning("Running CVE checks againts: #{framework.datastore['RHOSTS']}")
          run_single("db_nmap -sV -T4 -Pn --script=freevulnsearch.nse #{framework.datastore['RHOSTS']}")
 
-
+      ## Save current database to local file (database.xml)
       if (framework.datastore['SAVE_DB'] == "true")
          rand = Rex::Text.rand_text_alpha(5)
          print_warning("Exporting database to: database_#{rand}.xml")
          run_single("db_export -f xml -a database_#{rand}.xml")
       end
 
+      ## Cleaning database and unset global variables
       print_warning("Please wait, Cleaning global variables.")
       Rex::sleep(1.5)
       run_single("unsetg all")
