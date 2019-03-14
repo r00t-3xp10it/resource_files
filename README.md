@@ -20,10 +20,10 @@ why? to allow users to manage all workspaces (databases) and not only redteam wo
 
 ### INDEX
 
-- [!] [using SETG to config scripts](https://github.com/r00t-3xp10it/resource_files#using-setg-global-variables-to-config-this-kind-of-rc-scripts)
-#### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#example)
-#### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
-#### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
+- [1] [Using SETG to config scripts](https://github.com/r00t-3xp10it/resource_files#using-setg-global-variables-to-config-this-kind-of-rc-scripts)
+- [2] [Step-by-step how to run brute_force script](https://github.com/r00t-3xp10it/resource_files#step-by-step-how-to-run-brute_forcerc-script)
+- [3] [Manage_db.rc demonstration exercise](https://github.com/r00t-3xp10it/resource_files#manage_dbrc-demonstration-exercise)
+- [4] [Article about resource files scripting](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
 
 ---
 
@@ -96,7 +96,7 @@ It does **'not'** delete any entries that you have before on your *default works
 
 <br /><br />
 
-### manage_db.rc
+### MANAGE_DB.RC DEMONSTRATION EXERCISE
 Adicionally to all brute force rc scripts and core commands rc scripts, i have written one resource file to manage database common tasks like: Display database stored data, record msfconsole activity (Logfile.log), add hosts to database, import/export files.xml import list of hosts contained on a text file (one-per-line-entries), auto_brute force db hosts by service name, auto search compatible auxiliarys modules based on db hosts service names, export database data to one CSV file, the RUN_RC option that allow us to execute another script.rc before manage_db.rc ends execution and clean all database data at script exit.
 ![pic](http://i65.tinypic.com/opwwig.gif)
 
