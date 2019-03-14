@@ -109,7 +109,7 @@ Adicionally to all brute force rc scripts and core commands rc scripts, i have w
 
       wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/freevulnsearch.nse
       sudo cp freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
-      sudo nmap --script-updated
+      sudo nmap --script-updatedb
 
 5º start postgresql service (**local machine**)<br />
 
