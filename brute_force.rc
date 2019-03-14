@@ -201,7 +201,6 @@
               run_single("use auxiliary/scanner/mysql/mysql_login")
               run_single("set USERPASS_FILE #{framework.datastore['USERPASS_FILE']}")
               run_single("set STOP_ON_SUCCESS true")
-              run_single("set BLANK_PASSWORDS true")
               run_single("set VERBOSE true")
               run_single("set THREADS 100")
               print_line("")
