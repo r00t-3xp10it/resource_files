@@ -37,9 +37,15 @@
        Rex::sleep(1.0)
     end
 
-    ## Adds manually hosts to database and asign RHOSTS global var
+    ## Adds manually hosts to database and scan them with db_nmap
     unless (framework.datastore['DBHOST'] == nil or framework.datastore['DBHOST'] == '')
+       print_line("")
+       print_line("Hosts to import")
+       print_line("=======================")
        run_single("hosts -a #{framework.datastore['DBHOST']}")
+       print_status("Scanning new targets (db_nmap)")
+       Rex::sleep(1.0)
+       run_single("db_nmap -sV -Pn -T4 -O --open #{framework.datastore['DBHOST']}")
        Rex::sleep(1.0)
     end
 
@@ -61,14 +67,9 @@
           print_line("=======================")
           run_single("hosts -a #{parse_data}")
           Rex::sleep(1.5)
-          print_status("Scanning new targets (syn scan)")
+          print_status("Scanning new targets (db_nmap)")
           Rex::sleep(1.0)
-          run_single("use auxiliary/scanner/portscan/syn")
-          run_single("set VERBOSE true")
-          run_single("set THREADS 16")
-          run_single("set PORTS 21-23,53,80,110,139,443,445,1433,3306,5432,5900,8080-8083")
-          run_single("hosts -R")
-          run_single("exploit")
+          run_single("db_nmap -sV -Pn -T4 -O --open #{parse_data}")
           Rex::sleep(2.5)
     end
 
@@ -122,7 +123,7 @@
           ## setting speend of scan based on nº of hosts
           len = xhost.length()
           if xhost.length() > 200
-               print_warning("LENGTH: #{len} => -T5 (scan speed)")
+               print_status("LENGTH: #{len} => -T5 (scan speed)")
                run_single("db_nmap -sV -Pn -T5 --open #{xhost}")
           else
                print_status("LENGTH: #{len} => -T4 (scan speed)")
