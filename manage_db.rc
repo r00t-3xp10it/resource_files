@@ -149,7 +149,7 @@
     print_line("   ----------------------------------------------------")
     Rex::sleep(1.5)
        ## List of service names supported by this function
-       unless proto =~ /ftp/i or proto =~ /ssh/i or proto =~ /telnet/i or proto =~ /smb/i or proto =~ /microsoft-ds/i or proto =~ /netbios-ssn/i or proto =~ /msrcp/i or proto =~ /pop3/i or proto =~ /mssql/i or proto =~ /mysql/i or proto =~ /http/i or proto =~ /smtp/i or proto =~ /imap/i or proto =~ /postgresql/i or proto =~ /vnc/i
+       unless proto =~ /ftp/i or proto =~ /ssh/i or proto =~ /telnet/i or proto =~ /smb/i or proto =~ /netbios/i or proto =~ /msrcp/i or proto =~ /pop3/i or proto =~ /mssql/i or proto =~ /mysql/i or proto =~ /http/i or proto =~ /smtp/i or proto =~ /imap/i or proto =~ /postgresql/i or proto =~ /postgres/i or proto =~ /vnc/i
           print_error("[ERROR] None services names found in current database.")
           print_line("   ----------------------------------------------------")
           Rex::sleep(2.0)
@@ -165,7 +165,7 @@
        if proto =~ /telnet/i
             run_single("grep -m 5 scanner search name:telnet type:auxiliary")
        end
-       if proto =~ /smb/i or proto =~ /microsoft-ds/i or proto =~ /netbios-ssn/i or proto =~ /msrpc/i
+       if proto =~ /smb/i or proto =~ /netbios/i or proto =~ /msrpc/i
             run_single("grep -m 5 scanner search name:smb type:auxiliary")
        end
        if proto =~ /pop3/i
@@ -209,9 +209,9 @@
             return nil
        end
        ## List of service names supported by this function
-       unless (framework.datastore['DB_BRUTE'] == "ftp" or framework.datastore['DB_BRUTE'] == "ssh" or framework.datastore['DB_BRUTE'] == "telnet" or framework.datastore['DB_BRUTE'] == "smb" or framework.datastore['DB_BRUTE'] == "microsoft-ds" or framework.datastore['DB_BRUTE'] == "netbios-ssn" or framework.datastore['DB_BRUTE'] == "msrpc" or framework.datastore['DB_BRUTE'] == "pop3" or framework.datastore['DB_BRUTE'] == "mssql" or framework.datastore['DB_BRUTE'] == "mysql" or framework.datastore['DB_BRUTE'] == "http" or framework.datastore['DB_BRUTE'] == "postgresql" or framework.datastore['DB_BRUTE'] == "postgres" or framework.datastore['DB_BRUTE'] == "vnc")
+       unless (framework.datastore['DB_BRUTE'] == "ftp" or framework.datastore['DB_BRUTE'] == "ssh" or framework.datastore['DB_BRUTE'] == "telnet" or framework.datastore['DB_BRUTE'] == "smb" or framework.datastore['DB_BRUTE'] == "netbios" or framework.datastore['DB_BRUTE'] == "msrpc" or framework.datastore['DB_BRUTE'] == "pop3" or framework.datastore['DB_BRUTE'] == "mssql" or framework.datastore['DB_BRUTE'] == "mysql" or framework.datastore['DB_BRUTE'] == "http" or framework.datastore['DB_BRUTE'] == "postgresql" or framework.datastore['DB_BRUTE'] == "postgres" or framework.datastore['DB_BRUTE'] == "vnc")
           print_error("[ERROR] This option does not accept [#{framework.datastore['DB_BRUTE']}] service names.")
-          print_warning("Service names supported: ftp|ssh|telnet|smb|microsoft-ds|netbios-ssn|msrpc|pop3|mssql|ms-sql-s|mssql-m|mysql|postgresql|postgres|vnc|http")
+          print_warning("Service names supported: ftp|ssh|telnet|smb|netbios|msrpc|pop3|mssql|mysql|postgresql|postgres|vnc|http")
           Rex::sleep(2.0)
           run_single("unsetg all")
           return nil
@@ -288,7 +288,7 @@
            end
          end
 
-         if xport =~ /445/i or proto =~ /smb/i or proto =~ /microsoft-ds/i or proto =~ /netbios-ssn/i or proto =~ /msrpc/i
+         if xport =~ /445/i or proto =~ /smb/i or proto =~ /netbios/i or proto =~ /msrpc/i
            if (framework.datastore['DB_BRUTE'] == "smb")
               print_warning("Remote Target port: 445 smb found")
               Rex::sleep(1.0)
@@ -337,7 +337,7 @@
            end
          end
 
-         if xport =~ /1433/i or proto =~ /ms-sql-s/i or proto =~ /mssql/i or proto =~ /mssql-m/i
+         if xport =~ /1433/i or proto =~ /mssql/i
            if (framework.datastore['DB_BRUTE'] == "mssql")
               print_warning("Remote Target port 1433 mssql found")
               Rex::sleep(1.0)
@@ -445,13 +445,18 @@
           run_single("unsetg all")
           return nil
        end
+       print_warning("Executing 'another' script inside manage_db.rc tasks.")
        if (framework.datastore['RANDOM_HOSTS'] == "true")
           run_single("resource #{framework.datastore['RUN_RC']}")
        else
-          ## If random_hosts == nil then set rhosts global var
+          ## If random_hosts != nil then set rhosts global var
           unless xhost.nil? or xhost == '' or xhost == ' '
-             run_single("setg RHOSTS #{xhost}")
-             run_single("resource #{framework.datastore['RUN_RC']}")
+             if framework.datastore['RUN_RC'] =~ /handler.rc/i
+                run_single("resource #{framework.datastore['RUN_RC']}")
+             else
+                run_single("setg RHOSTS #{xhost}")
+                run_single("resource #{framework.datastore['RUN_RC']}")
+             end
           else
              run_single("resource #{framework.datastore['RUN_RC']}")
           end
