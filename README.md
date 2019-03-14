@@ -61,6 +61,8 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;setg USERPASS_FILE dicionary.txt;resource mysql_brute.rc'
 
+#### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
+
 ---
 
 <br /><br /><br />
@@ -94,7 +96,11 @@ This database.xml file can now be **'imported'** to your *default workspace with
 importing this database.xml files **appends** data to your *default workspace database making it larger.<br />
 It does **'not'** delete any entries that you have before on your *default workspace database (it only appends data).
 
-<br /><br />
+#### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
+
+---
+
+<br /><br /><br />
 
 ### MANAGE_DB.RC DEMONSTRATION EXERCISE
 Adicionally to all brute force rc scripts and core commands rc scripts, i have written one resource file to manage database common tasks like: Display database stored data, record msfconsole activity (Logfile.log), add hosts to database, import/export files.xml import list of hosts contained on a text file (one-per-line-entries), auto_brute force db hosts by service name, auto search compatible auxiliarys modules based on db hosts service names, export database data to one CSV file, the RUN_RC option that allow us to execute another script.rc before manage_db.rc ends execution and clean all database data at script exit.
@@ -148,7 +154,11 @@ Adicionally to all brute force rc scripts and core commands rc scripts, i have w
 #### Final note:
 Remmenber that we can **'abort'** scans simple by pressing the **[CTRL+C]** in command prompt, that hotkey will abort msf auxiliary execution and jump to resource script next funtion (another auxiliary module scan or another funtion inside rc script).
 
-<br /><br />
+#### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
+
+---
+
+<br /><br /><br />
 
 ### CREDITS
 
