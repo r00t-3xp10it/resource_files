@@ -61,7 +61,7 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 
       msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;setg USERPASS_FILE dicionary.txt;resource mysql_brute.rc'
 
-#### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
+#### [!] [Jump to readme file index](https://github.com/r00t-3xp10it/resource_files#index)
 
 ---
 
@@ -96,7 +96,7 @@ This database.xml file can now be **'imported'** to your *default workspace with
 importing this database.xml files **appends** data to your *default workspace database making it larger.<br />
 It does **'not'** delete any entries that you have before on your *default workspace database (it only appends data).
 
-#### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
+#### [!] [Jump to readme file index](https://github.com/r00t-3xp10it/resource_files#index)
 
 ---
 
@@ -154,7 +154,7 @@ Adicionally to all brute force rc scripts and core commands rc scripts, i have w
 #### Final note:
 Remmenber that we can **'abort'** scans simple by pressing the **[CTRL+C]** in command prompt, that hotkey will abort msf auxiliary execution and jump to resource script next funtion (another auxiliary module scan or another funtion inside rc script).
 
-#### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
+#### [!] [Jump to readme file index](https://github.com/r00t-3xp10it/resource_files#index)
 
 ---
 
@@ -169,7 +169,7 @@ Then in 2011 i have read this article [rapid7-@hdmoore](https://blog.rapid7.com/
 ![pic](http://i64.tinypic.com/210g9bp.gif)
 
 
-#### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
+#### [!] [Jump to readme file index](https://github.com/r00t-3xp10it/resource_files#index)
 
 ### Suspicious Shell Activity RedTeam @2019
 
