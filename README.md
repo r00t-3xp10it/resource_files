@@ -20,9 +20,9 @@ why? to allow users to manage all workspaces (databases) and not only redteam wo
 
 ### INDEX
 
-- [1] [Using 'setg' to config rc scripts](https://github.com/r00t-3xp10it/resource_files#using-setg-global-variables-to-config-this-kind-of-rc-scripts)
-- [2] [Step-by-step - how to run brute_force.rc script](https://github.com/r00t-3xp10it/resource_files#step-by-step-how-to-run-brute_forcerc-script)
-- [3] [Manage_db.rc demonstration exercise (WAN)](https://github.com/r00t-3xp10it/resource_files#manage_dbrc-demonstration-exercise)
+- [1] [Using 'setg' (msf) to config rc scripts](https://github.com/r00t-3xp10it/resource_files#using-setg-global-variables-to-config-this-kind-of-rc-scripts)
+- [2] [Step-by-step - How to run brute_force.rc script](https://github.com/r00t-3xp10it/resource_files#step-by-step-how-to-run-brute_forcerc-script)
+- [3] [Manage_db.rc - Demonstration exercise (WAN)](https://github.com/r00t-3xp10it/resource_files#manage_dbrc-demonstration-exercise)
 - [4] [Article about resource files scripting (github)](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
 
 ---
