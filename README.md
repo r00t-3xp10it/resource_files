@@ -19,7 +19,8 @@ why? to allow users to manage all workspaces (databases) and not only redteam wo
 <br />
 
 ### INDEX
-#### [!] [using SETG to config scripts](https://github.com/r00t-3xp10it/resource_files#using-setg-global-variables-to-config-this-kind-of-rc-scripts)
+
+- [!] [using SETG to config scripts](https://github.com/r00t-3xp10it/resource_files#using-setg-global-variables-to-config-this-kind-of-rc-scripts)
 #### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#example)
 #### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
 #### [!] [Jump to readme file index (beginning)](https://github.com/r00t-3xp10it/resource_files#metasploit-resource-files)
