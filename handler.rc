@@ -12,6 +12,10 @@
    print_line(help)
    Rex::sleep(2.0)
    print_status("Input LHOST:")
+
+      ## 'gets' is used to get the LHOST variable from user input, but appends on it the
+      # trailing new line character i.e.'\n' in the end of the string. 'chomp' is the method
+      # to remove the trailing new line character i.e. '\n' from the end of the string.
       addr = gets.chomp
 
       run_single("use exploit/multi/handler")
