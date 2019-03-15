@@ -68,6 +68,7 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 <br /><br /><br />
 
 ### Step-By-Step how to run 'brute_force.rc' script
+![pic](http://i64.tinypic.com/210g9bp.gif)
 
 1º download the resource script to your **/root** folder<br />
 
@@ -166,7 +167,7 @@ About 10 years ago (2009) I heard the creator of metasploit say: **'Automation i
 Then in 2011 i have read this article [rapid7-@hdmoore](https://blog.rapid7.com/2011/12/08/six-ways-to-automate-metasploit/) and everything have changed for me since that day.<br />
 **thank you for the inspiration l33t @hdmoore** ..
 "My love for scripting and understanding, have done all the rest" ..
-![pic](http://i64.tinypic.com/210g9bp.gif)
+
 
 
 #### [!] [Jump to readme file index](https://github.com/r00t-3xp10it/resource_files#index)
