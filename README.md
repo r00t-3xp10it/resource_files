@@ -21,7 +21,7 @@ Why ? to allow users to manage all workspaces (databases) if needed and not only
 ### INDEX
 
 - [1] [Using 'setg' (msf) to config rc scripts](https://github.com/r00t-3xp10it/resource_files#using-setg-global-variables-to-config-this-kind-of-rc-scripts)
-- [2] [Step-by-step - How to run brute_force.rc script](https://github.com/r00t-3xp10it/resource_files#step-by-step-how-to-run-brute_forcerc-script)
+- [2] [Brute_force.rc - Demonstration exercise (WAN)](https://github.com/r00t-3xp10it/resource_files#brute_forcerc-demonstration-exercise)
 - [3] [Manage_db.rc - Demonstration exercise (WAN)](https://github.com/r00t-3xp10it/resource_files#manage_dbrc-demonstration-exercise)
 - [4] [Article about resource files scripting (github)](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
 
@@ -67,8 +67,10 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 
 <br /><br /><br />
 
-### Step-By-Step how to run 'brute_force.rc' script
+### BRUTE_FORCE.RC DEMONSTRATION EXERCISE
 ![pic](http://i64.tinypic.com/210g9bp.gif)
+
+**Step-By-Step how to run 'brute_force.rc' script**<br />
 
 1º download the resource script to your **/root** folder<br />
 
