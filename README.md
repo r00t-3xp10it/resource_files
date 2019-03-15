@@ -170,9 +170,5 @@ Then in 2011 i have read this article [rapid7-@hdmoore](https://blog.rapid7.com/
 **thank you for the inspiration l33t @hdmoore** ..
 "My love for scripting and understanding, have done all the rest" ..
 
-
-
-#### [!] [Jump to readme file index](https://github.com/r00t-3xp10it/resource_files#index)
-
 ### Suspicious Shell Activity RedTeam @2019
 
