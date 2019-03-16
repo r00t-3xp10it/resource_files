@@ -85,7 +85,7 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
       msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 200;resource /root/brute_force.rc'
 
 #### REMARK
-This brute force resource scripts deletes **redteam** workspace at execution exit.
+> This brute force resource scripts deletes **redteam** workspace at execution exit.
 
 How to instruct this scripts to export **redteam** workspace database to a local file at the end of execution? **(database.xml)**<br />
 
