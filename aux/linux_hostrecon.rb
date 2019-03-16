@@ -321,7 +321,6 @@ def run
           mont_uuid = cmd_exec("lsblk -f")
           storage_mont = cmd_exec("lsblk -m")
           current_shell = cmd_exec("echo $0")
-          list_drivers = cmd_exec("lspci -v")
           cpu_stats = cmd_exec("sudo mpstat")
           net_stat = cmd_exec("netstat -tulpn")
           demi_bios = cmd_exec("dmidecode -t bios")
@@ -401,10 +400,6 @@ def run
             data_dump << "SMBIOS DATA (sysfs) :\n"
             data_dump << "---------------------\n"
             data_dump << demi_bios
-            data_dump << "\n\n"
-            data_dump << "LIST ALL DRIVERS :\n"
-            data_dump << "------------------\n"
-            data_dump << list_drivers
             data_dump << "\n\n"
             data_dump << "CPU STATATISTICS :\n"
             data_dump << "------------------\n"
