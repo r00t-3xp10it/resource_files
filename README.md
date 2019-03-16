@@ -106,7 +106,7 @@ It does **'not'** delete any entries that you have before on your *default works
 <br /><br /><br />
 
 ### MANAGE_DB.RC DEMONSTRATION EXERCISE
-Adicionally to all brute force rc scripts and core commands rc scripts, i have written one resource file to manage database common tasks like: Display database stored data, record msfconsole activity (Logfile.log), add hosts to database, import/export files.xml import list of hosts contained on a text file (one-per-line-entries), auto_brute force db hosts by service name, auto search compatible auxiliarys modules based on db hosts service names, export database data to one CSV file, the RUN_RC option that allow us to execute another script.rc before manage_db.rc ends execution and clean all database data at script exit are some of the many options this script has (this scipt will allways be a 'work in progress').
+Adicionally to all brute force rc scripts and core commands rc scripts, i have written one resource file to manage database common tasks like: Display database stored data, record msfconsole activity (Logfile.log), add hosts to database, import/export files.xml import list of hosts contained on a text file (one-per-line-entries), auto_brute force db hosts by service name, auto search compatible auxiliarys modules based on db hosts service names, export database data to one CSV file. Additionally we have the RUN_RC (setg) option that allow us to execute another script.rc before manage_db.rc ends execution, it also cleans all database data (setg CLEAN true) are some of the many options that this script has (this scipt will allways be a 'work in progress').
 ![pic](http://i65.tinypic.com/opwwig.gif)
 
 **Step-By-Step how to download/run 'manage_db.rc' script**<br />
