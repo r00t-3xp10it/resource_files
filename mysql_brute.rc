@@ -76,7 +76,7 @@
       proto = framework.db.services.map(&:proto).join(' ')
       xname = framework.db.hosts.map(&:os_name).join(' ').gsub(' ',', ')
 
-         ## Make sure that exists hosts/ports (open) in database
+         ## Make sure that exists hosts/ports (open?) in database
          if xhost.nil? or xhost == ''
               print_error("db_nmap scan did not find any alive connections.")
               print_error("Please wait, cleaning recent configurations.")
