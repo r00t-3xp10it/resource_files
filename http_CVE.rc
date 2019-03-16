@@ -70,7 +70,7 @@
          run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=http-headers.nse,http-ntlm-info.nse")
       end
 
-      ## Read the database 
+      ## Read the database.
       run_single("spool http_CVE.log")
       print_line("")
       run_single("services")

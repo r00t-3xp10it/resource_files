@@ -38,7 +38,7 @@
         Rex::sleep(1.0)
       end
 
-      ## Sellect the type of nmap scan to use
+      ## Sellect the type of nmap scan to use.
       if (framework.datastore['RANDOM_HOSTS'] == "true")
          if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 800")
