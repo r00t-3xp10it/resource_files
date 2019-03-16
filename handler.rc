@@ -2,7 +2,7 @@
    help = %Q|
     Description:
       Resource File to get the LHOST variable from
-      user input and start a msf multi/handler.
+      user input and start one msf multi/handler.
 
     Author:
        r00t-3xp10it  <pedroubuntu10[at]gmail.com>
