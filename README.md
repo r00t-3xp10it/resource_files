@@ -134,7 +134,7 @@ Adicionally to all brute force rc scripts and core commands rc scripts, i have w
 
 6º execute manage_db.rc and http_CVE.rc together (setg run_rc http_CVE.rc)
 
-      msfconsole -q -x 'setg txt_import remote_hosts.txt;setg db_scan true;setg run_rc http_CVE.rc;setg save_db true;resource manage_db.rc'
+      msfconsole -q -x 'setg txt_import remote_hosts.txt;setg run_rc http_CVE.rc;setg save_db true;resource manage_db.rc'
 
 7º import the scan made by:http_CVE.rc to *default workspace database
 
