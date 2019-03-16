@@ -165,10 +165,10 @@ Remmenber that we can **'abort'** scans simple by pressing the **[CTRL+C]** in c
 
 ### CREDITS
 
-**@fyodor** [nmap] | **@hdmoore** [metasploit]<br />
+**@fyodor** [nmap] | **@hdmoore** [metasploit] | **@enigma0x3** | **@darkoperator**<br />
 About 10 years ago (2009) I heard the creator of metasploit say: **'Automation is the name of the pentest game'**.<br />
 Then in 2011 i have read this article [rapid7-@hdmoore](https://blog.rapid7.com/2011/12/08/six-ways-to-automate-metasploit/) and everything have changed for me since that day.<br />
-**thank you for all the inspiration l33t @hdmoore** ..
+**'Thank you for all the inspiration l33t @hdmoore'** ..
 
 ### Suspicious Shell Activity RedTeam @2019
 
