@@ -63,11 +63,17 @@
       end
 
       ## db_nmap WAN or RHOSTS scan settings
+      fhost = framework.datastore['RANDOM_HOSTS'].length()
+      if fhost.length() > 300
+        len = "-T5"
+      else
+        len = "-T4"
+      end
       unless (framework.datastore['RANDOM_HOSTS'] == "true")
-         run_single("db_nmap -sV -Pn -T4 -O -p 21,22,80 --open --script=http-headers.nse,http-ntlm-info.nse #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sV -Pn #{len} -O -p 21,22,80 --open --script=http-headers.nse,http-ntlm-info.nse #{framework.datastore['RHOSTS']}")
       else
          print_warning("db_nmap: search for random remote targets with ports 21:22:80 open (ftp,ssh,http)")
-         run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=http-headers.nse,http-ntlm-info.nse")
+         run_single("db_nmap -sV -Pn #{len} -O -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=http-headers.nse,http-ntlm-info.nse")
       end
 
       ## Read the database.
@@ -107,9 +113,19 @@
            print_error("[ERROR] freevulnsearch.nse script not found in nmap db.")
            print_error("[ERROR] Download nse script and install it before running this rc file.")
            Rex::sleep(1.0)
-           print_warning("[EXEC] sudo wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse")
-           print_warning("[EXEC] sudo cp freevulnsearch.nse #{nse}")
-           print_warning("[EXEC] sudo nmap --script-updatedb")
+           nof = %Q|
+
+    How To Fix
+    ----------
+    Exit current session and msfconsole < exit AND exit -y >
+    Then execute the follow commands in a new terminal windows:
+
+    sudo wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse
+    sudo cp freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
+    sudo nmap --script-updatedb
+
+           |
+           print_line(nof)
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            run_single("unsetg all")
