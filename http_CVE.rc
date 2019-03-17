@@ -63,17 +63,11 @@
       end
 
       ## db_nmap WAN or RHOSTS scan settings
-      fhost = framework.datastore['RANDOM_HOSTS'].length()
-      if fhost.length() > 300
-        len = "-T5"
-      else
-        len = "-T4"
-      end
       unless (framework.datastore['RANDOM_HOSTS'] == "true")
-         run_single("db_nmap -sV -Pn #{len} -O -p 21,22,80 --open --script=http-headers.nse,http-ntlm-info.nse #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sV -Pn -T4 -O -p 21,22,80 --open --script=http-headers.nse,http-ntlm-info.nse #{framework.datastore['RHOSTS']}")
       else
          print_warning("db_nmap: search for random remote targets with ports 21:22:80 open (ftp,ssh,http)")
-         run_single("db_nmap -sV -Pn #{len} -O -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=http-headers.nse,http-ntlm-info.nse")
+         run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=http-headers.nse,http-ntlm-info.nse")
       end
 
       ## Read the database.

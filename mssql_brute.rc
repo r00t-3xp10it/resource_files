@@ -66,17 +66,11 @@
       end
 
       ## db_nmap WAN or RHOSTS scan settings
-      fhost = framework.datastore['RANDOM_HOSTS'].length()
-      if fhost.length() > 300
-        len = "-T5"
-      else
-        len = "-T4"
-      end
       unless (framework.datastore['RANDOM_HOSTS'] == "true")
-         run_single("db_nmap -sV -Pn #{len} -O -p T:1433 --open --script=ms-sql-info.nse #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sV -Pn -T4 -O -p T:1433 --open --script=ms-sql-info.nse #{framework.datastore['RHOSTS']}")
       else
          print_warning("db_nmap: search for random remote targets with port 1433 open (mssql)")
-         run_single("db_nmap -sV -Pn #{len} -O -p T:1433 --open -iR #{framework.datastore['LIMMIT']} --script=ms-sql-info.nse")
+         run_single("db_nmap -sV -Pn -T4 -O -p T:1433 --open -iR #{framework.datastore['LIMMIT']} --script=ms-sql-info.nse")
       end
 
       ## Read the database 
