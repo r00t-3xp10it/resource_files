@@ -2,4 +2,5 @@ sysinfo
 getuid
 getpid
 idletime
+pwd
 screenshot
