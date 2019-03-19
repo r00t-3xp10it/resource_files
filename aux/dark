@@ -1,6 +1,8 @@
 sysinfo
 getuid
 getpid
-screenshot
-webcam_snap -i 1 -v true
+screenshot -v false
+webcam_snap
 ipconfig
+ls %ProgramFiles%
+
