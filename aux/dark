@@ -1,6 +1,6 @@
 sysinfo
 getuid
 getpid
-idletime
-pwd
 screenshot
+webcam_snap -i 1 -v true
+ipconfig
