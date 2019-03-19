@@ -2,7 +2,7 @@ sysinfo
 getuid
 getpid
 screenshot -v false
-webcam_snap
 ipconfig
 ls %ProgramFiles%
+ls %UserProfile%\\Documents
 
