@@ -2,7 +2,6 @@ sysinfo
 getuid
 getpid
 screenshot -v false
-ipconfig
 ls %ProgramFiles%
 ls %UserProfile%\\Documents
 
