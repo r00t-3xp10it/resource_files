@@ -17,8 +17,8 @@ The **brute force** resource scripts requires that the msf database to be empty 
 Why ? to allow users to manage all workspaces (databases) if needed and not only the redteam workspace.
 
 **WARNING:**<br />
-This resource scripts can **NOT** be run inside meterpeter prompt because **ERB** code its not accepted there.<br />
-In **post_exploitation.rc** case, simple **background** the current session and then load the resource script.
+This resource scripts can **NOT** be run inside meterpreter prompt because **ERB** code its not accepted there.<br />
+In **'post_exploitation.rc'** case, simple **background** the current session and then load the resource script.
 ![pic](http://i63.tinypic.com/5z2jb6.png)
 
 <br />
