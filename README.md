@@ -16,7 +16,8 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 This **brute force** resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new [workspace](https://www.offensive-security.com/metasploit-unleashed/using-databases/#Workspaces) named **'redteam'** and stores all the data inside that workspace while working, then the resource script deletes the **'redteam'** workspace in the end of execution. (This action allow us to mantain the attacker *default workspace database intact). The only script that does not create **redteam** workspace its **manage_db.rc**.<br />
 Why ? to allow users to manage all workspaces (databases) if needed and not only the redteam workspace.
 
-WARNING: **post_exploitation.rc** resource script can **NOT** be run inside meterpeter prompt, this resource script also requires the database to contain only the session active host addr (attacker -> target) or else it will be confused chosing target platform to present the script menu to users.
+**WARNING:** This resource scripts can **NOT** be run inside meterpeter prompt because **ERB** code its not accepted there.
+![pic](http://i63.tinypic.com/5z2jb6.png)
 
 <br />
 
