@@ -1,6 +1,7 @@
    <ruby>
       run_single("workspace -a redteam")
       help = %Q|
+
         Description:
           setg SAVE_DB true - Save workspace redteam to database.xml
           setg LIMMIT 1000 - Limit the number of random rhosts to search

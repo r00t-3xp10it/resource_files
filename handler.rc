@@ -1,5 +1,6 @@
 <ruby>
    help = %Q|
+
     Description:
       Resource File to get the LHOST variable from
       user input and start one msf multi/handler.

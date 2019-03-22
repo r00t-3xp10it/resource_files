@@ -1,7 +1,0 @@
-sysinfo
-getuid
-getpid
-screenshot -v false
-ls %ProgramFiles%
-ls %UserProfile%\\Documents
-

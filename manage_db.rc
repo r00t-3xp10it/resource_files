@@ -1,5 +1,6 @@
 <ruby>
    help = %Q|
+
     Description:
        This Metasploit RC file can be used to manage msfconsole database tasks:
        Display database data, record msfconsole activity, add hosts to database,
