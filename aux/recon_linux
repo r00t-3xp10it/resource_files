@@ -1,0 +1,6 @@
+sysinfo
+getuid
+getpid
+cat /etc/apt/sources.list
+ls /root
+netstat -atnp
