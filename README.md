@@ -19,7 +19,7 @@ Why ? to allow users to manage all workspaces (databases) if needed and not only
 **WARNING:**<br />
 This resource scripts can **NOT** be run inside meterpreter prompt because **ERB** code its not accepted there.<br />
 In **'post_exploitation.rc'** case, simple **background** the current session and then load the resource script.
-![pic](http://i63.tinypic.com/5z2jb6.png)
+![pic](https://i.imgur.com/BVWzYlJ.png)
 
 <br />
 
