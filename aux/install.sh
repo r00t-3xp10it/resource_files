@@ -56,7 +56,7 @@ if [ "$op" = "y" ] || [ "$op" = "Y" ]; then
           sleep 2
        else
           echo ${BlueF}[*]${white} "Copy module to: $aV_path/enum_protections.rb"${Reset};
-          sudo cp enum_protections.rb $aV_path/enum_protections.rb
+          sudo cp $IPATH/enum_protections.rb $aV_path/enum_protections.rb
           fresh = "yes"
           sleep 2
        fi
@@ -71,7 +71,7 @@ if [ "$op" = "y" ] || [ "$op" = "Y" ]; then
           sleep 2
        else
           echo ${BlueF}[*]${white} "Copy module to: $t1180_path/SCRNSAVE_T1180_persistence.rb"${Reset};
-          sudo cp SCRNSAVE_T1180_persistence.rb $t1180_path/SCRNSAVE_T1180_persistence.rb
+          sudo cp $IPATH/SCRNSAVE_T1180_persistence.rb $t1180_path/SCRNSAVE_T1180_persistence.rb
           fresh = "yes"
           sleep 2
        fi
@@ -86,7 +86,7 @@ if [ "$op" = "y" ] || [ "$op" = "Y" ]; then
           sleep 2
        else
           echo ${BlueF}[*]${white} "Copy module to: $Linux_path/linux_hostrecon.rb"${Reset};
-          sudo cp linux_hostrecon.rb $Linux_path/linux_hostrecon.rb
+          sudo cp $IPATH/linux_hostrecon.rb $Linux_path/linux_hostrecon.rb
           fresh = "yes"
           sleep 2
        fi
@@ -103,7 +103,7 @@ if [ "$op" = "y" ] || [ "$op" = "Y" ]; then
 
 
     echo ${BlueF}[*]${white} "Locate nmap nse freevulnsearch.nse path .."${Reset};
-    sudo cp freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
+    sudo cp $IPATH/freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
     echo ${BlueF}[*]${white} "Path: /usr/share/nmap/scripts/freevulnsearch.nse"${Reset};
     sleep 2
 
@@ -123,7 +123,7 @@ if [ "$op" = "y" ] || [ "$op" = "Y" ]; then
 else
 
     Colors;
-    echo ${RedF}[x]${white} "Aboting tasks .."${Reset};
+    echo ${RedF}[x]${white} "Aborting tasks .."${Reset};
 
 fi
 
