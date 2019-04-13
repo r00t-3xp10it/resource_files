@@ -32,6 +32,7 @@ time=$(date | awk {'print $4'})
 cd .. && cd bin
 local=$(cat settings | grep "version" | cut -d '=' -f2)
 rm -f settings > /dev/nul 2>&1
+echo ""
 wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/settings
 remote=$(cat settings | grep "version" | cut -d '=' -f2)
 desc=$(cat settings | grep "description" | cut -d '=' -f2)
@@ -48,6 +49,7 @@ while getopts ":h,:u," opt; do
               echo "[i] Current Branch     : UPDATES AVAILABLE"
               echo "[i] Description        : $desc"
               sleep 2
+              echo "[i] Downloading        : post-exploitation modules"
               echo ""
               
               ## Updating modules
@@ -67,6 +69,7 @@ while getopts ":h,:u," opt; do
               sudo cp $IPATH/linux_hostrecon.rb $Linux_path/linux_hostrecon.rb
 
               ## reload msfdb
+              echo "[i] Reloading msfdb    : reload_all"
               echo ""
               sudo service postgresql start > /dev/nul 2>&1
               #sudo msfdb reinit
