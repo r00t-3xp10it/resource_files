@@ -25,24 +25,23 @@ Reset="${Escape}[0m";
 
 
 
-# -------------------------------
-# Arguments declarations
-# ------------------------------
-time=$(date | awk {'print $4'})
-cd .. && cd bin
-local=$(cat settings | grep "version" | cut -d '=' -f2)
-rm -f settings > /dev/nul 2>&1
-echo ""
-wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/settings
-remote=$(cat settings | grep "version" | cut -d '=' -f2)
-desc=$(cat settings | grep "description" | cut -d '=' -f2)
-cd .. && cd aux
-
 
 ## Arguments menu
+time=$(date | awk {'print $4'})
 while getopts ":h,:u," opt; do
     case $opt in
         update | u)
+
+        ## downloading and comparing versions
+        cd .. && cd bin
+        local=$(cat settings | grep "version" | cut -d '=' -f2)
+        rm -f settings > /dev/nul 2>&1
+        echo ""
+        wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/settings
+        remote=$(cat settings | grep "version" | cut -d '=' -f2)
+        desc=$(cat settings | grep "description" | cut -d '=' -f2)
+        cd .. && cd aux
+
         echo "[i] Local version      : $local"
         echo "[i] Remote version     : $remote"
            if [ "$local" "<" "$remote" ]; then
