@@ -30,7 +30,7 @@ Reset="${Escape}[0m";
 time=$(date | awk {'print $4'})
 while getopts ":h,:u," opt; do
     case $opt in
-        update | u)
+        u)
 
         ## downloading and comparing versions
         cd .. && cd bin
@@ -81,7 +81,7 @@ while getopts ":h,:u," opt; do
            fi
         exit
         ;;
-        help | h)
+        h)
         echo "[i] help menu"
 
 cat << !
@@ -99,7 +99,6 @@ cat << !
        ./install.sh
        ./install.sh -h
        ./install.sh -u
-       ./install.sh -update
 
 !
         exit
