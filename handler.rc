@@ -12,11 +12,11 @@
    print_line(help)
    Rex::sleep(0.5)
    menu = %Q|
-    Command       Description                 platform
-    -------       -----------                 --------      
-    handler       simple multi/handler        multi
-    resource      handler with AutoRunScript  multi
-    evasion       handler with stage encoding multi
+    Command    Description                  platform
+    -------    -----------                  --------      
+    handler    simple multi/handler         multi
+    resource   handler with AutoRunScript   multi
+    evasion    handler with StageEncoding   multi
 
    |
    print_line(menu)

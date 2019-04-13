@@ -24,10 +24,96 @@ Reset="${Escape}[0m";
 }
 
 
-Colors;
+
+# -------------------------------
+# Arguments declarations
+# ------------------------------
+time=$(date | awk {'print $4'})
+cd .. && cd bin
+local=$(cat settings | grep "version" | cut -d '=' -f2)
+rm -f settings > /dev/nul 2>&1
+wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/settings
+remote=$(cat settings | grep "version" | cut -d '=' -f2)
+desc=$(cat settings | grep "description" | cut -d '=' -f2)
+cd .. && cd aux
+
+
+## Arguments menu
+while getopts ":h,:u," opt; do
+    case $opt in
+        update | u)
+        echo "[i] Local version      : $local"
+        echo "[i] Remote version     : $remote"
+           if [ "$local" "<" "$remote" ]; then
+              echo "[i] Current Branch     : UPDATES AVAILABLE"
+              echo "[i] Description        : $desc"
+              sleep 2
+              echo ""
+              
+              ## Updating modules
+              sudo rm -f enum_protections.rb
+              sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/enum_protections.rb
+              aV_path=$(locate modules/post/windows/recon | grep -v '\doc' | grep -v '\documentation' | head -n 1)
+              sudo cp $IPATH/enum_protections.rb $aV_path/enum_protections.rb
+
+              sudo rm -f SCRNSAVE_T1180_persistence.rb
+              sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/SCRNSAVE_T1180_persistence.rb
+              t1180_path=$(locate modules/post/windows/escalate | grep -v '\doc' | grep -v '\documentation' | head -n 1)
+              sudo cp $IPATH/SCRNSAVE_T1180_persistence.rb $t1180_path/SCRNSAVE_T1180_persistence.rb
+
+              sudo rm -f linux_hostrecon.rb
+              sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/linux_hostrecon.rb
+              Linux_path=$(locate modules/post/linux/gather | grep -v '\doc' | grep -v '\documentation' | head -n 1)
+              sudo cp $IPATH/linux_hostrecon.rb $Linux_path/linux_hostrecon.rb
+
+              ## reload msfdb
+              echo ""
+              sudo service postgresql start > /dev/nul 2>&1
+              #sudo msfdb reinit
+              sudo msfconsole -q -x 'db_status;reload_all;exit -y'
+              echo ""
+              echo "[i] Database updated   : $time"
+           else
+              echo "[i] Current Branch     : NONE UPDATES AVAILABLE"
+           fi
+        exit
+        ;;
+        help | h)
+        echo "[i] help menu"
+
+cat << !
+
+    Description:
+       Post_exploitation.rc resource script requires 3 metasploit post modules written by me
+       to assist in post-exploitation tasks. This Install script will install ALL dependencies
+       needed for post_exploitation.rc resource script proper execution.
+
+    Updates:
+       This Install script also allow users to update is current repository (local)
+       and the msf database with my latests msf updated modules (if available).
+
+    Execution:
+       ./install.sh
+       ./install.sh -h
+       ./install.sh -u
+       ./install.sh -update
+
+!
+        exit
+        ;;
+        \?)
+        echo "Invalid option: -$OPTARG"; >&2
+        exit
+        ;;
+    esac
+done
+
+
+
 #
 # BANNER DISPLAY
 #
+Colors;
 clear
 echo ${BlueF}
 cat << !
