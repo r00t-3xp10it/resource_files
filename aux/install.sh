@@ -42,6 +42,7 @@ while getopts ":h,:u," opt; do
         desc=$(cat settings | grep "description" | cut -d '=' -f2)
         cd .. && cd aux
 
+        echo ""
         echo "[i] Local version      : $local"
         echo "[i] Remote version     : $remote"
            if [ "$local" "<" "$remote" ]; then
@@ -49,7 +50,7 @@ while getopts ":h,:u," opt; do
               echo "[i] Description        : $desc"
               sleep 2
               echo "[i] Downloading        : post-exploitation modules"
-              echo ""
+              echo "" && echo ""
               
               ## Updating modules
               sudo rm -f enum_protections.rb
