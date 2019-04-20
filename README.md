@@ -119,7 +119,7 @@ Adicionally to all brute force rc scripts and core commands rc scripts, i have w
 **Step-By-Step how to download/run 'manage_db.rc' script**<br />
 1º download demonstration hosts list (txt)
 
-      wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/remote_hosts.txt
+      wget https://github.com/r00t-3xp10it/resource_files/blob/master/bin/remote_hosts.txt
 
 2º download manage_db.rc script to your **/root** folder<br />
 
