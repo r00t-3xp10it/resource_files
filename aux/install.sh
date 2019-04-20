@@ -34,12 +34,12 @@ while getopts ":h,:u," opt; do
 
         ## downloading and comparing versions
         cd .. && cd bin
-        local=$(cat settings | grep "version" | cut -d '=' -f2)
-        rm -f settings > /dev/nul 2>&1
+        local=$(cat version | grep "version" | cut -d '=' -f2)
+        mv version backup > /dev/nul 2>&1
         echo ""
-        wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/settings
-        remote=$(cat settings | grep "version" | cut -d '=' -f2)
-        desc=$(cat settings | grep "description" | cut -d '=' -f2)
+        wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/version
+        remote=$(cat version | grep "version" | cut -d '=' -f2)
+        desc=$(cat version | grep "description" | cut -d '=' -f2)
         cd .. && cd aux
 
         echo ""
@@ -76,8 +76,15 @@ while getopts ":h,:u," opt; do
               sudo msfconsole -q -x 'db_status;reload_all;exit -y'
               echo ""
               echo "[i] Database updated   : $time"
+              cd .. && cd bin
+              rm -f backup > /dev/nul 2>&1
+              cd .. && cd aux
            else
               echo "[i] Current Branch     : NONE UPDATES AVAILABLE"
+              cd .. && cd bin
+              rm -f version > /dev/nul 2>&1
+              mv backup version > /dev/nul 2>&1
+              cd .. && cd aux
            fi
         exit
         ;;
