@@ -48,7 +48,7 @@ while getopts ":h,:u," opt; do
            if [ "$local" "<" "$remote" ]; then
               echo "[i] Current Branch     : UPDATES AVAILABLE"
               echo "[i] Description        : $desc"
-              sleep 2
+              sleep 3
               echo "[i] Downloading        : post-exploitation modules"
               echo "" && echo ""
               
