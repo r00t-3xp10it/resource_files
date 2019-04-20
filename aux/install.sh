@@ -76,8 +76,10 @@ while getopts ":h,:u," opt; do
               sudo msfconsole -q -x 'db_status;reload_all;exit -y'
               echo ""
               echo "[i] Database updated   : $time"
-              cd .. && cd bin
-              rm -f backup > /dev/nul 2>&1
+              cd ..
+              rm -f post_exploitation.rc > /dev/nul 2>&1
+              sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/post_exploitation.rc
+              cd bin && rm -f backup > /dev/nul 2>&1
               cd .. && cd aux
            else
               echo "[i] Current Branch     : NONE UPDATES AVAILABLE"
