@@ -35,14 +35,14 @@ while getopts ":h,:u," opt; do
         echo "Checking for updates"
         echo "--------------------"
         sleep 1 && cd .. && cd bin
-        local=$(cat version | grep "version" | cut -d '=' -f2)
-        core_local=$(cat version | grep "version" | cut -d '.' -f2)
-        msf_local=$(cat version | grep "version" | cut -d '.' -f3)
+        local=$(cat version | grep "=" | cut -d '=' -f2)
+        core_local=$(cat version | grep "=" | cut -d '.' -f2)
+        msf_local=$(cat version | grep "=" | cut -d '.' -f3)
         mv version backup > /dev/nul 2>&1
         wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/version > /dev/nul 2>&1
-        remote=$(cat version | grep "version" | cut -d '=' -f2)
-        core_remote=$(cat version | grep "version" | cut -d '.' -f2)
-        msf_remote=$(cat version | grep "version" | cut -d '.' -f3)
+        remote=$(cat version | grep "=" | cut -d '=' -f2)
+        core_remote=$(cat version | grep "=" | cut -d '.' -f2)
+        msf_remote=$(cat version | grep "=" | cut -d '.' -f3)
         cd .. && cd aux
 
         echo "[i] Local version      : $local"
