@@ -30,7 +30,8 @@ In **'post_exploitation.rc'** case, simple **background** the current session an
 - [3] [Manage_db.rc - Demonstration exercise (WAN)](https://github.com/r00t-3xp10it/resource_files#manage_dbrc-demonstration-exercise)
 - [4] [Article about resource files scripting (github)](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
 - [5] WIKI-PAGES
-  - [post_exploitation.rc | offensive resource script](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)
+  - [offensive resource script | post_exploitation.rc](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)
+  - [offensive resource scripts | Dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)
 
 ---
 
