@@ -32,8 +32,7 @@ while getopts ":h,:u," opt; do
     case $opt in
         u)
         ## downloading and comparing versions
-        echo "Checking for updates"
-        echo "--------------------"
+        echo "[$time] Checking for updates .." && echo ""
         sleep 1 && cd .. && cd bin
         local=$(cat version | grep "=" | cut -d '=' -f2)
         core_local=$(cat version | grep "=" | cut -d '.' -f2)
@@ -45,14 +44,16 @@ while getopts ":h,:u," opt; do
         msf_remote=$(cat version | grep "=" | cut -d '.' -f3)
         cd .. && cd aux
 
-        echo "[i] Local version      : $local"
-        echo "[i] Remote version     : $remote"
            if [ "$local" "<" "$remote" ]; then
-              echo "[i] Current Branch     : UPDATES AVAILABLE"
+              echo "    Local version   Remote version   Status"
+              echo "    -------------   --------------   ------"
+              echo "    $local           $remote            Updates Available"
+              echo "" && echo ""
               sleep 3
                  if [ "$msf_local" "<" "$msf_remote" ]; then
-                    echo "[i] Downloading        : post-exploitation modules"
-                    echo "" && echo ""   
+                    echo "[i] Updating post-exploitation modules"
+                    echo "[i] ----------------------------------"
+                    sleep 2
                     ## Updating modules
                     sudo rm -f enum_protections.rb
                     sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/enum_protections.rb
@@ -70,22 +71,20 @@ while getopts ":h,:u," opt; do
                     sudo cp $IPATH/linux_hostrecon.rb $Linux_path/linux_hostrecon.rb
 
                     ## reload msfdb
-                    echo "[i] Reloading msfdb    : reload_all"
-                    echo ""
+                    echo "[i] Reloading msfdb (reload_all)"
                     sudo service postgresql start > /dev/nul 2>&1
                     #sudo msfdb reinit
                     sudo msfconsole -q -x 'db_status;reload_all;exit -y'
                     echo ""
-                    echo "[i] Database updated   : $time"
-                    cd ..
-                    rm -f post_exploitation.rc > /dev/nul 2>&1
-                    cd bin && rm -f backup > /dev/nul 2>&1
+                    cd .. && cd bin
+                    rm -f backup > /dev/nul 2>&1
                     cd .. && cd aux
                  fi
 
                  if [ "$core_local" "<" "$core_remote" ]; then
-                    echo "[i] Downloading        : Resource files"
-                    sleep 1 && echo "" && echo "" && cd ..
+                    echo "[i] Updating Resource files"
+                    echo "[i] -----------------------"
+                    sleep 2 && cd ..
                     rm -f *.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/brute_force.rc
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/handler.rc
@@ -98,9 +97,15 @@ while getopts ":h,:u," opt; do
                     cd bin && rm -f backup > /dev/nul 2>&1
                     cd .. && cd aux
                  fi
+                 echo ""
+                 fin_time=$(date | awk {'print $4'})
+                 echo "[i] Database updated: $fin_time"
 
            else
-              echo "[i] Current Branch     : NONE UPDATES AVAILABLE"
+              echo "    Local version   Remote version   Status"
+              echo "    -------------   --------------   ------"
+              echo "    $local           $remote            None Updates Available"
+              echo ""
               cd .. && cd bin
               rm -f version > /dev/nul 2>&1
               mv backup version > /dev/nul 2>&1
@@ -109,18 +114,15 @@ while getopts ":h,:u," opt; do
         exit
         ;;
         h)
-        echo "[i] help menu"
-
 cat << !
 
     Description:
-       Post_exploitation.rc resource script requires 3 metasploit post modules written by me
-       to assist in post-exploitation tasks. This Install script will install ALL dependencies
-       needed for post_exploitation.rc resource script proper execution.
+       This Install script will download/install ALL dependencies needed by all resource
+       scripts in this project/repository to work proper. (msf modules and nmap nse scripts)
 
     Updates:
-       This Install script also allow users to update is current repository (local)
-       and the msf database with my latests msf updated modules (if available).
+       This Install script also allow users to update this project resource scripts or
+       post-exploitation modules and the database with my latests updated modules/scripts.
 
     Execution:
        ./install.sh
