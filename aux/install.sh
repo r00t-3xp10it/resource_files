@@ -77,6 +77,7 @@ while getopts ":h,:u," opt; do
                     sudo msfconsole -q -x 'db_status;reload_all;exit -y'
                     echo ""
                     cd .. && cd bin
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/multi_services_wordlist.txt > /dev/nul 2>&1
                     rm -f backup > /dev/nul 2>&1
                     cd .. && cd aux
                  fi
