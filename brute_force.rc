@@ -62,11 +62,12 @@
       end
 
       ## db_nmap WAN or RHOSTS scan settings
+      # HINT: nmap will use a fake user-agent string (iPhone:Safari)
       unless (framework.datastore['RANDOM_HOSTS'] == "true")
-         run_single("db_nmap -sV -Pn -T4 -O -p 21,22,23,80,110,445,1433,3306 --open --script=http-headers.nse,ip-geolocation-geoplugin.nse #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sV -Pn -T4 -O -p 21,22,23,80,110,445,1433,3306 --open --script=http-headers.nse,ip-geolocation-geoplugin.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
       else
          print_good("Nmap: search for random remote hosts with ports 21:22:23:80:110:445:1433:3306 open")
-         run_single("db_nmap -sV -Pn -T5 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,23,80,110,445,1433,3306 --open --script=http-headers.nse,ip-geolocation-geoplugin.nse")
+         run_single("db_nmap -sV -Pn -T5 -O -iR #{framework.datastore['LIMMIT']} -p 21,22,23,80,110,445,1433,3306 --open --script=http-headers.nse,ip-geolocation-geoplugin.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\"")
       end
 
       ## Read the database 
