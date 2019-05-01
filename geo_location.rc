@@ -2,10 +2,10 @@
       help = %Q|
 
         Description:
-          setg AGRESSIVE true - Use curl ipinfo.io insted of geoiplookup software.
-          setg RHOSTS 216.15.177.33 162.246.22.133 - To instruct db_nmap to scan hosts for geolocation.
-          geo_location.rc will use nmap to populate the msfdb database with remote hosts address then it
-          will trigger nmap nse geolocation scripts and curl/geoiplookup software(s) to display geolocation.
+          setg AGRESSIVE true - Use curl ipinfo.io insted of geoiplookup default package.
+          setg RHOSTS 216.15.177.33 162.246.22.133 - Instruct nmap/msf to scan this hosts for geolocation.
+          geo_location.rc uses nmap to populate the msfdb database with remote host address then it will
+          trigger nmap nse geolocation scripts and curl/geoiplookup software(s) to display hosts geolocation.
           'if none value (setg) has povided then this script will scan all hosts in database using geoiplookup'
 
         Execute in msfconsole:
@@ -20,7 +20,6 @@
       Rex::sleep(1.5)
       print_line("")
 
-
       ## Make sure we are connected to db
       unless framework.db.active
         print_error("[ERROR] Database not connected to postgresql.")
@@ -31,22 +30,22 @@
         local = Dir.pwd
         print_good("Database connected to postgresql.")
         Rex::sleep(1.0)
-           if (framework.datastore['RHOSTS'])
-              print_status("Adding hosts to metasploit database.")
-              Rex::sleep(1.0)
-              ## populate msf database
-              run_single("hosts -a #{framework.datastore['RHOSTS']}")
-           else
-              print_status("Scanning current database for hosts.")
-              Rex::sleep(1.0)
-           end
+        if (framework.datastore['RHOSTS'])
+           print_status("Adding hosts to metasploit database.")
+           Rex::sleep(1.0)
+           ## populate (manually) the msf database
+           run_single("hosts -a #{framework.datastore['RHOSTS']}")
+        else
+           print_status("Scanning current database for hosts.")
+           Rex::sleep(1.0)
+        end
       end
 
-
-      ## Make sure we have any hosts in db to scan
+      ## Make sure we have any hosts in db to start scanning
       xhost = framework.db.hosts.map(&:address).join(' ')
       if xhost.nil? or xhost == '' or xhost == ' '
            print_error("[ERROR] None hosts found in database.")
+           Rex::sleep(1.5)
            err = %Q|
 
         [execute] setg RHOSTS <hosts-separated-by-spaces>
@@ -61,12 +60,13 @@
            return nil
       end
 
-      ## Make sure geoiplookup software its installed
+      ## Make sure geoiplookup software its installed (local)
       unless (framework.datastore['AGRESSIVE'] == "true")
          geoip_lookup = "/usr/bin/geoiplookup"
          unless (File.exist?(geoip_lookup))
             print_error("[ERROR] geoiplookup software not found (local)")
-            Rex::sleep(1.0)
+            print_error("[ERROR] #{geoip_lookup}")
+            Rex::sleep(1.5)
             err = %Q|
 
         Remark
@@ -95,34 +95,35 @@
       print_good("Running nmap nse geolocation scripts.")
       run_single("db_nmap -sV -Pn -T5 --script=ip-geolocation-geoplugin.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{xhost}")
 
-
-      ## geo-location plugin function
-      print_good("Geoiplookup geolocation reports.")
-      print_line("")
+      ## Geo-Location plugin function
+      # HINT: If used <setg AGRESSIVE true> then this script will use curl ipinfo.io/#{ip}
+      # If not used then this script will use geoiplookup package to retrieve hosts geolocation.
       if (framework.datastore['AGRESSIVE'] == "true")
+         print_good("Curl ipinfo.io geolocation reports.")
+         print_line("")
          print_line("")
          geo_ip = framework.db.hosts.map(&:address).each do |f|
-         geo_location = `curl ipinfo.io/#{f} | tr -d '",' | sed 's|{| |g' | sed 's|}||g'`
-         print_line("#{geo_location}")
-         print_line("")
+            geo_location = `curl ipinfo.io/#{f} | tr -d '",' | sed 's|||g' | sed 's|}||g'`
+            print_line("#{geo_location}")
+            print_line("")
          end
       else
+         print_good("Geoiplookup geolocation reports.")
+         print_line("")
          print_line("")
          print_line("    IP addr                GeoLocation")
          print_line("    -------                -----------")
          geo_ip = framework.db.hosts.map(&:address).each do |f|
-         geo_location = `geoiplookup #{f} | cut -d ':' -f2`
-         print_line("    #{f}         #{geo_location}")
+            geo_location = `geoiplookup #{f} | cut -d ':' -f2`
+            print_line("    #{f}         #{geo_location}")
          end
       end
 
-
+   ## clean recent configs and global vars
    unless (framework.datastore['AGRESSIVE'] == "true")
       print_line("")
    end
-   ## clean recent configs and global vars
    print_status("Module execution finished.")
    run_single("unsetg all")
    run_single("back")
-
 </ruby>
