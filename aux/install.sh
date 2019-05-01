@@ -87,14 +87,20 @@ while getopts ":h,:u," opt; do
                     echo "[i] -----------------------"
                     sleep 2 && cd ..
                     rm -f *.rc > /dev/nul 2>&1
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/brute_force.rc
+                    ## Install geo-location plugin
+                    imp=`which geoiplookup`
+                    if ! [ "$?" -eq "0" ]; then
+                       sudo apt-get install geoiplookup > /dev/nul 2>&1
+                    fi
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/handler.rc
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/http_CVE.rc
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/manage_db.rc
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/brute_force.rc
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mssql_brute.rc
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mysql_brute.rc
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/post_exploitation.rc
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/geo_location.rc
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/snmp_exploiter.rc
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/manage_db.rc
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/post_exploitation.rc
                     cd bin && rm -f backup > /dev/nul 2>&1
                     cd .. && cd aux
                  fi
@@ -272,6 +278,20 @@ count="0"
     fi
 
 
+    ## geo-location plugin
+    imp=`which geoiplookup`
+    echo ${BlueF}[*]${white} "Query for geoiplookup software."${Reset};
+    sleep 1
+    if ! [ "$?" -eq "0" ]; then
+       echo ${RedF}[x]${white} "geoiplookup software NOT found."${Reset};
+       sleep 1
+       echo ${BlueF}[*]${white} "Downloading/installing geoiplookup from network"${Reset};
+       sleep 1
+       sudo apt-get install geoiplookup
+    else
+       echo ${GreenF}[*]${white} "geoiplookup found => ${GreenF}(no need to install)"${Reset};
+       sleep 2
+    fi
 
     echo ${BlueF}[*] "----------------------------------------"${Reset};
     echo ${BlueF}[*]${white} "All post-modules are ready to be used."${Reset};
