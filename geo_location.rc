@@ -98,10 +98,10 @@
       end
 
 
-      ## Run nmap nse discovery scripts
+      ## Run nmap nse discovery scripts --script=ip-geolocation-geoplugin.nse
       run_single("hosts -c address,os_name,purpose")
       print_good("Running nmap nse geolocation scripts.")
-      run_single("db_nmap -sV -Pn -T5 -O --script=ip-geolocation-geoplugin.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{xhost}")
+      run_single("db_nmap -sV -Pn -T5 -O --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{xhost}")
 
       ## Geo-Location plugin function
       # HINT: If used <setg USE_CURL true> then this script will use curl ipinfo.io/#{ip}
