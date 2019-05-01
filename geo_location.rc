@@ -2,19 +2,20 @@
       help = %Q|
 
         Description:
-          setg AGRESSIVE true - Use curl ipinfo.io insted of geoiplookup default package.
-          setg RHOSTS 216.15.177.33 162.246.22.133 - Instruct nmap/msf to scan this hosts for geolocation.
+          setg USE_CURL true - Use curl ipinfo.io/ip insted of geoiplookup default package.
+          setg RHOSTS 162.246.22.133 146.101.130.133 - Instruct nmap/msf to scan this hosts geolocation.
           geo_location.rc uses nmap to populate the msfdb database with remote host address then it will
           trigger nmap nse geolocation scripts and curl/geoiplookup software(s) to display hosts geolocation.
           'if none value (setg) has povided then this script will scan all hosts in database using geoiplookup'
 
         Execute in msfconsole:
-          setg AGRESSIVE <true-or-blank>
+          setg USE_CURL <true-or-blank>
           setg RHOSTS <hosts-separated-by-spaces>
           resource <path-to-script>/geo_location.rc
 
         Author:
           r00t-3xp10it  <pedroubuntu10[at]gmail.com>
+
       |
       print_line(help)
       Rex::sleep(1.5)
@@ -49,7 +50,7 @@
            err = %Q|
 
         [execute] setg RHOSTS <hosts-separated-by-spaces>
-        [example] setg RHOSTS 216.15.177.33 162.246.22.133 146.101.130.133
+        [example] setg RHOSTS 162.246.22.133 146.101.130.133
         'Then we are able to run this resource script again'
 
            |
@@ -61,7 +62,7 @@
       end
 
       ## Make sure geoiplookup software its installed (local)
-      unless (framework.datastore['AGRESSIVE'] == "true")
+      unless (framework.datastore['USE_CURL'] == "true")
          geoip_lookup = "/usr/bin/geoiplookup"
          unless (File.exist?(geoip_lookup))
             print_error("[ERROR] geoiplookup software not found (local)")
@@ -76,9 +77,16 @@
         install the package we can still use this script by setting the
         geolocation software to curl ipinfo.io (native in linux distros). 
 
-        [install geoip-bin] sudo apt-get install geoip-bin
-        [use curl ipinfo] setg AGRESSIVE true
-        'Then run this resource script again'
+
+        Install Geoip-Bin
+        -----------------
+        sudo apt-get install geoip-bin
+
+
+        OR: Use Curl Ipinfo.Io
+        ----------------------
+        setg USE_CURL true
+        resource geo_location.rc
 
             |
             print_line(err)
@@ -93,22 +101,22 @@
       ## Run nmap nse discovery scripts
       run_single("hosts -c address,os_name,purpose")
       print_good("Running nmap nse geolocation scripts.")
-      run_single("db_nmap -sV -Pn -T5 --script=ip-geolocation-geoplugin.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{xhost}")
+      run_single("db_nmap -sV -Pn -T5 -O --script=ip-geolocation-geoplugin.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{xhost}")
 
       ## Geo-Location plugin function
-      # HINT: If used <setg AGRESSIVE true> then this script will use curl ipinfo.io/#{ip}
+      # HINT: If used <setg USE_CURL true> then this script will use curl ipinfo.io/#{ip}
       # If not used then this script will use geoiplookup package to retrieve hosts geolocation.
-      if (framework.datastore['AGRESSIVE'] == "true")
-         print_good("Curl ipinfo.io geolocation reports.")
+      if (framework.datastore['USE_CURL'] == "true")
+         print_good("Curl ipinfo.io Geolocation Reports.")
          print_line("")
          print_line("")
          geo_ip = framework.db.hosts.map(&:address).each do |f|
-            geo_location = `curl ipinfo.io/#{f} | tr -d '",' | sed 's|||g' | sed 's|}||g'`
+            geo_location = `curl ipinfo.io/#{f} | tr -d '",' | sed 's|{||g' | sed 's|}||g'`
             print_line("#{geo_location}")
             print_line("")
          end
       else
-         print_good("Geoiplookup geolocation reports.")
+         print_good("Geoiplookup Geolocation Reports.")
          print_line("")
          print_line("")
          print_line("    IP addr                GeoLocation")
@@ -120,10 +128,11 @@
       end
 
    ## clean recent configs and global vars
-   unless (framework.datastore['AGRESSIVE'] == "true")
+   unless (framework.datastore['USE_CURL'] == "true")
       print_line("")
    end
    print_status("Module execution finished.")
+   print_warning("Module::Version::1.0::@2019")
    run_single("unsetg all")
    run_single("back")
 </ruby>
