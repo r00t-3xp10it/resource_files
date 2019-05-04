@@ -2,15 +2,21 @@
       help = %Q|
 
         Description:
-          setg USE_CURL true - Use curl ipinfo.io/ip insted of geoiplookup default package.
-          setg RHOSTS 162.246.22.133 146.101.130.133 - Instruct nmap/msf to scan this hosts geolocation.
-          geo_location.rc uses nmap to populate the msfdb database with remote host address then it will
-          trigger nmap nse geolocation scripts and curl/geoiplookup software(s) to display hosts geolocation.
-          'if none value (setg) has povided then this script will scan all hosts in database using geoiplookup'
+          setg TXT_IMPORT /root/hosts_list.txt - Import a list of hosts to be added to db.
+          setg USE_CURL true - Use curl ipinfo.io/ip insted of geoiplookup (default) package.
+          setg RHOSTS 162.246.22.133 185.99.212.190 - Add hosts to database and scan for geolocation.
+          setg GEOIP_PATH /usr/bin/geoiplookup - Geoiplookup package installation absoluct path (local).
+          setg RESOLVER true - Resolve YOUR internal ip addr into external ip, add it to db and geolocate.
+          geo_location.rc requires geoiplookup (geoip-bin) or curl (ipinfo.io) packages to retrieve the
+          geolocation of all hosts in msf database. (curl will provide more detailed geolocation reports).
+          'IF none value (setg) has povided then this script will scan all hosts in db using geoiplookup'
 
         Execute in msfconsole:
+          setg RESOLVER <true-or-blank>
           setg USE_CURL <true-or-blank>
           setg RHOSTS <hosts-separated-by-spaces>
+          setg TXT_IMPORT <absoluct-path-of-hosts-file>
+          setg GEOIP_PATH <absoluct-path-of-geoiplookup>
           resource <path-to-script>/geo_location.rc
 
         Author:
@@ -19,43 +25,141 @@
       |
       print_line(help)
       Rex::sleep(1.5)
-      print_line("")
+         err=''
+
+
+      ## Display script confs on startup
+      if (framework.datastore['USE_CURL'] == "true")
+           print_line("USE_CURL => true")
+      elsif (framework.datastore['RHOSTS'])
+           ## Geoiplookup package installation (local) absoluct path
+           if (framework.datastore['GEOIP_PATH'] == nil or framework.datastore['GEOIP_PATH'] == '')
+              run_single("setg GEOIP_PATH /usr/bin/geoiplookup")
+           else
+              print_line("GEOIP_PATH => #{framework.datastore['GEOIP_PATH']}")
+           end
+      else
+         ## Geoiplookup package installation (local) absoluct path
+         if (framework.datastore['GEOIP_PATH'] == nil or framework.datastore['GEOIP_PATH'] == '')
+            run_single("setg GEOIP_PATH /usr/bin/geoiplookup")
+         else
+            print_line("GEOIP_PATH => #{framework.datastore['GEOIP_PATH']}")
+         end
+      end
 
       ## Make sure we are connected to db
       unless framework.db.active
         print_error("[ERROR] Database not connected to postgresql.")
-        print_warning("[execute] service postgresql start")
+        Rex::sleep(2.0)
+        err = %Q|
+
+        Remark
+        ------
+        This resource script requires the msf database connected to postgresql.
+
+        Connect DB To Postgresql
+        ------------------------
+        [execute] service postgresql start
+        [execute] msfconsole -q -x 'resource geo_location.rc'
+
+        |
+        print_line(err)
+        print_error("please wait, cleaning recent configurations.")
+        print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/ofensive_script_geo_location")
+        run_single("unsetg all")
         run_single("exit -y")
         return nil
       else
-        local = Dir.pwd
+        work_name = framework.db.workspace.name
         print_good("Database connected to postgresql.")
+        Rex::sleep(0.5)
+        print_status("Working in workspace: *#{work_name}")
         Rex::sleep(1.0)
+
+        ## Function to RESOLVE internal ip to external ip
+        if (framework.datastore['RESOLVER'] == "true")
+           print_warning("Resolving internal IP to External IP")
+           Rex::sleep(2.0)
+           ## Online services to resolve ip addr function
+           # con_vert = `wget -q -O checkip.dyndns.org|sed -e 's/[^[:digit:]|.]//g'`
+           con_vert = `dig @resolver1.opendns.com ANY myip.opendns.com +short`
+           run_single("setg RHOSTS #{con_vert}")
+           Rex::sleep(1.0)
+        end
+
+        ## Import to current database a text list of hosts (one-per-line-entries)
+        unless (framework.datastore['TXT_IMPORT'] == nil or framework.datastore['TXT_IMPORT'] == '')
+           check_import = "#{framework.datastore['TXT_IMPORT']}"
+           ## Make sure that file to import exists
+           unless (File.exist?(check_import))
+              print_error("[ERROR] File to be imported not found.")
+              print_error("[ERROR] #{check_import}")
+              Rex::sleep(2.0)
+              err = %Q|
+
+        Remark
+        ------
+        This function allow us to import a list of hosts contain inside a text file
+        (one-per-line-entries). Metasploit framework only has the 'db_import' command
+        That allow us to import .xml files, this command presents a diferent import
+        function (.txt) available to users.
+
+        Import hosts list
+        -----------------
+        [example] setg TXT_IMPORT <absoluct-path-to-hosts-file>
+        [execute] setg TXT_IMPORT bin/remote_hosts.txt
+        [execute] resource geo_location.rc
+
+              |
+              print_line(err)
+              print_error("please wait, cleaning recent configurations.")
+              print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/ofensive_script_geo_location")
+              run_single("unsetg all")
+              return nil
+           end
+           ## Read contents of file to import, parse data and start msf portscanner
+           import_txt = File.read(check_import)
+              parse_data = import_txt.split(' ').join(' ')
+              print_status("Importing hosts to metasploit database.")
+              Rex::sleep(1.0)
+              run_single("hosts -a #{parse_data}")
+        end
+
         if (framework.datastore['RHOSTS'])
+           ## Populate (manually) the msf database
            print_status("Adding hosts to metasploit database.")
            Rex::sleep(1.0)
-           ## populate (manually) the msf database
            run_single("hosts -a #{framework.datastore['RHOSTS']}")
+           print_good("Geolocating current database host(s).")
+           Rex::sleep(1.0)
         else
-           print_status("Scanning current database for hosts.")
+           ## Scan database hosts only
+           print_good("Geolocating current database host(s).")
            Rex::sleep(1.0)
         end
       end
 
-      ## Make sure we have any hosts in db to start scanning
+      ## Make sure we have any hosts in db before start scanning
       xhost = framework.db.hosts.map(&:address).join(' ')
       if xhost.nil? or xhost == '' or xhost == ' '
-           print_error("[ERROR] None hosts found in database.")
-           Rex::sleep(1.5)
+           print_error("[ERROR] None hosts found in msf database.")
+           Rex::sleep(2.0)
            err = %Q|
 
-        [execute] setg RHOSTS <hosts-separated-by-spaces>
-        [example] setg RHOSTS 162.246.22.133 146.101.130.133
-        'Then we are able to run this resource script again'
+        Remark
+        ------
+        This resource script will scan all hosts in database, If the database
+        its empty we can populate it by using 'setg RHOSTS' msf global variable.
+
+        Add Hosts To Database
+        ---------------------
+        [execute] setg RHOSTS 162.246.22.133 185.99.212.190
+        [execute] resource geo_location.rc
 
            |
            print_line(err)
            print_error("please wait, cleaning recent configurations.")
+           print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/ofensive_script_geo_location")
            run_single("unsetg all")
            run_single("back")
            return nil
@@ -63,11 +167,11 @@
 
       ## Make sure geoiplookup software its installed (local)
       unless (framework.datastore['USE_CURL'] == "true")
-         geoip_lookup = "/usr/bin/geoiplookup"
+         geoip_lookup = "#{framework.datastore['GEOIP_PATH']}"
          unless (File.exist?(geoip_lookup))
-            print_error("[ERROR] geoiplookup software not found (local)")
-            print_error("[ERROR] #{geoip_lookup}")
-            Rex::sleep(1.5)
+            print_error("[ERROR] geoiplookup package not found (local)")
+            print_error("[ERROR] GEOIP_PATH: #{geoip_lookup}")
+            Rex::sleep(2.0)
             err = %Q|
 
         Remark
@@ -75,22 +179,43 @@
         This function requires geoiplookup package (geoip-bin) installed
         to be abble to retry target host geolocation, if we dont want to
         install the package we can still use this script by setting the
-        geolocation software to curl ipinfo.io (native in linux distros). 
-
+        geolocation software to use curl ipinfo.io insted. (linux native) 
 
         Install Geoip-Bin
         -----------------
-        sudo apt-get install geoip-bin
+        [execute] apt-get update
+        [execute] apt-get install geoip-bin
+        [execute] resource geo_location.rc
 
 
-        OR: Use Curl Ipinfo.Io
-        ----------------------
-        setg USE_CURL true
-        resource geo_location.rc
+        Remark
+        ------
+        If we have geoiplookup package installed on a diferent location
+        we can set the correct path using 'GEOIP_PATH' msf global variable
+        before executing this script (global vars will be clean on exit).
+
+        Set Geoiplookup Path
+        --------------------
+        [execute] setg GEOIP_PATH /usr/bin/geoiplookup
+        [execute] resource geo_location.rc
+
+
+        Remark
+        ------
+        If we dont want to install geoiplookup package, we can still use
+        this scipt by setting the geolocation to curl ipinfo (linux native)
+        using 'USE_CURL' msf global variable before executing this script.
+        HINT: Using curl will provide more detailed geolocation report(s).
+
+        Use Curl Ipinfo.Io
+        ------------------
+        [execute] setg USE_CURL true
+        [execute] resource geo_location.rc
 
             |
             print_line(err)
             print_error("please wait, cleaning recent configurations.")
+            print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/ofensive_script_geo_location")
             run_single("unsetg all")
             run_single("back")
             return nil
@@ -98,41 +223,50 @@
       end
 
 
-      ## Run nmap nse discovery scripts --script=ip-geolocation-geoplugin.nse
+      print_line("")
       run_single("hosts -c address,os_name,purpose")
-      print_good("Running nmap nse geolocation scripts.")
-      run_single("db_nmap -sV -Pn -T5 -O --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{xhost}")
-
-      ## Geo-Location plugin function
+      print_line("")
+      ## Geo-Location plugin(s) function(s)
       # HINT: If used <setg USE_CURL true> then this script will use curl ipinfo.io/#{ip}
       # If not used then this script will use geoiplookup package to retrieve hosts geolocation.
       if (framework.datastore['USE_CURL'] == "true")
-         print_good("Curl ipinfo.io Geolocation Reports.")
+         print_line("Curl ipinfo.io Geolocation Reports")
+         print_line("==================================")
+         Rex::sleep(1.5)
          print_line("")
-         print_line("")
-         geo_ip = framework.db.hosts.map(&:address).each do |f|
-            geo_location = `curl ipinfo.io/#{f} | tr -d '",' | sed 's|{||g' | sed 's|}||g'`
+         ## Mapping database hosts (loop)
+         framework.db.hosts.map(&:address).each do |sHost|
+            geo_location = `curl ipinfo.io/#{sHost}|tr -d '",'|sed 's|{||g'|sed 's|}||g'`
             print_line("#{geo_location}")
             print_line("")
          end
       else
-         print_good("Geoiplookup Geolocation Reports.")
+         ## Use geoiplookup package (default)
+         # HINT: geoiplookup works offline (its a local database)
+         print_line("Geoiplookup Geolocation Reports")
+         print_line("===============================")
+         Rex::sleep(1.5)
          print_line("")
-         print_line("")
-         print_line("    IP addr                GeoLocation")
-         print_line("    -------                -----------")
-         geo_ip = framework.db.hosts.map(&:address).each do |f|
-            geo_location = `geoiplookup #{f} | cut -d ':' -f2`
-            print_line("    #{f}         #{geo_location}")
+         print_line("IP addr           GeoLocation")
+         print_line("-------           -----------")
+         ## Mapping database hosts (loop)
+         framework.db.hosts.map(&:address).each do |sHost|
+            geo_location = `geoiplookup #{sHost}|cut -d ':' -f2|tr -d '\n'`
+            print_line("#{sHost}   #{geo_location}")
          end
       end
 
-   ## clean recent configs and global vars
+
+   ## Clean recent configs and global vars
    unless (framework.datastore['USE_CURL'] == "true")
       print_line("")
+      print_line("")
    end
-   print_status("Module execution finished.")
-   print_warning("Module::Version::1.0::@2019")
+
    run_single("unsetg all")
+   Rex::sleep(1.0)
+   print_status("Module execution finished.")
+   print_status("Geo_location::Version::1.1::SSA_redteam@2019")
+   print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/ofensive_script_geo_location")
    run_single("back")
 </ruby>

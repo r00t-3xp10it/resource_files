@@ -30,8 +30,9 @@ In **'post_exploitation.rc'** case, simple **background** the current session an
 - [3] [Manage_db.rc - Demonstration exercise (WAN)](https://github.com/r00t-3xp10it/resource_files#manage_dbrc-demonstration-exercise)
 - [4] [Article about resource files scripting (github)](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
 - [5] WIKI-PAGES
-  - [offensive resource script | post_exploitation.rc](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)
   - [offensive resource scripts | Dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)
+  - [offensive resource script | post_exploitation.rc](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)
+  - [offensive resource script | geo_location.rc](https://github.com/r00t-3xp10it/resource_files/wiki/geo_location.rc-%7C-offensive-resource-script)
 
 ---
 
@@ -84,13 +85,17 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 
       wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/brute_force.rc
 
-2º start postgresql service (**local machine**)<br />
+2º download wordlist (dicionary file)
+
+      wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/multi_services_wordlist.txt
+
+3º start postgresql service (**local machine**)<br />
 
       service postgresql start
 
-3º run brute_force.rc resource script to search hosts in WAN (**limmit the search to 200 hosts**)<br />
+4º run brute_force.rc resource script to search hosts in WAN (**limmit the search to 200 hosts**)<br />
 
-      msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 200;resource /root/brute_force.rc'
+      msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 200;setg USERPASS_FILE multi_services_wordlist.txt;resource brute_force.rc'
 
 #### REMARK
 > This brute force resource scripts deletes **redteam** workspace at execution exit.
