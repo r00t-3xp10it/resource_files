@@ -3,7 +3,7 @@
 # variable declarations _________________________________
 #                                                        |
 OS=`uname`                                               # grab OS
-ver="1.0"                                                # toolkit version
+ver="1.1"                                                # toolkit version
 DiStRo=`awk '{print $1}' /etc/issue`                     # grab distribution -  Ubuntu or Kali
 IPATH=`pwd`                                              # grab install.sh install path
 # _______________________________________________________|
@@ -54,7 +54,8 @@ while getopts ":h,:u," opt; do
                     echo "[i] Updating post-exploitation modules"
                     echo "[i] ----------------------------------"
                     sleep 2
-                    ## Updating modules
+
+                    ## Updating msf modules
                     sudo rm -f enum_protections.rb
                     sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/enum_protections.rb
                     aV_path=$(locate modules/post/windows/recon | grep -v '\doc' | grep -v '\documentation' | head -n 1)
@@ -71,15 +72,21 @@ while getopts ":h,:u," opt; do
                     sudo cp $IPATH/linux_hostrecon.rb $Linux_path/linux_hostrecon.rb
 
                     ## reload msfdb
+                    echo "[i] ----------------------------------"
                     echo "[i] Reloading msfdb (reload_all)"
                     sudo service postgresql start > /dev/nul 2>&1
                     #sudo msfdb reinit
                     sudo msfconsole -q -x 'db_status;reload_all;exit -y'
                     echo ""
+
                     cd .. && cd bin
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/multi_services_wordlist.txt > /dev/nul 2>&1
                     rm -f backup > /dev/nul 2>&1
                     cd .. && cd aux
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon_linux.rc > /dev/nul 2>&1
+                    echo "[i] Directory: /aux Updated."
+                    sleep 1
                  fi
 
                  if [ "$core_local" "<" "$core_remote" ]; then
@@ -90,7 +97,7 @@ while getopts ":h,:u," opt; do
                     ## Install geo-location plugin
                     imp=`which geoiplookup`
                     if ! [ "$?" -eq "0" ]; then
-                       sudo apt-get install geoiplookup > /dev/nul 2>&1
+                       sudo apt-get update && apt-get install geoiplookup > /dev/nul 2>&1
                     fi
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/handler.rc
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/http_CVE.rc
@@ -103,6 +110,9 @@ while getopts ":h,:u," opt; do
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/post_exploitation.rc
                     cd bin && rm -f backup > /dev/nul 2>&1
                     cd .. && cd aux
+                    echo "[i] -----------------------"
+                    echo "[i] Directory: /resource_files Updated."
+                    sleep 1
                  fi
                  echo ""
                  fin_time=$(date | awk {'print $4'})
@@ -125,7 +135,7 @@ cat << !
 
     Description:
        This Install script will download/install ALL dependencies needed by all resource
-       scripts in this project/repository to work proper. (msf modules and nmap nse scripts)
+       scripts in this project/repository to work proper. (msf modules ; nmap nse scripts)
 
     Updates:
        This Install script also allow users to update this project resource scripts or
