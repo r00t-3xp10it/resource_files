@@ -32,7 +32,7 @@ In **'post_exploitation.rc'** case, simple **background** the current session an
 - [5] WIKI-PAGES
   - [offensive resource scripts | Dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)
   - [offensive resource script | post_exploitation.rc](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)
-  - [offensive resource script | geo_location.rc](https://github.com/r00t-3xp10it/resource_files/wiki/geo_location.rc-%7C-offensive-resource-script)
+  - [offensive resource script | geo_location.rc](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location)
 
 ---
 
