@@ -6,7 +6,7 @@
           setg SAVE_DB true - Save workspace redteam to database.xml
           setg LIMMIT 1000 - Limmit the number of random WAN hosts to search
           setg RANDOM_HOSTS true - To instruct db_nmap to random search in WAN for hosts with ports open
-          setg RHOSTS 216.15.177.33 162.246.22.133 - To instruct db_nmap to scan hosts for ports open
+          setg RHOSTS 216.15.177.33 162.246.22.133 - To instruct db_nmap to scan hosts for ports open.
           setg USERPASS_FILE /root/my_dicionary.txt - To instruct auxiliarys to use our own dicionary file
           brute_force.rc will use nmap to populate the msfdb database with remote hosts address then it
           triggers msf auxiliary/scanners based on host(s) open port(s) and service name discovery.
