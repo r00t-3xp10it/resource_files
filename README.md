@@ -13,7 +13,7 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 <br />
 
 ### REMARK
-The **brute force** resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new [workspace](https://www.offensive-security.com/metasploit-unleashed/using-databases/#Workspaces) named **'redteam'** and stores all the data inside that workspace while working, then the resource script deletes the **'redteam'** workspace in the end of execution. (This action allow us to mantain the attacker *default workspace database intact).
+The **brute force** resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new [workspace](https://www.offensive-security.com/metasploit-unleashed/using-databases/#Workspaces) named **'redteam'** and stores all the data inside that workspace while working, then the resource script deletes the **'redteam'** workspace in the end of execution.<br />**(This action allow us to mantain the attacker *default workspace database intact).**
 
 <br />
 
@@ -42,7 +42,7 @@ In **'post_exploitation.rc'** case, simple **background** the current session an
 ### USING 'SETG' GLOBAL VARIABLES TO CONFIG THIS KIND OF RC SCRIPTS
 
 ![pic](http://i67.tinypic.com/2iu59g7.png)
-Many of the this brute force resource scripts are written to accept **user inputs** (msfconsole setg global variable).<br />This means that i have written this resource scripts to work in 3 diferent ways:
+Many of the this brute force resource scripts are written to accept **user inputs** (msfconsole setg global variable).<br />**This means that i have written this resource scripts to work in 3 diferent ways:**
 
 Execute resource script againts local lan
 
@@ -101,7 +101,7 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 <br /><br />
 
 #### REMARK
-"This brute force resource scripts deletes the **redteam** workspace at execution exit".
+"This brute force resource scripts deletes the **redteam** workspace at execution exit".<br />
 How to instruct this scripts to export **redteam** workspace database to a local file at the end of execution? **(database.xml)**<br />
 
       msfconsole -q -x 'setg SAVE_DB true;setg RANDOM_HOSTS true;setg LIMMIT 200;resource /root/brute_force.rc'
@@ -118,7 +118,7 @@ It does **'not'** delete any entries that you have before on your *default works
 
 ---
 
-<br /><br /><br />
+<br />
 
 ### CREDITS
 
