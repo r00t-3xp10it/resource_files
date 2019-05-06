@@ -13,8 +13,9 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 <br />
 
 ### REMARK
-The **brute force** resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new [workspace](https://www.offensive-security.com/metasploit-unleashed/using-databases/#Workspaces) named **'redteam'** and stores all the data inside that workspace while working, then the resource script deletes the **'redteam'** workspace in the end of execution. (This action allow us to mantain the attacker *default workspace database intact). The only script that does not create **redteam** workspace its **manage_db.rc**.<br />
-Why ? to allow users to manage all workspaces (databases) if needed and not only the redteam workspace.
+The **brute force** resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new [workspace](https://www.offensive-security.com/metasploit-unleashed/using-databases/#Workspaces) named **'redteam'** and stores all the data inside that workspace while working, then the resource script deletes the **'redteam'** workspace in the end of execution. (This action allow us to mantain the attacker *default workspace database intact).
+
+<br />
 
 **WARNING:**<br />
 This resource scripts can **NOT** be run inside meterpreter prompt because **ERB** code its not accepted there.<br />
@@ -31,8 +32,8 @@ In **'post_exploitation.rc'** case, simple **background** the current session an
 - [4] [Article about resource files scripting (github)](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
 - [5] WIKI-PAGES
   - [offensive resource scripts | Dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)
-  - [offensive resource script | post_exploitation.rc](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)
   - [offensive resource script | geo_location.rc](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location)
+  - [offensive resource script | post_exploitation.rc](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)
 
 ---
 
@@ -97,9 +98,10 @@ Instruct the resource script to scan rhosts input by attacker, and use the attac
 
       msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 200;setg USERPASS_FILE multi_services_wordlist.txt;resource brute_force.rc'
 
-#### REMARK
-> This brute force resource scripts deletes **redteam** workspace at execution exit.
+<br /><br />
 
+#### REMARK
+"This brute force resource scripts deletes the **redteam** workspace at execution exit".
 How to instruct this scripts to export **redteam** workspace database to a local file at the end of execution? **(database.xml)**<br />
 
       msfconsole -q -x 'setg SAVE_DB true;setg RANDOM_HOSTS true;setg LIMMIT 200;resource /root/brute_force.rc'
@@ -111,64 +113,6 @@ This database.xml file can now be **'imported'** to your *default workspace with
 #### REMARK
 importing this database.xml files **appends** data to your *default workspace database making it larger.<br />
 It does **'not'** delete any entries that you have before on your *default workspace database (it only appends data).
-
-#### [!] [Jump to readme file index](https://github.com/r00t-3xp10it/resource_files#index)
-
----
-
-<br /><br /><br />
-
-### MANAGE_DB.RC DEMONSTRATION EXERCISE
-Adicionally to all brute force rc scripts and core commands rc scripts, i have written one resource file to manage database common tasks like: Display database stored data, record msfconsole activity (Logfile.log), add hosts to database, import/export files.xml import list of hosts contained on a text file (one-per-line-entries), auto_brute force db hosts by service name, auto search compatible auxiliarys modules based on db hosts service names, export database data to one CSV file. Additionally we have the RUN_RC (setg) option that allow us to execute another script.rc before manage_db.rc ends execution, it also cleans all database (setg CLEAN true) are some of the many options that this script has (this scipt will allways be a 'work in progress').
-![pic](http://i65.tinypic.com/opwwig.gif)
-
-**Step-By-Step how to download/run 'manage_db.rc' script**<br />
-1º download demonstration hosts list (txt)
-
-      wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/remote_hosts.txt
-
-2º download manage_db.rc script to your **/root** folder<br />
-
-      wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/manage_db.rc
-
-3º download http_CVE.rc script to your **/root** folder<br />
-
-      wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/http_CVE.rc
-
-4º download freevulnsearch.nse and port it to nmap
-
-      wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/freevulnsearch.nse
-      sudo cp freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
-      sudo nmap --script-updatedb
-
-5º start postgresql service (**local machine**)<br />
-
-      service postgresql start
-
-6º execute manage_db.rc and http_CVE.rc together (setg run_rc http_CVE.rc)
-
-      msfconsole -q -x 'setg txt_import remote_hosts.txt;setg run_rc http_CVE.rc;setg save_db true;resource manage_db.rc'
-
-7º import the scan made by:http_CVE.rc to *default workspace database
-
-      setg xml_import database_<random-letters>.xml
-      resource manage_db.rc
-
-8º viewing database notes
-
-      notes
-      notes -S '(WWW_AUTHENTICATE|nmap.nse.http-headers.tcp.80)'
-      notes -S '(nmap.nse.freevulnsearch.tcp.22|nmap.nse.freevulnsearch.tcp.53)'
-
-9º clean *default workspace database
-
-      setg clean true
-      resource manage_db.rc
-      exit -y
-      service postgesql stop
-
-#### Final note:
-Remmenber that we can **'abort'** scans simple by pressing the **[CTRL+C]** in command prompt, that hotkey will abort msf auxiliary execution and jump to resource script next funtion (another auxiliary module scan or another funtion inside rc script).
 
 #### [!] [Jump to readme file index](https://github.com/r00t-3xp10it/resource_files#index)
 
