@@ -37,11 +37,13 @@ while getopts ":h,:u," opt; do
         local=$(cat version | grep "=" | cut -d '=' -f2)
         core_local=$(cat version | grep "=" | cut -d '.' -f2)
         msf_local=$(cat version | grep "=" | cut -d '.' -f3)
+        main_local=$(cat version | grep "=" | cut -d '.' -f1 | cut -d '=' -f2)
         mv version backup > /dev/nul 2>&1
         wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/version > /dev/nul 2>&1
         remote=$(cat version | grep "=" | cut -d '=' -f2)
         core_remote=$(cat version | grep "=" | cut -d '.' -f2)
         msf_remote=$(cat version | grep "=" | cut -d '.' -f3)
+        main_remote=$(cat version | grep "=" | cut -d '.' -f1 | cut -d '=' -f2)
         cd .. && cd aux
 
            if [ "$local" "<" "$remote" ]; then
@@ -56,26 +58,43 @@ while getopts ":h,:u," opt; do
                     sleep 2
 
                     ## Updating msf modules
-                    sudo rm -f enum_protections.rb
-                    sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/enum_protections.rb
-                    aV_path=$(locate modules/post/windows/recon | grep -v '\doc' | grep -v '\documentation' | head -n 1)
-                    sudo cp $IPATH/enum_protections.rb $aV_path/enum_protections.rb
+                    rm -f enum_protections.rb > /dev/nul 2>&1
+                    echo "[i] Downloading enum_protections.rb"
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/enum_protections.rb > /dev/nul 2>&1
+                    echo "[i] Locate metasploit absoluct path"
+                    aV_path=$(locate modules/post/windows/recon | grep -v '\doc' | grep -v '\documentation' | head -n 1) > /dev/nul 2>&1
+                    echo "[i] Copy Module to metasploit database"
+                    sudo cp $IPATH/enum_protections.rb $aV_path/enum_protections.rb > /dev/nul 2>&1
+                    if [ "$?" -eq "1" ]; then
+                       echo "[x] [ERROR] enum_protections.rb Fail to copy to: $aV_path"
+                    fi
 
-                    sudo rm -f SCRNSAVE_T1180_persistence.rb
-                    sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/SCRNSAVE_T1180_persistence.rb
-                    t1180_path=$(locate modules/post/windows/escalate | grep -v '\doc' | grep -v '\documentation' | head -n 1)
-                    sudo cp $IPATH/SCRNSAVE_T1180_persistence.rb $t1180_path/SCRNSAVE_T1180_persistence.rb
+                    rm -f SCRNSAVE_T1180_persistence.rb > /dev/nul 2>&1
+                    echo "[i] Downloading SCRNSAVE_T1180_persistence.rb"
+                  wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/SCRNSAVE_T1180_persistence.rb > /dev/nul 2>&1
+                    echo "[i] Locate metasploit absoluct path"
+                  t1180_path=$(locate modules/post/windows/escalate | grep -v '\doc' | grep -v '\documentation' | head -n 1) > /dev/nul 2>&1
+                    echo "[i] Copy Module to metasploit database"
+                    sudo cp $IPATH/SCRNSAVE_T1180_persistence.rb $t1180_path/SCRNSAVE_T1180_persistence.rb > /dev/nul 2>&1
+                    if [ "$?" -eq "1" ]; then
+                       echo "[x] [ERROR] SCRNSAVE_T1180_persistence.rb Fail to copy to: $t1180_path"
+                    fi
 
-                    sudo rm -f linux_hostrecon.rb
-                    sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/linux_hostrecon.rb
-                    Linux_path=$(locate modules/post/linux/gather | grep -v '\doc' | grep -v '\documentation' | head -n 1)
-                    sudo cp $IPATH/linux_hostrecon.rb $Linux_path/linux_hostrecon.rb
+                    rm -f linux_hostrecon.rb > /dev/nul 2>&1
+                    echo "[i] Downloading linux_hostrecon.rb"
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/linux_hostrecon.rb > /dev/nul 2>&1
+                    echo "[i] Locate metasploit absoluct path"
+                    Linux_path=$(locate modules/post/linux/gather | grep -v '\doc' | grep -v '\documentation' | head -n 1) > /dev/nul 2>&1
+                    echo "[i] Copy Module to metasploit database"
+                    sudo cp $IPATH/linux_hostrecon.rb $Linux_path/linux_hostrecon.rb > /dev/nul 2>&1
+                    if [ "$?" -eq "1" ]; then
+                       echo "[x] [ERROR] linux_hostrecon.rb Fail to copy to: $Linux_path"
+                    fi
 
                     ## reload msfdb
                     echo "[i] ----------------------------------"
                     echo "[i] Reloading msfdb (reload_all)"
                     sudo service postgresql start > /dev/nul 2>&1
-                    #sudo msfdb reinit
                     sudo msfconsole -q -x 'db_status;reload_all;exit -y'
                     echo ""
 
@@ -99,24 +118,70 @@ while getopts ":h,:u," opt; do
                     if ! [ "$?" -eq "0" ]; then
                        sudo apt-get update && apt-get install geoiplookup > /dev/nul 2>&1
                     fi
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/handler.rc
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/http_CVE.rc
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/manage_db.rc
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/brute_force.rc
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mssql_brute.rc
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mysql_brute.rc
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/geo_location.rc
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/snmp_exploiter.rc
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/post_exploitation.rc
+                    echo "[i] Updating handler.rc"
+                    rm -f handler.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/handler.rc > /dev/nul 2>&1
+                    echo "[i] Updating http_CVE.rc"
+                    rm -f http_CVE.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/http_CVE.rc > /dev/nul 2>&1
+                    echo "[i] Updating manage_db.rc"
+                    rm -f manage_db.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/manage_db.rc > /dev/nul 2>&1
+                    echo "[i] Updating brute_force.rc"
+                    rm -f brute_force.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/brute_force.rc > /dev/nul 2>&1
+                    echo "[i] Updating mssql_brute.rc"
+                    rm -f mssql_brute.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mssql_brute.rc > /dev/nul 2>&1
+                    echo "[i] Updating mysql_brute.rc"
+                    rm -f mysql_brute.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mysql_brute.rc > /dev/nul 2>&1
+                    echo "[i] Updating geo_location.rc"
+                    rm -f geo_location.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/geo_location.rc > /dev/nul 2>&1
+                    echo "[i] Updating snmp_exploiter.rc"
+                    rm -f snmp_exploiter.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/snmp_exploiter.rc > /dev/nul 2>&1
+                    echo "[i] Updating post_exploitation.rc"
+                    rm -f post_exploitation.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/post_exploitation.rc > /dev/nul 2>&1
                     cd bin && rm -f backup > /dev/nul 2>&1
                     cd .. && cd aux
                     echo "[i] -----------------------"
                     echo "[i] Directory: /resource_files Updated."
                     sleep 1
                  fi
-                 echo ""
+
+                 if [ "$main_local" "<" "$main_remote" ]; then
+                    echo "[i] Updating Project core files"
+                    echo "[i] ---------------------------"
+                    sleep 2
+                    echo "[i] Updating recon.rc"
+                    rm -f recon.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon.rc > /dev/nul 2>&1
+                    echo "[i] Updating recon_linux.rc"
+                    rm -f recon_linux.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon_linux.rc > /dev/nul 2>&1
+                    cd .. && cd bin
+                    echo "[i] Updating remote_hosts.txt"
+                    rm -f remote_hosts.txt > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/remote_hosts.txt > /dev/nul 2>&1
+                    echo "[i] Updating database_Exercise.xml"
+                    rm -f database_Exercise.xml > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/database_Exercise.xml > /dev/nul 2>&1
+                    echo "[i] Updating multi_services_wordlist.txt"
+                    rm -f multi_services_wordlist.txt > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/multi_services_wordlist.txt > /dev/nul 2>&1
+                    rm -f backup > /dev/nul 2>&1
+                    cd .. cd aux
+                    echo "[i] ------------------------------------"
+                    echo "[i] Directory: /aux and /bin Updated."
+                    sleep 1
+                 fi
                  fin_time=$(date | awk {'print $4'})
-                 echo "[i] Database updated: $fin_time"
+                 echo "[i] Database updated at: $fin_time"
+
+
 
            else
               echo "    Local version   Remote version   Status"
@@ -300,6 +365,20 @@ count="0"
        sudo apt-get install geoiplookup
     else
        echo ${GreenF}[*]${white} "geoiplookup found => ${GreenF}(no need to install)"${Reset};
+       sleep 2
+    fi
+
+    imp=`which curl`
+    echo ${BlueF}[*]${white} "Query for curl package."${Reset};
+    sleep 1
+    if ! [ "$?" -eq "0" ]; then
+       echo ${RedF}[x]${white} "Curl package NOT found."${Reset};
+       sleep 1
+       echo ${BlueF}[*]${white} "Downloading/installing Curl from network"${Reset};
+       sleep 1
+       sudo apt-get install curl
+    else
+       echo ${GreenF}[*]${white} "Curl found => ${GreenF}(no need to install)"${Reset};
        sleep 2
     fi
 
