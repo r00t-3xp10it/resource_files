@@ -267,6 +267,6 @@
    Rex::sleep(1.0)
    print_status("Module execution finished.")
    print_status("Geo_location::Version::1.1::SSA_redteam@2019")
-   print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/ofensive_script_geo_location")
+   print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location")
    run_single("back")
 </ruby>

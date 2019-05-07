@@ -13,7 +13,7 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 <br />
 
 ### REMARK
-The **brute force** resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new [workspace](https://www.offensive-security.com/metasploit-unleashed/using-databases/#Workspaces) named **'redteam'** and stores all the data inside that workspace while working, then the resource script deletes the **'redteam'** workspace in the end of execution.<br />**(This action allow us to mantain the attacker *default workspace database intact).**
+The **brute force** resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new [workspace](https://www.offensive-security.com/metasploit-unleashed/using-databases/#Workspaces) named **'redteam'** and stores all the data inside that workspace while working, then the resource script deletes the **'redteam'** workspace in the end of execution.<br />**(This action allow us to mantain the attacker default workspace database intact).**
 
 <br />
 
@@ -28,9 +28,8 @@ In **'post_exploitation.rc'** case, simple **background** the current session an
 
 - [1] [Using 'setg' (msf) to config rc scripts](https://github.com/r00t-3xp10it/resource_files#using-setg-global-variables-to-config-this-kind-of-rc-scripts)
 - [2] [Brute_force.rc - Demonstration exercise (WAN)](https://github.com/r00t-3xp10it/resource_files#brute_forcerc-demonstration-exercise)
-- [3] [Manage_db.rc - Demonstration exercise (WAN)](https://github.com/r00t-3xp10it/resource_files#manage_dbrc-demonstration-exercise)
-- [4] [Article about resource files scripting (github)](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
-- [5] WIKI-PAGES
+- [3] [Article about resource files scripting (github)](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
+- [4] WIKI-PAGES
   - [offensive resource scripts | Dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)
   - [offensive resource script | geo_location.rc](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location)
   - [offensive resource script | post_exploitation.rc](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)
@@ -42,7 +41,7 @@ In **'post_exploitation.rc'** case, simple **background** the current session an
 ### USING 'SETG' GLOBAL VARIABLES TO CONFIG THIS KIND OF RC SCRIPTS
 
 ![pic](http://i67.tinypic.com/2iu59g7.png)
-Many of the this brute force resource scripts are written to accept **user inputs** (msfconsole setg global variable).<br />**This means that i have written this resource scripts to work in 3 diferent ways:**
+Many of the this brute force resource scripts are written to accept **user inputs** (msfconsole setg global variable).<br />**'This means that i have written this resource scripts to work in 3 diferent ways':**
 
 Execute resource script againts local lan
 
