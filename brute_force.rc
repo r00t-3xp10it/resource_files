@@ -59,6 +59,8 @@
       if (framework.datastore['USERPASS_FILE'] == nil or framework.datastore['USERPASS_FILE'] == '')
          # setg USERPASS_FILE /usr/share/metasploit-framework/data/wordlists/piata_ssh_userpass.txt
          run_single("setg USERPASS_FILE #{local}/bin/multi_services_wordlist.txt")
+      else
+         print_line("USERPASS_FILE => #{framework.datastore['USERPASS_FILE']}")
       end
 
       ## db_nmap WAN or RHOSTS or LOCAL_LAN scan settings
@@ -163,7 +165,7 @@
               run_single("set USERPASS_FILE #{framework.datastore['USERPASS_FILE']}")
               run_single("set STOP_ON_SUCCESS true")
               run_single("set VERBOSE true")
-              run_single("set THREADS 30")
+              run_single("set THREADS 40")
               print_line("")
               run_single("services -c name -S ssh -R")
               run_single("exploit")
@@ -193,7 +195,7 @@
               run_single("exploit")
               run_single("use auxiliary/scanner/pop3/pop3_login")
               run_single("set STOP_ON_SUCCESS true")
-              run_single("set THREADS 16")
+              run_single("set THREADS 14")
               print_line("")
               run_single("services -c name -S pop3 -R")
               run_single("exploit")
