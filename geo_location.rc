@@ -3,15 +3,15 @@
 
         Description:
           setg TXT_IMPORT /root/hosts_list.txt - Import a list of hosts to be added to db.
-          setg USE_CURL true - Use curl ipinfo.io/ip insted of geoiplookup (default) package.
+          setg USE_CURL true - Use curl ipapi.co/ip insted of geoiplookup (default) package.
           setg RHOSTS 162.246.22.133 185.99.212.190 - Add hosts to database and scan for geolocation.
           setg GEOIP_PATH /usr/bin/geoiplookup - Geoiplookup package installation absoluct path (local).
           setg RESOLVER true - Resolve YOUR internal ip addr into external ip, add it to db and geolocate.
-          geo_location.rc requires geoiplookup (geoip-bin) or curl (ipinfo.io) packages to retrieve the
+          geo_location.rc requires geoiplookup (geoip-bin) or curl (ipapi.co) packages to retrieve the
           geolocation of all hosts in msf database. (curl will provide more detailed geolocation reports).
           'IF none value (setg) has povided then this script will scan all hosts in db using geoiplookup'
 
-        Execute in msfconsole:
+        Execute in msfconsole: ipapi.co
           setg RESOLVER <true-or-blank>
           setg USE_CURL <true-or-blank>
           setg RHOSTS <hosts-separated-by-spaces>
@@ -115,6 +115,7 @@
               print_error("please wait, cleaning recent configurations.")
               print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/ofensive_script_geo_location")
               run_single("unsetg all")
+              run_single("back")
               return nil
            end
            ## Read contents of file to import, parse data and start msf portscanner
@@ -179,7 +180,7 @@
         This function requires geoiplookup package (geoip-bin) installed
         to be abble to retry target host geolocation, if we dont want to
         install the package we can still use this script by setting the
-        geolocation software to use curl ipinfo.io insted. (linux native) 
+        geolocation software to use curl ipapi.co insted. (linux native) 
 
         Install Geoip-Bin
         -----------------
@@ -207,7 +208,7 @@
         using 'USE_CURL' msf global variable before executing this script.
         HINT: Using curl will provide more detailed geolocation report(s).
 
-        Use Curl Ipinfo.Io
+        Use Curl ipapi.co
         ------------------
         [execute] setg USE_CURL true
         [execute] resource geo_location.rc
@@ -227,16 +228,15 @@
       run_single("hosts -c address,os_name,purpose")
       print_line("")
       ## Geo-Location plugin(s) function(s)
-      # HINT: If used <setg USE_CURL true> then this script will use curl ipinfo.io/#{ip}
+      # HINT: If used <setg USE_CURL true> then this script will use curl ipapi.co/#{ip}
       # If not used then this script will use geoiplookup package to retrieve hosts geolocation.
       if (framework.datastore['USE_CURL'] == "true")
-         print_line("Curl ipinfo.io Geolocation Reports")
+         print_line("Curl ipapi.co Geolocation Reports")
          print_line("==================================")
          Rex::sleep(1.5)
          print_line("")
          ## Mapping database hosts (loop)
          framework.db.hosts.map(&:address).each do |sHost|
-            #geo_location = `curl ipinfo.io/#{sHost}|tr -d '",'|sed 's|{||g'|sed 's|}||g'`
             geo_location = `curl 'https://ipapi.co/#{sHost}/json/'|tr -d '",'|sed 's|{||g'|sed 's|}||g'`
             print_line("#{geo_location}")
             print_line("")
@@ -247,7 +247,7 @@
          user_input = gets.chomp
 
          ## Use geoiplookup package (default)
-         # HINT: ip-tracker.org website will be used also (URL)
+         # HINT: melissa.com website will be used also (URL)
         if user_input == "y" or user_input == "Y"
            print_line("Geoiplookup Geolocation Reports")
             print_line("===============================")
@@ -284,7 +284,7 @@
    run_single("unsetg all")
    Rex::sleep(1.0)
    print_status("Module execution finished.")
-   print_status("Geo_location::Version::1.1::SSA_redteam@2019")
+   print_status("Geo_location::Version::1.2::SSA_redteam@2019")
    print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location")
    run_single("back")
 </ruby>
