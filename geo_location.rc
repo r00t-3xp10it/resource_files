@@ -236,33 +236,51 @@
          print_line("")
          ## Mapping database hosts (loop)
          framework.db.hosts.map(&:address).each do |sHost|
-            geo_location = `curl ipinfo.io/#{sHost}|tr -d '",'|sed 's|{||g'|sed 's|}||g'`
+            #geo_location = `curl ipinfo.io/#{sHost}|tr -d '",'|sed 's|{||g'|sed 's|}||g'`
+            geo_location = `curl 'https://ipapi.co/#{sHost}/json/'|tr -d '",'|sed 's|{||g'|sed 's|}||g'`
             print_line("#{geo_location}")
             print_line("")
          end
       else
+
+      print "[i] Use melissa.com website (y/n)?: "
+         user_input = gets.chomp
+
          ## Use geoiplookup package (default)
-         # HINT: geoiplookup works offline (its a local database)
-         print_line("Geoiplookup Geolocation Reports")
-         print_line("===============================")
-         Rex::sleep(1.5)
-         print_line("")
-         print_line("IP addr           GeoLocation")
-         print_line("-------           -----------")
-         ## Mapping database hosts (loop)
-         framework.db.hosts.map(&:address).each do |sHost|
-            geo_location = `geoiplookup #{sHost}|cut -d ':' -f2|tr -d '\n'`
-            print_line("#{sHost}   #{geo_location}")
+         # HINT: ip-tracker.org website will be used also (URL)
+        if user_input == "y" or user_input == "Y"
+           print_line("Geoiplookup Geolocation Reports")
+            print_line("===============================")
+            Rex::sleep(1.5)
+            print_line("")
+            print_line("Hosts            GeoLocation          MAP")
+            print_line("-----            -----------          ---")
+            ## Mapping database hosts (loop)
+            framework.db.hosts.map(&:address).each do |sHost|
+               geo_location = `geoiplookup #{sHost}|cut -d ':' -f2|tr -d '\n'`
+               print_line("#{sHost}  #{geo_location}    https://www.melissa.com/v2/lookups/iplocation/ip?ip=#{sHost}")
+            end
+         else
+            ## Use geoiplookup package (default)
+            # HINT: geoiplookup works offline (its a local database)
+            print_line("Geoiplookup Geolocation Reports")
+            print_line("===============================")
+            Rex::sleep(1.5)
+            print_line("")
+            print_line("Hosts             GeoLocation")
+            print_line("-----             -----------")
+            ## Mapping database hosts (loop)
+            framework.db.hosts.map(&:address).each do |sHost|
+               geo_location = `geoiplookup #{sHost}|cut -d ':' -f2|tr -d '\n'`
+               print_line("#{sHost}   #{geo_location}")
+            end
          end
+         print_line("")
+         print_line("")
       end
 
 
    ## Clean recent configs and global vars
-   unless (framework.datastore['USE_CURL'] == "true")
-      print_line("")
-      print_line("")
-   end
-
    run_single("unsetg all")
    Rex::sleep(1.0)
    print_status("Module execution finished.")
