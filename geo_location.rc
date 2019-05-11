@@ -65,7 +65,7 @@
         |
         print_line(err)
         print_error("please wait, cleaning recent configurations.")
-        print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/ofensive_script_geo_location")
+        print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location")
         run_single("unsetg all")
         run_single("exit -y")
         return nil
@@ -90,9 +90,9 @@
         ## Import to current database a text list of hosts (one-per-line-entries)
         unless (framework.datastore['TXT_IMPORT'] == nil or framework.datastore['TXT_IMPORT'] == '')
            check_import = "#{framework.datastore['TXT_IMPORT']}"
-           ## Make sure that file to import exists
+           ## Make sure that file to be import exists
            unless (File.exist?(check_import))
-              print_error("[ERROR] File to be imported not found.")
+              print_error("[ERROR] File to be import not found.")
               print_error("[ERROR] #{check_import}")
               Rex::sleep(2.0)
               err = %Q|
@@ -106,19 +106,18 @@
 
         Import hosts list
         -----------------
-        [example] setg TXT_IMPORT <absoluct-path-to-hosts-file>
         [execute] setg TXT_IMPORT bin/remote_hosts.txt
         [execute] resource geo_location.rc
 
               |
               print_line(err)
               print_error("please wait, cleaning recent configurations.")
-              print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/ofensive_script_geo_location")
+              print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location")
               run_single("unsetg all")
               run_single("back")
               return nil
            end
-           ## Read contents of file to import, parse data and start msf portscanner
+           ## Read contents of file to import and parse data
            import_txt = File.read(check_import)
               parse_data = import_txt.split(' ').join(' ')
               print_status("Importing hosts to metasploit database.")
@@ -127,7 +126,7 @@
         end
 
         if (framework.datastore['RHOSTS'])
-           ## Populate (manually) the msf database
+           ## Populate the msf database
            print_status("Adding hosts to metasploit database.")
            Rex::sleep(1.0)
            run_single("hosts -a #{framework.datastore['RHOSTS']}")
@@ -157,10 +156,21 @@
         [execute] setg RHOSTS 162.246.22.133 185.99.212.190
         [execute] resource geo_location.rc
 
+
+        Remark
+        ------
+        This resource script also gives to is users the ability to import (to db)
+        a list of hosts contained inside a local text file (one-per-line-entries)
+
+        Import a hosts list
+        -------------------
+        [execute] setg TXT_IMPORT bin/remote_hosts.txt
+        [execute] resource geo_location.rc
+
            |
            print_line(err)
            print_error("please wait, cleaning recent configurations.")
-           print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/ofensive_script_geo_location")
+           print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location")
            run_single("unsetg all")
            run_single("back")
            return nil
@@ -216,7 +226,7 @@
             |
             print_line(err)
             print_error("please wait, cleaning recent configurations.")
-            print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/ofensive_script_geo_location")
+            print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location")
             run_single("unsetg all")
             run_single("back")
             return nil
@@ -237,28 +247,32 @@
          print_line("")
          ## Mapping database hosts (loop)
          framework.db.hosts.map(&:address).each do |sHost|
-            geo_location = `curl 'https://ipapi.co/#{sHost}/json/'|tr -d '",'|sed 's|{||g'|sed 's|}||g'`
+            geo_location = `curl 'https://ipapi.co/#{sHost}/json/'|sed 's|{||g'|sed 's|}||g'|tr -d '",'`
             print_line("#{geo_location}")
             print_line("")
          end
       else
 
-      print "[i] Use melissa.com website (y/n)?: "
+      ## Use adictionally reports (ip-tracker.org)?
+      print "[i] Use ip-tracker website (y/n)?: "
          user_input = gets.chomp
 
-         ## Use geoiplookup package (default)
-         # HINT: melissa.com website will be used also (URL)
+        ## Use geoiplookup package (default)
+        # HINT: ip-tracker.org website list (URL)
         if user_input == "y" or user_input == "Y"
            print_line("Geoiplookup Geolocation Reports")
             print_line("===============================")
             Rex::sleep(1.5)
             print_line("")
-            print_line("Hosts            GeoLocation          MAP")
-            print_line("-----            -----------          ---")
+            print_line("Hosts               GeoLocation               IP-TRACKER")
+            print_line("-----               -----------               ----------")
             ## Mapping database hosts (loop)
+            # https://extreme-ip-lookup.com/json/#{sHost}
+            # https://www.ip-tracker.org/locator/ip-lookup.php?ip=#{sHost}
+            # https://www.melissa.com/v2/lookups/iplocation/ip?ip=#{sHost}
             framework.db.hosts.map(&:address).each do |sHost|
                geo_location = `geoiplookup #{sHost}|cut -d ':' -f2|tr -d '\n'`
-               print_line("#{sHost}  #{geo_location}    https://www.melissa.com/v2/lookups/iplocation/ip?ip=#{sHost}")
+               print_line("#{sHost}     #{geo_location}         https://www.ip-tracker.org/locator/ip-lookup.php?ip=#{sHost}")
             end
          else
             ## Use geoiplookup package (default)
@@ -267,12 +281,12 @@
             print_line("===============================")
             Rex::sleep(1.5)
             print_line("")
-            print_line("Hosts             GeoLocation")
-            print_line("-----             -----------")
+            print_line("Hosts               GeoLocation")
+            print_line("-----               -----------")
             ## Mapping database hosts (loop)
             framework.db.hosts.map(&:address).each do |sHost|
                geo_location = `geoiplookup #{sHost}|cut -d ':' -f2|tr -d '\n'`
-               print_line("#{sHost}   #{geo_location}")
+               print_line("#{sHost}     #{geo_location}")
             end
          end
          print_line("")
