@@ -36,7 +36,10 @@
         return nil
       else
         print_good("Database connected to postgresql.")
+        Rex::sleep(0.5)
+        work_name = framework.db.workspace.name
         local = Dir.pwd
+        print_status("Working in workspace: *#{work_name}")
         Rex::sleep(1.0)
       end
 
@@ -145,7 +148,7 @@
               run_single("set USERPASS_FILE #{framework.datastore['USERPASS_FILE']}")
               run_single("set STOP_ON_SUCCESS true")
               run_single("set BRUTEFORCE_SPEED 4")
-              run_single("set THREADS 70")
+              run_single("set THREADS 80")
               print_line("")
               run_single("services -c name -S ftp -R")
               run_single("exploit")
