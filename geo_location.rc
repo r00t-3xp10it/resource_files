@@ -4,16 +4,18 @@
         Description:
           setg TXT_IMPORT /root/hosts_list.txt - Import a list of hosts to be added to db.
           setg USE_CURL true - Use curl ipapi.co/ip insted of geoiplookup (default) package.
-          setg RHOSTS 162.246.22.133 185.99.212.190 - Add hosts to database and scan for geolocation.
+          setg GOOGLE_MAP true - Use geoiplookup and iptracker to geolocate (google maps url link).
+          setg RHOSTS 162.246.22.133 104.96.180.140 - Add hosts to database and scan for geolocation.
           setg GEOIP_PATH /usr/bin/geoiplookup - Geoiplookup package installation absoluct path (local).
           setg RESOLVER true - Resolve YOUR internal ip addr into external ip, add it to db and geolocate.
           geo_location.rc requires geoiplookup (geoip-bin) or curl (ipapi.co) packages to retrieve the
           geolocation of all hosts in msf database. (curl will provide more detailed geolocation reports).
           'IF none value (setg) has povided then this script will scan all hosts in db using geoiplookup'
 
-        Execute in msfconsole: ipapi.co
+        Execute in msfconsole:
           setg RESOLVER <true-or-blank>
           setg USE_CURL <true-or-blank>
+          setg GOOGLE_MAP <true-or-blank>
           setg RHOSTS <hosts-separated-by-spaces>
           setg TXT_IMPORT <absoluct-path-of-hosts-file>
           setg GEOIP_PATH <absoluct-path-of-geoiplookup>
@@ -153,7 +155,7 @@
 
         Add Hosts To Database
         ---------------------
-        [execute] setg RHOSTS 162.246.22.133 185.99.212.190
+        [execute] setg RHOSTS 162.246.22.133 104.96.180.140
         [execute] resource geo_location.rc
 
 
@@ -253,13 +255,10 @@
          end
       else
 
-      ## Use adictionally reports (ip-tracker.org)?
-      print "[i] Use ip-tracker website (y/n)?: "
-         user_input = gets.chomp
 
         ## Use geoiplookup package (default)
         # HINT: ip-tracker.org website list (URL)
-        if user_input == "y" or user_input == "Y"
+        if (framework.datastore['GOOGLE_MAP'] == "true")
            print_line("Geoiplookup Geolocation Reports")
             print_line("===============================")
             Rex::sleep(1.5)
@@ -298,7 +297,6 @@
    run_single("unsetg all")
    Rex::sleep(1.0)
    print_status("Module execution finished.")
-   print_status("Geo_location::Version::1.2::SSA_redteam@2019")
    print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location")
    run_single("back")
 </ruby>
