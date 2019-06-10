@@ -112,7 +112,7 @@
          if (framework.datastore['LHOST'] == nil or framework.datastore['LHOST'] == '')
          print_error("[ERROR] LHOST option not set.")
          Rex::sleep(2.0)
-         err = %Q|
+           err = %Q|
 
         Remark
         ------
@@ -124,14 +124,13 @@
         [execute] setg LHOST 192.168.1.71
         [execute] resource ms17_010.rc
 
-         |
-         print_line(err)
-         run_single("unset all")
-         run_single("unsetg all")
-         File.delete('ms17_010.log')
-         run_single("workspace -d redteam")
-         return nil
-
+           |
+           print_line(err)
+           run_single("unset all")
+           run_single("unsetg all")
+           File.delete('ms17_010.log')
+           run_single("workspace -d redteam")
+           return nil
          else
             local_ip = "#{framework.datastore['LHOST']}"
          end
