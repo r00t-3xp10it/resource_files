@@ -1,4 +1,5 @@
 #!/bin/sh
+resize -s 25 110 > /dev/null
 #
 # variable declarations _________________________________
 #                                                        |
@@ -236,7 +237,6 @@ cat << !
 
    ╔──────────────────────────────────────────────────╗
    |        "install.sh - configuration script"       |
-   | Install all post-modules of post_exploitation.rc |
    ╠──────────────────────────────────────────────────╝
    |_ OS:$OS DISTRO:$DiStRo PATH:$IPATH
 
