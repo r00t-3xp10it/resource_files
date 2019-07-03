@@ -153,6 +153,9 @@ while getopts ":h,:u," opt; do
                     echo "[i] Updating ms17_010.rc"
                     rm -f ms17_010.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/ms17_010.rc > /dev/nul 2>&1
+                    echo "[i] Updating winrm_brute.rc"
+                    rm -f winrm_brute.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/winrm_brute.rc > /dev/nul 2>&1
                     cd bin && rm -f backup > /dev/nul 2>&1
                     cd .. && cd aux
                     echo "[i] -----------------------"
