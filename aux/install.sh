@@ -228,22 +228,23 @@ while getopts ":h,:u," opt; do
         exit
         ;;
         h)
+echo "---"
 cat << !
 
-    Description:
-       This Install script will download/install ALL dependencies needed by all resource
-       scripts in this project/repository to work proper. (msf modules ; nmap nse scripts)
+    Script Description:
+       This script was written to help users install msf auxiliarys and nmap scripts
+       that are required by some of the resource scripts of this project, OR check/update
+       this project local directory for updates available in my oficial repository (github).
+      
 
-    Updates:
-       This Install script also allow users to update this project resource scripts or
-       post-exploitation modules and the database with my latests updated modules/scripts.
-
-    Execution:
-       ./install.sh
-       ./install.sh -h
-       ./install.sh -u
+       Syntax              Description
+       ------------        -----------
+       ./install.sh        Install msf_auxiliary|nmap_nse
+       ./install.sh -u     Check/Install Updates (GitHub)
+       ./install.sh -h     This help menu
 
 !
+echo "---"
         exit
         ;;
         \?)
@@ -300,8 +301,7 @@ count="0"
           count=$(( $count + 1 ))
        fi
 
-    echo 
-${BlueF}[*]${white} "Query msfdb for SCRNSAVE_T1180_persistence.rb installation .."${Reset};
+    echo ${BlueF}[*]${white} "Query msfdb for SCRNSAVE_T1180_persistence.rb installation .."${Reset};
     t1180_path=$(locate modules/post/windows/escalate | grep -v '\doc' | grep -v '\documentation' | head -n 1)
     echo ${YellowF}[i]${white} "Path: $t1180_path/SCRNSAVE_T1180_persistence.rb"${Reset};
     sleep 2
