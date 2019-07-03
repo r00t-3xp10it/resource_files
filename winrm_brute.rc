@@ -69,10 +69,10 @@
       ## db_nmap WAN or RHOSTS or LOCAL_LAN scan settings
       # HINT: nmap will use a fake user-agent string (iPhone:Safari) while scanning.
       unless (framework.datastore['RANDOM_HOSTS'] == "true")
-         run_single("db_nmap -sV -Pn -T4 -O -p 80,5985 --open --script=http-headers.nse,smb-os-discovery.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sV -Pn -T4 -O -p 80,5985 --open --script=http-headers.nse,http-winrm.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
       else
          print_good("Nmap: search for random remote hosts with ports 80:5985 open")
-         run_single("db_nmap -sV -Pn -T5 -O -iR #{framework.datastore['LIMMIT']} -p 80,5985 --open --script=http-headers.nse,smb-os-discovery.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\"")
+         run_single("db_nmap -sV -Pn -T5 -O -iR #{framework.datastore['LIMMIT']} -p 80,5985 --open --script=http-headers.nse,http-winrm.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\"")
       end
 
       ## Read the database 
