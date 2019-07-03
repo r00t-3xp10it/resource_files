@@ -34,7 +34,7 @@
 
     ## Record msfconsole activity
     if (framework.datastore['RECORD'] == "true")
-       run_single("spool database.log")
+       run_single("spool #{local}/logs/database.log")
        Rex::sleep(1.0)
     end
 

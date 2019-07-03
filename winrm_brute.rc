@@ -76,7 +76,7 @@
       end
 
       ## Read the database 
-      run_single("spool winrm_brute.log")
+      run_single("spool #{local}/logs/winrm_brute.log")
       print_line("")
       run_single("services")
       print_good("Sellecting target hosts from msf database.")
@@ -94,7 +94,7 @@
               print_error("please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
               run_single("unsetg all")
-              File.delete('winrm_brute.log')
+              File.delete('#{local}/logs/winrm_brute.log')
               run_single("workspace -d redteam")
               return nil
          elsif xport.nil? or xport == '' or xport == ' '
@@ -102,7 +102,7 @@
               print_error("please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
               run_single("unsetg all")
-              File.delete('winrm_brute.log')
+              File.delete('#{local}/logs/winrm_brute.log')
               run_single("workspace -d redteam")
               return nil
          end
@@ -125,7 +125,7 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
             run_single("unsetg all")
-            File.delete('winrm_brute.log')
+            File.delete('#{local}/logs/winrm_brute.log')
             run_single("workspace -d redteam")
             return nil
          end
@@ -216,6 +216,6 @@
       run_single("workspace -d redteam")
       run_single("back")
 
-      print_warning("Logfile stored under: #{local}/winrm_brute.log")
+      print_warning("Logfile stored under: #{local}/logs/winrm_brute.log")
       print_warning("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
    </ruby>

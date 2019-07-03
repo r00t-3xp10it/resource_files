@@ -75,7 +75,7 @@
       end
 
       ## Read metasploit database 
-      run_single("spool ms17_010.log")
+      run_single("spool #{local}/logs/ms17_010.log")
       print_line("")
       run_single("services")
       print_good("Sellecting target hosts from msf database.")
@@ -93,7 +93,7 @@
               Rex::sleep(1.0)
               run_single("unset all")
               run_single("unsetg all")
-              File.delete('ms17_010.log')
+              File.delete('#{local}/logs/ms17_010.log')
               run_single("workspace -d redteam")
               return nil
          elsif xport.nil? or xport == '' or xport == ' '
@@ -102,7 +102,7 @@
               Rex::sleep(1.0)
               run_single("unset all")
               run_single("unsetg all")
-              File.delete('ms17_010.log')
+              File.delete('#{local}/logs/ms17_010.log')
               run_single("workspace -d redteam")
               return nil
          end
@@ -128,7 +128,7 @@
            print_line(err)
            run_single("unset all")
            run_single("unsetg all")
-           File.delete('ms17_010.log')
+           File.delete('#{local}/logs/ms17_010.log')
            run_single("workspace -d redteam")
            return nil
          else
@@ -223,6 +223,6 @@
       run_single("workspace -d redteam")
       run_single("back")
 
-      print_warning("Logfile stored under: #{local}/ms17_010.log")
+      print_warning("Logfile stored under: #{local}/logs/ms17_010.log")
       print_warning("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
    </ruby>

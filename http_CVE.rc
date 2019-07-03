@@ -72,7 +72,7 @@
       end
 
       ## Read the database.
-      run_single("spool http_CVE.log")
+      run_single("spool #{local}/logs/http_CVE.log")
       print_line("")
       run_single("services")
       print_good("Reading msfdb database for info.")
@@ -87,7 +87,7 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            run_single("unsetg all")
-           File.delete('http_CVE.log')
+           File.delete('#{local}/logs/http_CVE.log')
            run_single("workspace -d redteam")
            return nil
       elsif xport.nil? or xport == ''
@@ -95,7 +95,7 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            run_single("unsetg all")
-           File.delete('http_CVE.log')
+           File.delete('#{local}/logs/http_CVE.log')
            run_single("workspace -d redteam")
            return nil
       end
@@ -179,7 +179,7 @@
       run_single("workspace -d redteam")
       run_single("back")
 
-print_warning("Logfile stored under: http_CVE.log")
+print_warning("Logfile stored under: #{local}/logs/http_CVE.log")
 print_warning("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
 </ruby>
 
