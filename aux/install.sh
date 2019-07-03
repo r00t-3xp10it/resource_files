@@ -101,10 +101,13 @@ while getopts ":h,:u," opt; do
                     echo ""
 
                     cd .. && cd bin
+                    rm -f multi_services_wordlist.txt > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/multi_services_wordlist.txt > /dev/nul 2>&1
                     rm -f backup > /dev/nul 2>&1
                     cd .. && cd aux
+                    rm -f recon.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon.rc > /dev/nul 2>&1
+                    rm -f recon_linux.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon_linux.rc > /dev/nul 2>&1
                     echo "[i] Directory: /aux Updated."
                     sleep 1
@@ -163,17 +166,16 @@ while getopts ":h,:u," opt; do
                     sleep 2
                     echo "[i] Updating recon.rc"
                     rm -f recon.rc > /dev/nul 2>&1
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon.rc > /dev/nul 2>&1
+                    wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon.rc > /dev/nul 2>&1
                     echo "[i] Updating recon_linux.rc"
                     rm -f recon_linux.rc > /dev/nul 2>&1
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon_linux.rc > /dev/nul 2>&1
+                    wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon_linux.rc > /dev/nul 2>&1
 
                     ## NMAP NSE SCRIPTS
                     echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
                     sleep 2
-                    echo ""
                     sudo rm -f http-winrm.nse > /dev/nul 2>&1
-                    sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/http-winrm.nse
+                    sudo wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/http-winrm.nse
                     echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/http-winrm.nse"${Reset};
                     sleep 2
                     sudo cp $IPATH/http-winrm.nse /usr/share/nmap/scripts/http-winrm.nse
@@ -181,9 +183,8 @@ while getopts ":h,:u," opt; do
 
                     echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
                     sleep 2
-                    echo ""
                     sudo rm -f freevulnsearch.nse > /dev/nul 2>&1
-                    sudo wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse
+                    sudo wget -qq https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse
                     echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/freevulnsearch.nse"${Reset};
                     sleep 2
                     sudo cp $IPATH/freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
@@ -199,7 +200,7 @@ while getopts ":h,:u," opt; do
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/database_Exercise.xml > /dev/nul 2>&1
                     echo "[i] Updating multi_services_wordlist.txt"
                     rm -f multi_services_wordlist.txt > /dev/nul 2>&1
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/multi_services_wordlist.txt > /dev/nul 2>&1
+                    wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/multi_services_wordlist.txt > /dev/nul 2>&1
                     rm -f backup > /dev/nul 2>&1
                     cd .. cd aux
                     echo "[i] ------------------------------------"
