@@ -7,6 +7,7 @@ OS=`uname`                                               # grab OS
 ver="1.1"                                                # toolkit version
 DiStRo=`awk '{print $1}' /etc/issue`                     # grab distribution -  Ubuntu or Kali
 IPATH=`pwd`                                              # grab install.sh install path
+user=`who | awk {'print $1'}`                            # grab username
 # _______________________________________________________|
 
 
@@ -166,6 +167,29 @@ while getopts ":h,:u," opt; do
                     echo "[i] Updating recon_linux.rc"
                     rm -f recon_linux.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon_linux.rc > /dev/nul 2>&1
+
+                    ## NMAP NSE SCRIPTS
+                    echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
+                    sleep 2
+                    echo ""
+                    sudo rm -f http-winrm.nse > /dev/nul 2>&1
+                    sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/http-winrm.nse
+                    echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/http-winrm.nse"${Reset};
+                    sleep 2
+                    sudo cp $IPATH/http-winrm.nse /usr/share/nmap/scripts/http-winrm.nse
+                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
+
+                    echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
+                    sleep 2
+                    echo ""
+                    sudo rm -f freevulnsearch.nse > /dev/nul 2>&1
+                    sudo wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse
+                    echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/freevulnsearch.nse"${Reset};
+                    sleep 2
+                    sudo cp $IPATH/freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
+                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
+                    sudo nmap --script-updatedb
+
                     cd .. && cd bin
                     echo "[i] Updating remote_hosts.txt"
                     rm -f remote_hosts.txt > /dev/nul 2>&1
@@ -238,7 +262,7 @@ cat << !
    ╔──────────────────────────────────────────────────╗
    |        "install.sh - configuration script"       |
    ╠──────────────────────────────────────────────────╝
-   |_ OS:$OS DISTRO:$DiStRo PATH:$IPATH
+   |_ OS:$OS DISTRO:$DiStRo USER:$user
 
 
 !
@@ -272,7 +296,8 @@ count="0"
           count=$(( $count + 1 ))
        fi
 
-    echo ${BlueF}[*]${white} "Query msfdb for SCRNSAVE_T1180_persistence.rb installation .."${Reset};
+    echo 
+${BlueF}[*]${white} "Query msfdb for SCRNSAVE_T1180_persistence.rb installation .."${Reset};
     t1180_path=$(locate modules/post/windows/escalate | grep -v '\doc' | grep -v '\documentation' | head -n 1)
     echo ${YellowF}[i]${white} "Path: $t1180_path/SCRNSAVE_T1180_persistence.rb"${Reset};
     sleep 2
@@ -333,6 +358,7 @@ count="0"
 
 
 
+    ## NMAP NSE
     echo ${BlueF}[*]${white} "query nmap nse freevulnsearch.nse installation .."${Reset};
     sleep 2
     echo ${YellowF}[i]${white} "Path: /usr/share/nmap/scripts/freevulnsearch.nse"${Reset};
@@ -351,6 +377,29 @@ count="0"
        echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/freevulnsearch.nse"${Reset};
        sleep 2
        sudo cp $IPATH/freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
+       echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
+       sudo nmap --script-updatedb
+    fi
+
+
+    echo ${BlueF}[*]${white} "query nmap nse http-winrm.nse installation .."${Reset};
+    sleep 2
+    echo ${YellowF}[i]${white} "Path: /usr/share/nmap/scripts/http-winrm.nse"${Reset};
+    sleep 1
+    if [ -e "/usr/share/nmap/scripts/http-winrm.nse" ]; then
+       echo ${GreenF}[*]${white} "Nmap nse script found in database => ${GreenF}(no need to install)"${Reset};
+       sleep 2
+    else
+       echo ${RedF}[x]${white} "Nmap nse script NOT found in database."${Reset};
+       sleep 2
+       echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
+       sleep 2
+       echo ""
+       sudo rm -f http-winrm.nse
+       sudo wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse
+       echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/http-winrm.nse"${Reset};
+       sleep 2
+       sudo cp $IPATH/freevulnsearch.nse /usr/share/nmap/scripts/http-winrm.nse
        echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
        sudo nmap --script-updatedb
     fi

