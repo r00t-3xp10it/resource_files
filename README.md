@@ -22,15 +22,15 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 <br />
 
 ### Index
-[1] [Project History](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
-[2] [Framework Description](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
-[3] [Framework Dictionary files](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
-[4] [Framework Dependencies](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
-[5] [Framework Limitations](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
-[6] [Framework Download](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
-[7] [Framework help-update-install-execution](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
-[8] [Project Referencies url's](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
-[9] [Project Acknowledgment](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
+[1] [Project History](https://github.com/r00t-3xp10it/resource_files#project-history)<br />
+[2] [Framework Description](https://github.com/r00t-3xp10it/resource_files#framework-description)<br />
+[3] [Framework Dictionary files](https://github.com/r00t-3xp10it/resource_files#framework-dictionary-files)<br />
+[4] [Framework Dependencies](https://github.com/r00t-3xp10it/resource_files#framework-dependencies)<br />
+[5] [Framework Limitations](https://github.com/r00t-3xp10it/resource_files#framework-limitations)<br />
+[6] [Framework Download](https://github.com/r00t-3xp10it/resource_files#framework-download)<br />
+[7] [Framework help-update-install-execution](https://github.com/r00t-3xp10it/resource_files#framework-help-update-install-execution)<br />
+[8] [Project Referencies url's](https://github.com/r00t-3xp10it/resource_files#referencies)<br />
+[9] [Project Acknowledgment](https://github.com/r00t-3xp10it/resource_files#project-acknowledgment)<br />
 
 ---
 <br /><br />
@@ -132,9 +132,9 @@ the main reason why this scripts creates a new workspace named 'mosquito' and st
 [1] [Project home page](https://github.com/r00t-3xp10it/resource_files)<br />
 [2] [Project wiki - dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)<br />
 [3] [hacking-material-books - metasploit_resource_files](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)<br />
-[4] [offensive resource scripts | Dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)<br />
-[5] [offensive resource script | geo_location.rc](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location)<br />
-[6] [offensive resource script | post_exploitation.rc](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)<br />
+[4] [offensive resource scripts - Dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)<br />
+[5] [offensive resource script - geo_location.rc](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location)<br />
+[6] [offensive resource script - post_exploitation.rc](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)<br />
 
 <br />
 
