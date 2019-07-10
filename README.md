@@ -56,6 +56,8 @@ Mosquito also allow users to scan-brute-force multiple targets (multi-tasking) f
 
 ![mosquito_banner](http://i65.tinypic.com/280v0hc.png)
 
+[jump to top](https://github.com/r00t-3xp10it/resource_files#index)
+
 ---
 <br /><br />
 
@@ -65,6 +67,8 @@ Initial the resource scripts that this project contains are written to allow is 
 nevertheless mosquito users can improve existing dictionary(s) by edit them before executing mosquito framework, all dictionary files can be found under project working directory in: 'resource_files/bin/worldlists'.
 
 ![mosquito_banner](http://i63.tinypic.com/2u7c87b.png)
+
+[jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
 ---
 <br /><br />
@@ -88,6 +92,8 @@ nevertheless mosquito users can improve existing dictionary(s) by edit them befo
 Adicionaly to the dependencies described above, diferent resource scripts requires diferent msf auxiliarys
 or nmap nse adicional scripts installed, the -i switch in mosquito allow us to download/install all that extra modules fast and easy.
 
+[jump to top](https://github.com/r00t-3xp10it/resource_files#index)
+
 ---
 <br /><br />
 
@@ -100,6 +106,8 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 
 **Hint:** This resource scripts requires that the msf database to be empty of hosts and services data. Thats
 the main reason why this scripts creates a new workspace named 'mosquito' and stores all data inside that workspace while working, then the resource script deletes the 'mosquito' workspace in the end of execution.
+
+[jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
 ---
 <br /><br />
@@ -125,6 +133,8 @@ the main reason why this scripts creates a new workspace named 'mosquito' and st
     [execute] sudo ./mosquito.sh
 ![mosquito_banner](http://i65.tinypic.com/2ewejqd.jpg)
 
+[jump to top](https://github.com/r00t-3xp10it/resource_files#index)
+
 ---
 <br /><br />
 
@@ -139,11 +149,13 @@ the main reason why this scripts creates a new workspace named 'mosquito' and st
 <br />
 
 ### Project Acknowledgment
+@HD Moore - metasploit framework<br />
+@fyodor - nmap framework<br />
 @Mathias Gut - freevulnsearch.nse script<br />
 @Sean Warnock - http-winrm.nse script<br />
+
+[jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
 <br />
 
 ## Suspicious Shell Activity redteam@2019
-
-[jump to top](https://github.com/r00t-3xp10it/resource_files#index)
