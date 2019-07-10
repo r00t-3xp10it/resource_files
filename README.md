@@ -22,15 +22,15 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 <br />
 
 ### Index
-[1] [Project History](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
-[2] [Framework Description](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
-[3] [Framework Dictionary files](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
-[4] [Framework Dependencies](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
-[5] [Framework Limitations](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
-[6] [Framework Download](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
-[7] [Framework help-update-install-execution](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
-[8] [Project Referencies url's](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
-[9] [Project Acknowledgment](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
+[1] [Project History](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
+[2] [Framework Description](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
+[3] [Framework Dictionary files](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
+[4] [Framework Dependencies](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
+[5] [Framework Limitations](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
+[6] [Framework Download](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
+[7] [Framework help-update-install-execution](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
+[8] [Project Referencies url's](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
+[9] [Project Acknowledgment](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)<br />
 
 ---
 <br /><br />
@@ -84,7 +84,7 @@ nevertheless mosquito users can improve existing dictionary(s) by edit them befo
     * ./mosquito.sh -i = to install packages/scripts/modules
     ** Linux native installed package = no need to install it
 
-**Hint:** All mosquito dependencies can be easy installed by runing: **sudo ./mosquito.sh -i**
+**Hint:** All mosquito dependencies can be easy installed by runing: **sudo ./mosquito.sh -i**<br />
 Adicionaly to the dependencies described above, diferent resource scripts requires diferent msf auxiliarys
 or nmap nse adicional scripts installed, the -i switch in mosquito allow us to download/install all that extra modules fast and easy.
 
@@ -92,11 +92,11 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 <br /><br />
 
 ### Framework Limitations
-**a)** mosquito only accepts ip addr inputs, not domain names
-**b)** brute forcing takes time, use 'CTRL+C' to skip current task(s)
-**c)** mosquito dicionarys can be found in resource_files/bin/worldlists
-**d)** find valid credentials sometimes fails to spawn a shell
-**e)** multiple sessions open migth slowdown your pc
+**a)** mosquito only accepts ip addr inputs, not domain names<br />
+**b)** brute forcing takes time, use 'CTRL+C' to skip current task(s)<br />
+**c)** mosquito dicionarys can be found in resource_files/bin/worldlists<br />
+**d)** find valid credentials sometimes fails to spawn a shell<br />
+**e)** multiple sessions open migth slowdown your pc<br />
 
 **Hint:** This resource scripts requires that the msf database to be empty of hosts and services data. Thats
 the main reason why this scripts creates a new workspace named 'mosquito' and stores all data inside that workspace while working, then the resource script deletes the 'mosquito' workspace in the end of execution.
@@ -129,21 +129,21 @@ the main reason why this scripts creates a new workspace named 'mosquito' and st
 <br /><br />
 
 ### Referencies
-[1] [Project home page](https://github.com/r00t-3xp10it/resource_files)
-[2] [Project wiki - dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)
-[3] [hacking-material-books - metasploit_resource_files](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
-[4] [offensive resource scripts | Dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)
-[5] [offensive resource script | geo_location.rc](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location)
-[6] [offensive resource script | post_exploitation.rc](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)
+[1] [Project home page](https://github.com/r00t-3xp10it/resource_files)<br />
+[2] [Project wiki - dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)<br />
+[3] [hacking-material-books - metasploit_resource_files](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)<br />
+[4] [offensive resource scripts | Dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)<br />
+[5] [offensive resource script | geo_location.rc](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location)<br />
+[6] [offensive resource script | post_exploitation.rc](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)<br />
 
 <br />
 
 ### Project Acknowledgment
-Mathias Gut - freevulnsearch.nse script
-Sean Warnock - http-winrm.nse script
+@Mathias Gut - freevulnsearch.nse script<br />
+@Sean Warnock - http-winrm.nse script<br />
 
 <br />
 
 ## Suspicious Shell Activity redteam@2019
 
-[jump to top](Jump to top](https://github.com/r00t-3xp10it/resource_files#index)
+[jump to top](https://github.com/r00t-3xp10it/resource_files#index)
