@@ -10,121 +10,140 @@
 ### DISCLAMER
 The resource scripts this repository contains serves as proof of concept (**POC**) of this [article](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files) published on resource files scripting. This repository is designed to demonstrate what resource files [ERB](https://www.offensive-security.com/metasploit-unleashed/custom-scripting/) can accomplish when automating tasks in msfconsole, and they are written to take advantage of multi-hosts-exploitation-scan tasks (manage large databases of hosts) from scanning the local lan for alive hosts, scan attackers input rhosts or scan wan networks in search of rhosts to exploit/brute-force. 'They are **not** written with the objective of exploiting remote targets, but to serve as inspiration for msf developing'. This repository shows above all how [nmap](https://nmap.org/) and [metasploit](https://www.metasploit.com/) frameworks are amazing tools.
 
-<br />
-
-### REMARK
-The **brute force** resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new [workspace](https://www.offensive-security.com/metasploit-unleashed/using-databases/#Workspaces) named **'redteam'** and stores all the data inside that workspace while working, then the resource script deletes the **'redteam'** workspace in the end of execution.<br />**(This action allow us to mantain the attacker default workspace database intact).**
-
-<br />
-
-**WARNING:**<br />
-This resource scripts can **NOT** be run inside meterpreter prompt because **ERB** code its not accepted there.<br />
-In **'post_exploitation.rc'** case, simple **background** the current session and then load the resource script.
-![pic](https://i.imgur.com/BVWzYlJ.png)
-
-<br />
-
-### INDEX
-
-- [1] [Using 'setg' (msf) to config rc scripts](https://github.com/r00t-3xp10it/resource_files#using-setg-global-variables-to-config-this-kind-of-rc-scripts)
-- [2] [Brute_force.rc - Demonstration exercise (WAN)](https://github.com/r00t-3xp10it/resource_files#brute_forcerc-demonstration-exercise)
-- [3] [Article about resource files scripting (github)](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
-- [4] WIKI-PAGES
-  - [offensive resource scripts | Dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)
-  - [offensive resource script | geo_location.rc](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location)
-  - [offensive resource script | post_exploitation.rc](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)
 
 ---
 
 <br /><br /><br />
 
-### USING 'SETG' GLOBAL VARIABLES TO CONFIG THIS KIND OF RC SCRIPTS
+## Mosquito - Automating reconnaissance and brute force attacks
 
-![pic](http://i67.tinypic.com/2iu59g7.png)
-Many of the this brute force resource scripts are written to accept **user inputs** (msfconsole setg global variable).<br />**'This means that i have written this resource scripts to work in 3 diferent ways':**
-
-Execute resource script againts local lan
-
-      msfconsole -r /root/mysql_brute.rc
-
-Instruct the resource script to scan hosts input by the attacker
-
-      msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;resource /root/mysql_brute.rc'
-
-Instruct the resource script to search in WAN for hosts with the service port open (mysql port/service)
-
-      msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
-
-<br /><br />
-
-**Adicionally to the described settings, we can also combine diferent configurations at runtime execution.**<br />
-Instruct the resource script to search in WAN for rhosts with service port open and limmit the search to 300 hosts
-
-      msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 300;resource /root/mysql_brute.rc'
-
-Instruct the resource script to use attackers dicionary file (absoluct path required)
-
-      msfconsole -q -x 'setg USERPASS_FILE /root/dicionary.txt;resource /root/mysql_brute.rc'
-
-Instruct the resource script to scan rhosts input by attacker, and use the attacker dicionary file 
-
-      msfconsole -q -x 'setg RHOSTS 10.10.10.1 10.10.11.2;setg USERPASS_FILE dicionary.txt;resource mysql_brute.rc'
-
-#### [!] [Jump to readme file index](https://github.com/r00t-3xp10it/resource_files#index)
-
----
-
-<br /><br /><br />
-
-### BRUTE_FORCE.RC DEMONSTRATION EXERCISE
-![pic](http://i64.tinypic.com/210g9bp.gif)
-
-**Step-By-Step how to run 'brute_force.rc' script**<br />
-
-1º download the resource script to your **/root** folder<br />
-
-      wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/brute_force.rc
-
-2º download wordlist (dicionary file)
-
-      wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/multi_services_wordlist.txt
-
-3º start postgresql service (**local machine**)<br />
-
-      service postgresql start
-
-4º run brute_force.rc resource script to search hosts in WAN (**limmit the search to 200 hosts**)<br />
-
-      msfconsole -q -x 'setg RANDOM_HOSTS true;setg LIMMIT 200;setg USERPASS_FILE multi_services_wordlist.txt;resource brute_force.rc'
-
-<br /><br />
-
-#### REMARK
-"This brute force resource scripts deletes the **redteam** workspace at execution exit".<br />
-How to instruct this scripts to export **redteam** workspace database to a local file at the end of execution? **(database.xml)**<br />
-
-      msfconsole -q -x 'setg SAVE_DB true;setg RANDOM_HOSTS true;setg LIMMIT 200;resource /root/brute_force.rc'
-
-This database.xml file can now be **'imported'** to your *default workspace with the follow command:
-
-      msfconsole -q -x 'db_import /root/database.xml'
-
-#### REMARK
-importing this database.xml files **appends** data to your *default workspace database making it larger.<br />
-It does **'not'** delete any entries that you have before on your *default workspace database (it only appends data).
-
-#### [!] [Jump to readme file index](https://github.com/r00t-3xp10it/resource_files#index)
-
----
+![mosquito_banner](http://i65.tinypic.com/2ewejqd.jpg)
 
 <br />
 
-### CREDITS
+### Index
+[1] [Project History](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
+[2] [Framework Description](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
+[3] [Framework Dictionary files](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
+[4] [Framework Dependencies](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
+[5] [Framework Limitations](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
+[6] [Framework Download](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
+[7] [Framework help-update-install-execution](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
+[8] [Project Referencies url's](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
+[9] [Project Acknowledgment](https://github.com/r00t-3xp10it/resource_files/releases/mosquito#Project#History)
 
-**@fyodor** [nmap] | **@hdmoore** [metasploit] | **@enigma0x3** | **@darkoperator**<br />
-About 10 years ago (2009) I heard the creator of metasploit say: **'Automation is the name of the pentest game'**.<br />
-Then in 2011 i have read this article [rapid7-@hdmoore](https://blog.rapid7.com/2011/12/08/six-ways-to-automate-metasploit/) and everything have changed for me since that day.<br />
-**'Thank you for all the inspiration l33t @hdmoore'** ..
+---
+<br /><br />
 
-### Suspicious Shell Activity RedTeam @2019
+### Project History
+Mosquito.sh (**BASH**) script was written for the purpose of automating the resource files (**ERB**) contained in this [repository](https://github.com/r00t-3xp10it/resource_files). Each resource file is written to allows users to run them in three different ways, from scan the Local Lan, scan user inputs (**RHOSTS**) or randomly scan the **WAN** network for possible targets to add to msfdb.
 
+![mosquito_banner](http://i63.tinypic.com/2jczzmb.png)
+
+---
+<br /><br />
+
+### Framework Description
+Mosquito as first step uses nmap to seek-recon hosts information (or possible targets), then adds all the hosts found to the msfdb to be used in further recon, assist in exploration or brute force jobs carried out later.
+
+![mosquito_banner](http://i63.tinypic.com/2e5pce9.png)
+
+Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike metasploit the scans performed by nmap will use a false User-Agent (IPhone/Safari) and stealth scans that makes forensic log artifacts more dificult to identify the attacker.
+
+![mosquito_banner](http://i67.tinypic.com/209iyb7.png)
+
+Mosquito also allow users to scan-brute-force multiple targets (multi-tasking) from user inputs to the import of hosts list files containing ip addresses or randomly seek in WAN for possible targets. Each valid credentials found (brute-force or exploitation) will spawn a shell session to the remote host in msfconsole prompt.
+
+![mosquito_banner](http://i65.tinypic.com/280v0hc.png)
+
+---
+<br /><br />
+
+### Framework Dictionary files
+Initial the resource scripts that this project contains are written to allow is users to input dictionary file absoluct path before the scan take place, but mosquito ships with is own set of dictionary files to assist in brute force tasks, and it does not allow is users to input another dictionary file when running mosquito framework.
+
+nevertheless mosquito users can improve existing dictionary(s) by edit them before executing mosquito framework, all dictionary files can be found under project working directory in: 'resource_files/bin/worldlists'.
+
+![mosquito_banner](http://i63.tinypic.com/2u7c87b.png)
+
+---
+<br /><br />
+
+### Framework Dependencies
+|dependencie|actions|install|
+|---|---|---|
+|metasploit| msf database; recon; exploitation; brute force | [metasploit download](https://www.metasploit.com/download) |
+|nmap| WAN random search; recon | [nmap download](https://nmap.org/download.html) * |
+|zenity|Bash script GUI interface|[zenity download](https://help.gnome.org/users/zenity/) * |
+|geoiplookup| hosts geo location | sudo apt-get install geoip-bin * |
+|curl| hosts geo location | sudo apt-get install curl * |
+|dig| ip address resolver | Linux native installed package ** |
+|http-winrm.nse| http winrm recon | mosquito native nse script * |
+|freevulnsearch.nse| CVE recon | mosquito native nse script * |
+
+    * ./mosquito.sh -i = to install packages/scripts/modules
+    ** Linux native installed package = no need to install it
+
+**Hint:** All mosquito dependencies can be easy installed by runing: **sudo ./mosquito.sh -i**
+Adicionaly to the dependencies described above, diferent resource scripts requires diferent msf auxiliarys
+or nmap nse adicional scripts installed, the -i switch in mosquito allow us to download/install all that extra modules fast and easy.
+
+---
+<br /><br />
+
+### Framework Limitations
+**a)** mosquito only accepts ip addr inputs, not domain names
+**b)** brute forcing takes time, use 'CTRL+C' to skip current task(s)
+**c)** mosquito dicionarys can be found in resource_files/bin/worldlists
+**d)** find valid credentials sometimes fails to spawn a shell
+**e)** multiple sessions open migth slowdown your pc
+
+**Hint:** This resource scripts requires that the msf database to be empty of hosts and services data. Thats
+the main reason why this scripts creates a new workspace named 'mosquito' and stores all data inside that workspace while working, then the resource script deletes the 'mosquito' workspace in the end of execution.
+
+---
+<br /><br />
+
+### Framework Download
+```
+[download]   git clone https://github.com/r00t-3xp10it/resource_files.git
+[permitions] cd resource_files && find ./ -name "*.sh" -exec chmod +x {} \;
+```
+![mosquito_banner](http://i67.tinypic.com/b6es7l.png)
+
+### Framework help-update-install-execution
+
+    [help]    sudo ./mosquito.sh -h
+![mosquito_banner](http://i63.tinypic.com/do00zp.png)
+
+    [update]  sudo ./mosquito.sh -u
+![mosquito_banner](http://i65.tinypic.com/294mdja.png)
+
+    [install] sudo ./mosquito.sh -i
+![mosquito_banner](http://i67.tinypic.com/a59l50.png)
+
+    [execute] sudo ./mosquito.sh
+![mosquito_banner](http://i65.tinypic.com/2ewejqd.jpg)
+
+---
+<br /><br />
+
+### Referencies
+[1] [Project home page](https://github.com/r00t-3xp10it/resource_files)
+[2] [Project wiki - dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)
+[3] [hacking-material-books - metasploit_resource_files](https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md#metasploit-resource-files)
+[4] [offensive resource scripts | Dependencies](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files-%7C-Dependencies)
+[5] [offensive resource script | geo_location.rc](https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location)
+[6] [offensive resource script | post_exploitation.rc](https://github.com/r00t-3xp10it/resource_files/wiki/post_exploitation.rc-%7C-offensive-resource-script)
+
+<br />
+
+### Project Acknowledgment
+Mathias Gut - freevulnsearch.nse script
+Sean Warnock - http-winrm.nse script
+
+<br />
+
+## Suspicious Shell Activity redteam@2019
+
+[jump to top](Jump to top](https://github.com/r00t-3xp10it/resource_files#index)
