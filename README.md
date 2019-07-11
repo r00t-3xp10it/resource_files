@@ -55,7 +55,7 @@ Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) an
 
 ![mosquito_banner](https://i.imgur.com/84zazDr.png)
 
-**WARNING:** All this stealth technics will not prevent you beeing caugth, so its advice to **not** use mosquito inside your home network (Local Lan), but insted find a public hotspot to use and abuse mosquito framework.
+**WARNING:** All this stealth technics will not prevent us from beeing caugth, so its advice to **not** use mosquito inside your home network (Local Lan), but insted find a public hotspot to use and abuse of mosquito framework.
 
     stealth technics used to evade IDS analysis
     -------------------------------------------
