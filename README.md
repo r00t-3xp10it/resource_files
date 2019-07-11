@@ -60,7 +60,7 @@ Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) an
 
 ![mosquito_banner](http://i66.tinypic.com/90zthw.png)
 
-Mosquito also allow users to scan-brute-force multiple targets (multi-tasking) from user inputs to the import of hosts list files containing ip addresses or randomly seek in WAN for possible targets. Each valid credentials found (brute-force or exploitation) will spawn a shell session to the remote host in msfconsole prompt.
+Mosquito also allow users to scan-brute-force multiple targets at the same time (multi-tasking) from user inputs to the import of hosts list files containing ip addresses or randomly seek in WAN for possible targets. Each valid credentials found (brute-force or exploitation) will spawn a shell session to the remote host in msfconsole prompt.
 
 ![mosquito_banner](http://i65.tinypic.com/280v0hc.png)
 
