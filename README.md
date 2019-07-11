@@ -40,7 +40,7 @@ Mosquito.sh (**BASH**) script was written for the purpose of automating the reso
 
 ![mosquito_banner](https://i.imgur.com/Ibrvsjk.png)
 
-**WARNING:** In 'Random search WAN for rhosts' Depending of user set LIMMIT value, the scan migth take from 10 to 15 minuts to finish, so its adviced to start with default LIMMIT values before testing other timmings.
+**WARNING:** In 'Random search WAN for rhosts' Depending of user set LIMMIT value, the scan migth take from 10 to 15 minuts to finish, so its advice to start with default LIMMIT values before testing other timmings.
 
 ---
 <br /><br />
@@ -49,7 +49,7 @@ Mosquito.sh (**BASH**) script was written for the purpose of automating the reso
 Mosquito as first step uses nmap to seach-recon hosts information (or possible targets), then adds all the hosts found to metasploit database to be used in further recon, exploration or brute force jobs carried out later.
 
 ![mosquito_banner](http://i63.tinypic.com/2e5pce9.png)
-![mosquito_banner](https://i.imgur.com/EceMvea.png)
+![mosquito_banner](http://i66.tinypic.com/v5bix0.png)
 
 Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike metasploit the scans performed by nmap will use a fake UserAgent (IPhone/Safari) stealth scans (SYN ack) and Cloak scan(s) with decoys (-D decoy_ip,decoy_ip,ME) that turns forensic IDS analysis more dificult to identify the attack.
 
