@@ -46,7 +46,7 @@ Mosquito.sh (**BASH**) script was written for the purpose of automating the reso
 <br />
 
 ### Framework Description
-Mosquito as first step uses nmap to seach-recon hosts information (or possible targets), then adds all the hosts found (with open ports) to metasploit database to be used in further recon, exploration or brute force jobs carried out later.
+Mosquito as first step uses nmap to seach-recon hosts information (or possible targets), then adds all the hosts found (with open ports) to metasploit database to be used in further recon, exploration or brute force jobs carried out later with msf.
 
 ![mosquito_banner](http://i66.tinypic.com/v5bix0.png)
 ![mosquito_banner](http://i63.tinypic.com/2e5pce9.png)
