@@ -60,7 +60,7 @@ Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) an
 
 ![mosquito_banner](http://i66.tinypic.com/90zthw.png)
 
-Mosquito also allow us to scan-brute-force multiple targets at the same time (multi-tasking) from user inputs to the import of hosts list files containing ip addresse(s) or randomly seach in WAN for possible targets.
+Mosquito also allow us to scan-brute-force multiple targets at the same time (multi-tasking) from user inputs to the import of hosts list files containing ip address(s) or randomly seach in WAN for possible targets.
 
 ![mosquito_multi_targets](http://i65.tinypic.com)
 
@@ -74,7 +74,7 @@ And each valid credentials found (brute-force or exploitation) will spawn a shel
 <br /><br />
 
 ### Framework Dictionary files
-Initial the resource scripts that this project contains are written to allow is users to input dictionary file absoluct path before the scan take place (own dictionary), but mosquito ships with is own set of dictionary files to assist in brute force tasks, and it does not allow is users to input another dictionary file when running mosquito framework.
+Initialy all resource scripts that this project contains are written to allow is users to input dictionary file absoluct path before the scan take place (own dictionary), but mosquito ships with is own set of dictionary files to assist in brute force tasks, and it does not allow is users to input another dictionary file when running mosquito framework.
 
 nevertheless mosquito users can improve existing dictionary(s) by edit them before executing the framework, all dictionary files can be found under project working directory in: 'resource_files/bin/worldlists'.
 
