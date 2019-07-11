@@ -38,9 +38,9 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 ### Project History
 Mosquito.sh (**BASH**) script was written for the purpose of automating the resource files (**ERB**) contained in this [repository](https://github.com/r00t-3xp10it/resource_files). Each resource file is written to allow users to run them in three different ways, from scan the Local Lan, scan user inputs (**RHOSTS/LHOSTS**) or randomly scan the **WAN** network for possible targets to add to metasploit database.
 
-![mosquito_banner](http://i63.tinypic.com/2jczzmb.png)
+![mosquito_banner](https://i.imgur.com/Ibrvsjk.png)
 
-**WARNING:** In 'Random search WAN for rhosts' Depending of user set LIMMIT value, the scan migth take from 10 to 15 minuts to finish.
+**WARNING:** In 'Random search WAN for rhosts' Depending of user set LIMMIT value, the scan migth take from 10 to 15 minuts to finish, so its adviced to start with default LIMMIT values before testing other timmings.
 
 ---
 <br /><br />
