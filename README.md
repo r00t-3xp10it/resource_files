@@ -40,7 +40,7 @@ Mosquito.sh (**BASH**) script was written for the purpose of automating the reso
 
 ![mosquito_banner](https://i.imgur.com/Ibrvsjk.png)
 
-**WARNING:** In 'Random search WAN for rhosts' Depending of user set LIMMIT value, the scan migth take from 10 to 15 minuts to finish, so its advice to start with default LIMMIT values before testing other timmings.
+**WARNING:** In 'Random search WAN for rhosts' Depending of user set **LIMMIT** value, the scan migth take from 10 to 15 minuts to finish, so its advice to start with default **LIMMIT** values before testing other timmings.
 
 ---
 <br />
