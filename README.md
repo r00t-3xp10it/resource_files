@@ -110,7 +110,7 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
 ---
-<br /><br />
+<br />
 
 ### Framework Limitations
 **a)** mosquito only accepts ip addr inputs, not domain names<br />
@@ -126,7 +126,7 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
 ---
-<br /><br />
+<br />
 
 ### Framework Download
 ```
@@ -152,7 +152,7 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
 ---
-<br /><br />
+<br />
 
 ### Referencies
 [1] [Project home page](https://github.com/r00t-3xp10it/resource_files)<br />
