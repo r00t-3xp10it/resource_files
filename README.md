@@ -48,7 +48,7 @@ Mosquito as first step uses nmap to seek-recon hosts information (or possible ta
 
 ![mosquito_banner](http://i63.tinypic.com/2e5pce9.png)
 
-Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike metasploit the scans performed by nmap will use a false User-Agent (IPhone/Safari) stealth scans (SYN ack) and mac address spoofing (--spoof-mac) technics that turns forensic log artifacts analysis more dificult to identify the attacker.
+Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike metasploit the scans performed by nmap will use a fake UserAgent (IPhone/Safari) stealth scans (SYN ack) and mac addr spoofing (--spoof-mac) technics that turns forensic log artifacts analysis more dificult to identify the attacker.
 
     stealth technics used by mosquito to evade IDS and artifacs logs analysis
     -------------------------------------------------------------------------
