@@ -17,7 +17,7 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 
 ## Mosquito - Automating reconnaissance and brute force attacks
 
-![mosquito_banner](http://i65.tinypic.com/2ewejqd.jpg)
+![mosquito_banner](http://i65.tinypic.com/25swl77.png)
 
 <br />
 
@@ -70,7 +70,7 @@ Mosquito also allow users to scan-brute-force multiple targets (multi-tasking) f
 ### Framework Dictionary files
 Initial the resource scripts that this project contains are written to allow is users to input dictionary file absoluct path before the scan take place, but mosquito ships with is own set of dictionary files to assist in brute force tasks, and it does not allow is users to input another dictionary file when running mosquito framework.
 
-nevertheless mosquito users can improve existing dictionary(s) by edit them before executing mosquito framework, all dictionary files can be found under project working directory in: 'resource_files/bin/worldlists'.
+nevertheless mosquito users can improve existing dictionary(s) by edit them before executing the framework, all dictionary files can be found under project working directory in: 'resource_files/bin/worldlists'.
 
 ![mosquito_banner](http://i63.tinypic.com/2u7c87b.png)
 
@@ -82,16 +82,16 @@ nevertheless mosquito users can improve existing dictionary(s) by edit them befo
 ### Framework Dependencies
 |dependencie|actions|install|
 |---|---|---|
-|metasploit| msf database; recon; exploitation; brute force | [metasploit download](https://www.metasploit.com/download) |
+|zenity|Bash script GUI interfaces|[zenity download](https://help.gnome.org/users/zenity/) * |
 |nmap| WAN random search; recon | [nmap download](https://nmap.org/download.html) * |
-|zenity|Bash script GUI interface|[zenity download](https://help.gnome.org/users/zenity/) * |
+|metasploit| msf database; recon; exploitation; brute force | [metasploit download](https://www.metasploit.com/download) |
 |geoiplookup| hosts geo location | sudo apt-get install geoip-bin * |
 |curl| hosts geo location | sudo apt-get install curl * |
 |dig| ip address resolver | Linux native installed package ** |
 |http-winrm.nse| http winrm recon | mosquito native nse script * |
 |freevulnsearch.nse| CVE recon | mosquito native nse script * |
 
-    * ./mosquito.sh -i = to install packages/scripts/modules
+    * ./mosquito.sh -i = to install all packages/scripts/modules
     ** Linux native installed package = no need to install it
 
 **Hint:** All mosquito dependencies can be easy installed by runing: **sudo ./mosquito.sh -i**<br />
@@ -110,8 +110,7 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 **d)** find valid credentials sometimes fails to spawn a shell<br />
 **e)** multiple sessions open migth slowdown your pc<br />
 
-**Hint:** This resource scripts requires that the msf database to be empty of hosts and services data. Thats
-the main reason why this scripts creates a new workspace named 'mosquito' and stores all data inside that workspace while working, then the resource script deletes the 'mosquito' workspace in the end of execution.
+**Hint:** This resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new workspace named **'mosquito'** and stores all data inside that workspace while working, then the resource script deletes the **'mosquito'** workspace in the end of execution.
 
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
@@ -137,7 +136,7 @@ the main reason why this scripts creates a new workspace named 'mosquito' and st
 ![mosquito_banner](http://i67.tinypic.com/a59l50.png)
 
     [execute] sudo ./mosquito.sh
-![mosquito_banner](http://i65.tinypic.com/2ewejqd.jpg)
+![mosquito_banner](http://i65.tinypic.com/25swl77.png)
 
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
