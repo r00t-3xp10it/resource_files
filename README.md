@@ -127,7 +127,7 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 ### Framework help-update-install-execution
 
     [help]    sudo ./mosquito.sh -h
-![mosquito_banner](http://i63.tinypic.com/do00zp.png)
+![mosquito_banner](http://i63.tinypic.com/wa652q.png)
 
     [update]  sudo ./mosquito.sh -u
 ![mosquito_banner](http://i65.tinypic.com/294mdja.png)
