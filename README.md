@@ -36,7 +36,7 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 <br /><br />
 
 ### Project History
-Mosquito.sh (**BASH**) script was written for the purpose of automating the resource files (**ERB**) contained in this [repository](https://github.com/r00t-3xp10it/resource_files). Each resource file is written to allows users to run them in three different ways, from scan the Local Lan, scan user inputs (**RHOSTS/LHOSTS**) or randomly scan the **WAN** network for possible targets to add to metasploit database.
+Mosquito.sh (**BASH**) script was written for the purpose of automating the resource files (**ERB**) contained in this [repository](https://github.com/r00t-3xp10it/resource_files). Each resource file is written to allow users to run them in three different ways, from scan the Local Lan, scan user inputs (**RHOSTS/LHOSTS**) or randomly scan the **WAN** network for possible targets to add to metasploit database.
 
 ![mosquito_banner](http://i63.tinypic.com/2jczzmb.png)
 
@@ -44,7 +44,7 @@ Mosquito.sh (**BASH**) script was written for the purpose of automating the reso
 <br /><br />
 
 ### Framework Description
-Mosquito as first step uses nmap to seek-recon hosts information (or possible targets), then adds all the hosts found to the msfdb to be used in further recon, assist in exploration or brute force jobs carried out later.
+Mosquito as first step uses nmap to seach-recon hosts information (or possible targets), then adds all the hosts found to metasploit database to be used in further recon, exploration or brute force jobs carried out later.
 
 ![mosquito_banner](http://i63.tinypic.com/2e5pce9.png)
 
