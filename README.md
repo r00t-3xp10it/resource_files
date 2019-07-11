@@ -55,14 +55,13 @@ Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) an
 
 ![mosquito_banner](https://i.imgur.com/84zazDr.png)
 
+**WARNING:** All this stealth technics will not prevent you beeing caugth, so its advice to **not** use mosquito inside your home network (Local Lan), but insted find a public hotspot to use and abuse mosquito framework.
+
     stealth technics used to evade IDS analysis
     -------------------------------------------
     nmap -sS [stealth scan using SYN ack]
     nmap -D 188.234.11.254,167.113.24.80,ME [Cloak a scan with decoys]
     nmap --script-args http.useragent="Apache-HttpClient/4.0.3 (java 1.5)" [spoof your UserAgent]
-
-**WARNING:** All this stealth technics will not prevent you beeing caugth, so its advice to **not** use mosquito inside your home network (Local Lan), but insted find a public hotspot to use and abuse mosquito framework.
-
 
 Mosquito also allow us to scan-brute-force multiple targets at the same time (multi-tasking) from user inputs to the import of hosts list files containing ip address(s) or randomly seach in WAN for possible targets.
 
