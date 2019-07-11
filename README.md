@@ -48,21 +48,21 @@ Mosquito as first step uses nmap to seach-recon hosts information (or possible t
 
 ![mosquito_banner](http://i63.tinypic.com/2e5pce9.png)
 
-Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike metasploit the scans performed by nmap will use a fake UserAgent (IPhone/Safari) stealth scans (SYN ack) and random data in each packet sent (--data-length) that turns forensic IDS analysis more dificult to identify the attack.
+Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike metasploit the scans performed by nmap will use a fake UserAgent (IPhone/Safari) stealth scans (SYN ack) and Cloak scan(s) with decoys (-D decoy_ip,decoy_ip,ME) that turns forensic IDS analysis more dificult to identify the attack.
 
-    stealth technics used by mosquito to evade IDS analysis
-    -------------------------------------------------------
-    nmap -sS [stealth scan using SYN ack packets]
-    nmap --data-length 18 [Append random data to sent packets]
+    stealth technics used to evade IDS analysis
+    -------------------------------------------
+    nmap -sS [stealth scan using SYN ack]
+    nmap -D 188.234.11.254,167.113.24.80,ME [Cloak a scan with decoys]
     nmap --script-args http.useragent="Apache-HttpClient/4.0.3 (java 1.5)" [spoof your UserAgent]
 
 **WARNING:** All this stealth technics will not prevent you beeing caugth, so its advice to **not** use mosquito inside your home network (Local Lan), but insted find a public hotspot to use and abuse mosquito framework.
 
-![mosquito_banner](http://i66.tinypic.com/90zthw.png)
+![mosquito_banner](https://i.imgur.com/84zazDr.png)
 
 Mosquito also allow us to scan-brute-force multiple targets at the same time (multi-tasking) from user inputs to the import of hosts list files containing ip address(s) or randomly seach in WAN for possible targets.
 
-![mosquito_multi_targets](http://i65.tinypic.com)
+![mosquito_multi_targets](https://i.imgur.com/r3BXpZa.png)
 
 And each valid credentials found (brute-force or exploitation) will spawn a shell session to the remote host in msf prompt.
 
