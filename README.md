@@ -63,7 +63,7 @@ Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) an
     nmap -D 188.234.11.254,167.113.24.80,ME [Cloak a scan with decoys]
     nmap --script-args http.useragent="Apache-HttpClient/4.0.3 (java 1.5)" [spoof your UserAgent]
 
-Mosquito also allow us to scan-brute-force multiple targets at the same time (multi-tasking) from user inputs to the import of hosts list files containing ip address(s) or randomly seach in WAN for possible targets.
+Mosquito also allow us to scan-brute-force multiple targets at the same time (multi-tasking) from user inputs to the import of hosts list files containing ip addr (one-per-line-ip-addr-text-file) or randomly seach in WAN for possible targets.
 
 ![mosquito_multi_targets](https://i.imgur.com/r3BXpZa.png)
 
