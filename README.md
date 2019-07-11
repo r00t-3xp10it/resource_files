@@ -13,7 +13,7 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 
 ---
 
-<br /><br />
+<br />
 
 ## Mosquito - Automating reconnaissance and brute force attacks
 
@@ -33,7 +33,7 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 [9] [Project Acknowledgment](https://github.com/r00t-3xp10it/resource_files#project-acknowledgment)<br />
 
 ---
-<br /><br />
+<br />
 
 ### Project History
 Mosquito.sh (**BASH**) script was written for the purpose of automating the resource files (**ERB**) contained in this [repository](https://github.com/r00t-3xp10it/resource_files). Each resource file is written to allow users to run them in three different ways, from scan the Local Lan, scan user inputs (**RHOSTS/LHOSTS**) or randomly scan the **WAN** network for possible targets to add to metasploit database.
@@ -43,7 +43,7 @@ Mosquito.sh (**BASH**) script was written for the purpose of automating the reso
 **WARNING:** In 'Random search WAN for rhosts' Depending of user set LIMMIT value, the scan migth take from 10 to 15 minuts to finish, so its advice to start with default LIMMIT values before testing other timmings.
 
 ---
-<br /><br />
+<br />
 
 ### Framework Description
 Mosquito as first step uses nmap to seach-recon hosts information (or possible targets), then adds all the hosts found to metasploit database to be used in further recon, exploration or brute force jobs carried out later.
@@ -74,7 +74,7 @@ And each valid credentials found (brute-force or exploitation) will spawn a shel
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
 ---
-<br /><br />
+<br />
 
 ### Framework Dictionary files
 Initialy all resource scripts that this project contains are written to allow is users to input dictionary file absoluct path before the scan take place (own dictionary), but mosquito ships with is own set of dictionary files to assist in brute force tasks, and it does not allow is users to input another dictionary file when running mosquito framework.
@@ -86,7 +86,7 @@ nevertheless mosquito users can improve existing dictionary(s) by edit them befo
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
 ---
-<br /><br />
+<br />
 
 ### Framework Dependencies
 |dependencie|actions|install|
