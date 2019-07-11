@@ -48,7 +48,7 @@ Mosquito as first step uses nmap to seach-recon hosts information (or possible t
 
 ![mosquito_banner](http://i63.tinypic.com/2e5pce9.png)
 
-Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike metasploit the scans performed by nmap will use a fake UserAgent (IPhone/Safari) stealth scans (SYN ack) and random data in each packet sent (--data-length) that turns forensic IDS analysis more dificult to identify the attacker.
+Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike metasploit the scans performed by nmap will use a fake UserAgent (IPhone/Safari) stealth scans (SYN ack) and random data in each packet sent (--data-length) that turns forensic IDS analysis more dificult to identify the attack.
 
     stealth technics used by mosquito to evade IDS analysis
     -------------------------------------------------------
@@ -60,7 +60,7 @@ Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) an
 
 ![mosquito_banner](http://i66.tinypic.com/90zthw.png)
 
-Mosquito also allow users to scan-brute-force multiple targets at the same time (multi-tasking) from user inputs to the import of hosts list files containing ip addresses or randomly seek in WAN for possible targets.
+Mosquito also allow us to scan-brute-force multiple targets at the same time (multi-tasking) from user inputs to the import of hosts list files containing ip addresse(s) or randomly seach in WAN for possible targets.
 
 ![mosquito_multi_targets](http://i65.tinypic.com)
 
