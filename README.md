@@ -36,7 +36,7 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 <br /><br />
 
 ### Project History
-Mosquito.sh (**BASH**) script was written for the purpose of automating the resource files (**ERB**) contained in this [repository](https://github.com/r00t-3xp10it/resource_files). Each resource file is written to allows users to run them in three different ways, from scan the Local Lan, scan user inputs (**RHOSTS**) or randomly scan the **WAN** network for possible targets to add to msfdb.
+Mosquito.sh (**BASH**) script was written for the purpose of automating the resource files (**ERB**) contained in this [repository](https://github.com/r00t-3xp10it/resource_files). Each resource file is written to allows users to run them in three different ways, from scan the Local Lan, scan user inputs (**RHOSTS/LHOSTS**) or randomly scan the **WAN** network for possible targets to add to metasploit database.
 
 ![mosquito_banner](http://i63.tinypic.com/2jczzmb.png)
 
@@ -60,7 +60,11 @@ Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) an
 
 ![mosquito_banner](http://i66.tinypic.com/90zthw.png)
 
-Mosquito also allow users to scan-brute-force multiple targets at the same time (multi-tasking) from user inputs to the import of hosts list files containing ip addresses or randomly seek in WAN for possible targets. Each valid credentials found (brute-force or exploitation) will spawn a shell session to the remote host in msfconsole prompt.
+Mosquito also allow users to scan-brute-force multiple targets at the same time (multi-tasking) from user inputs to the import of hosts list files containing ip addresses or randomly seek in WAN for possible targets.
+
+![mosquito_multi_targets](http://i65.tinypic.com)
+
+And each valid credentials found (brute-force or exploitation) will spawn a shell session to the remote host in msf prompt.
 
 ![mosquito_banner](http://i65.tinypic.com/280v0hc.png)
 
@@ -70,7 +74,7 @@ Mosquito also allow users to scan-brute-force multiple targets at the same time 
 <br /><br />
 
 ### Framework Dictionary files
-Initial the resource scripts that this project contains are written to allow is users to input dictionary file absoluct path before the scan take place, but mosquito ships with is own set of dictionary files to assist in brute force tasks, and it does not allow is users to input another dictionary file when running mosquito framework.
+Initial the resource scripts that this project contains are written to allow is users to input dictionary file absoluct path before the scan take place (own dictionary), but mosquito ships with is own set of dictionary files to assist in brute force tasks, and it does not allow is users to input another dictionary file when running mosquito framework.
 
 nevertheless mosquito users can improve existing dictionary(s) by edit them before executing the framework, all dictionary files can be found under project working directory in: 'resource_files/bin/worldlists'.
 
