@@ -121,6 +121,8 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 
 **Hint:** This resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new workspace named **'mosquito'** and stores all data inside that workspace while working, then the resource script deletes the **'mosquito'** workspace in the end of execution.
 
+![mosquito_banner](http://i66.tinypic.com/vmuaso.png)
+
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
 ---
