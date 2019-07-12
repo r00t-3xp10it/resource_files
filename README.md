@@ -53,7 +53,6 @@ Mosquito as first step uses nmap to seach-recon hosts information (or possible t
 
 Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike msf the scans performed by nmap will use a fake UserAgent (IPhone/Safari) stealth scans (SYN ack) and Cloak scan(s) with decoys (-D decoy_ip,decoy_ip,ME) that makes forensic IDS analysis more dificult to identify the attack. Also --host-timeout switch its used to prevent the WAN scans from hangout more than one minut between host discovery.
 
-![mosquito_banner](https://i.imgur.com/84zazDr.png)
 ![mosquito_banner](https://i.imgsafe.org/8a/8ab60aee47.png)
 
 **WARNING:** All this stealth technics will not prevent us from beeing caugth, so its advice to **not** use mosquito inside your home network (Local Lan), but insted find a public hotspot to use and abuse of mosquito framework.
