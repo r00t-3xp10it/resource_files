@@ -51,9 +51,9 @@ Mosquito as first step uses nmap to seach-recon hosts information (or possible t
 ![mosquito_banner](http://i66.tinypic.com/v5bix0.png)
 ![mosquito_banner](http://i63.tinypic.com/2e5pce9.png)
 
-Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike msf the scans performed by nmap will use a fake UserAgent (IPhone/Safari) stealth scans (SYN ack) and Cloak scan(s) with decoys (-D decoy_ip,decoy_ip,ME) that makes forensic IDS analysis more dificult to identify the attack. Also --host-timeout switch its used to prevent the WAN scans from hangout more than one minut between host discovery.
+Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike msf the scans performed by nmap will use a fake UserAgent (IPhone/Safari) stealth scans (SYN ack) and Cloak scan(s) with decoys (-D decoy_ip,decoy_ip,ME) that makes forensic IDS analysis more dificult to identify the attack.
 
-![mosquito_banner](https://i.imgsafe.org/8a/8ab60aee47.png)
+![mosquito_banner](http://i68.tinypic.com/1h82tj.png)
 
 **WARNING:** All this stealth technics will not prevent us from beeing caugth, so its advice to **not** use mosquito inside your home network (Local Lan), but insted find a public hotspot to use and abuse of mosquito framework.
 
@@ -63,7 +63,7 @@ Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) an
     nmap -D 188.234.11.254,167.113.24.80,ME [Cloak a scan with decoys]
     nmap --script-args http.useragent="Apache-HttpClient/4.0.3 (java 1.5)" [spoof your UserAgent]
 
-Mosquito also allow us to scan-brute-force multiple targets at the same time (multi-tasking) from user inputs to the import of hosts list files containing ip addr (one-per-line-ip-addr-text-file) or randomly seach in WAN for possible targets.
+Mosquito also allow us to search-scan-exploit-brute-force multiple targets at the same time (multi-tasking).
 
 ![mosquito_multi_targets](https://i.imgur.com/r3BXpZa.png)
 
