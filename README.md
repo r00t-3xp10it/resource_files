@@ -40,7 +40,7 @@ Mosquito.sh (**BASH**) script was written for the purpose of automating the reso
 
 ![mosquito_banner](https://i.imgur.com/Ibrvsjk.png)
 
-**WARNING:** In 'Random search WAN for rhosts' Depending of user set **LIMMIT** value, the scan migth take from 10 to 15 minuts to finish, so its advice to start with default **LIMMIT** values (4 to 5 minuts) before testing other timmings.
+**WARNING:** In 'Random search WAN for rhosts' its advice to use default **LIMMIT** values (4 to 5 minuts) before testing other timmings.
 
 ---
 <br />
@@ -164,10 +164,10 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 <br />
 
 ### Project Acknowledgment
-@HD Moore - metasploit framework<br />
 @fyodor - nmap framework<br />
-@Mathias Gut - freevulnsearch.nse script<br />
+@HD Moore - metasploit framework<br />
 @Sean Warnock - http-winrm.nse script<br />
+@Mathias Gut - freevulnsearch.nse script<br />
 
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
