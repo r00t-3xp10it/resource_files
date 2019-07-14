@@ -40,7 +40,7 @@ Mosquito.sh (**BASH**) script was written for the purpose of automating the reso
 
 ![mosquito_banner](https://i.imgur.com/Ibrvsjk.png)
 
-**WARNING:** In 'Random search WAN for rhosts' its advice to use default **LIMMIT** values (4 to 5 minuts).
+**WARNING:** In 'Random search WAN for rhosts' its advice to use default **LIMMIT** values (4 to 5 minuts scan aprox.)
 
 ---
 <br />
@@ -70,6 +70,8 @@ Mosquito also allow us to search-scan-exploit-brute-force multiple targets at th
 And each valid credentials found (brute-force or exploitation) will spawn a shell session to the remote host in msf prompt.
 
 ![mosquito_banner](http://i65.tinypic.com/280v0hc.png)
+![mosquito_banner](http://i65.tinypic.com/wj9tmt.png)
+
 
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
@@ -79,7 +81,8 @@ And each valid credentials found (brute-force or exploitation) will spawn a shel
 ### Framework Dictionary files
 Initialy all resource scripts that this project contains are written to allow is users to input dictionary file absoluct path before the scan take place (own dictionary), but mosquito ships with is own set of dictionary files to assist in brute force tasks, and it does not allow is users to input another dictionary file when running mosquito framework.
 
-nevertheless mosquito users can improve existing dictionary(s) by edit them before executing the framework, all dictionary files can be found under project working directory in: 'resource_files/bin/worldlists'.
+nevertheless mosquito users can still improve the existing dictionary(s) by edit them before executing the framework.
+All dictionary files can be found in project working directory under: 'resource_files/bin/worldlists'.
 
 ![mosquito_banner](http://i63.tinypic.com/2u7c87b.png)
 
@@ -89,7 +92,7 @@ nevertheless mosquito users can improve existing dictionary(s) by edit them befo
 <br />
 
 ### Framework Dependencies
-|dependencie|actions|install|
+|Dependencie|Function|Install|
 |---|---|---|
 |zenity|Bash script GUI interfaces|[zenity download](https://help.gnome.org/users/zenity/) * |
 |nmap| WAN random search; recon | [nmap download](https://nmap.org/download.html) * |
@@ -116,10 +119,10 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 **a)** mosquito only accepts ip addr inputs, not domain names<br />
 **b)** brute forcing takes time, use 'CTRL+C' to skip current task(s)<br />
 **c)** mosquito dicionarys can be found in resource_files/bin/worldlists<br />
-**d)** find valid credentials sometimes fails to spawn a shell<br />
-**e)** multiple sessions open migth slowdown your pc<br />
+**d)** finding valid credentials sometimes fails to spawn a shell<br />
+**e)** multiple sessions open (msf) migth slowdown your pc<br />
 
-**Hint:** This resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new workspace named **'mosquito'** and stores all data inside that workspace while working, then the resource script deletes the **'mosquito'** workspace in the end of execution.
+**Hint:** This resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new workspace named **'mosquito'** and stores all data inside that workspace while working, then the resource script deletes the **'mosquito'** workspace in the end of execution and leave *default database intact.
 
 ![mosquito_banner](http://i66.tinypic.com/vmuaso.png)
 
