@@ -1,7 +1,7 @@
 sysinfo
 getuid
 getpid
-ps gep explorer.exe
+ps grep explorer.exe
 ls
 ls %ProgramFiles%
 ls %UserProfile%\\Documents

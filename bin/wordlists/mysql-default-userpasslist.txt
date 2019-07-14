@@ -1,0 +1,41 @@
+root
+user
+guest
+admin
+ftp ftp
+root 123
+root root
+root usbw
+root mktt
+root moves
+root mysql
+root pgsql
+dbuser 123
+root admin
+mysql mysql
+root abc123
+admin admin
+root chippc
+moves moves
+root testpw
+root 123456
+root qwerty
+root vagrant
+root password
+root cloudera
+root nagiosxi
+oracle oracle
+administrator
+root raspberry
+admin password
+root 123qweASD#
+root p@ck3tf3nc3
+wwwadmin wwwadmin
+cloudera cloudera
+anonymous anonymous
+asteriskuser amp109
+mcUser medocheck123
+admin administrator
+administrator administrator
+root openauditrootuserpassword
+asteriskuser eLaStIx.asteriskuser.2oo7

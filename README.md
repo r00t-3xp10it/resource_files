@@ -82,7 +82,7 @@ And each valid credentials found (brute-force) will spawn a shell session to rem
 ### Framework Dictionary files
 Initialy all resource scripts that this project contains are written to allow is users to input dictionary file absoluct path before the scan take place (own dictionary), but mosquito ships with is own set of dictionary files to assist in brute force tasks, and it does not allow is users to input another dictionary file when running mosquito framework.
 
-nevertheless mosquito users can still improve the existing dictionary(s) by edit them before executing the framework.
+nevertheless mosquito users can still improve the existing dictionary(s) by edit them before executing the framework.<br />
 All dictionary files can be found in project working directory under: 'resource_files/bin/worldlists'.
 
 ![mosquito_banner](http://i63.tinypic.com/2u7c87b.png)

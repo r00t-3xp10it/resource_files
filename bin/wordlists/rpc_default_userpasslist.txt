@@ -1,0 +1,31 @@
+root
+user
+guest
+admin
+msf msf
+msf nsa
+msf cia
+msf 123
+msf kali
+msf 1234
+msf admin
+msf haxor
+msf linux
+msf 12345
+root root
+root toor
+anon anon
+msf centos
+msf ubuntu
+msf secret
+msf s3cr3t
+admin toor
+root admin
+msf parrot
+admin admin
+msf fsociety
+msf webmaster
+msfuser msfuser
+msfadmin msfadmin
+anonymous anonymous
+administrator administrator

@@ -1,28 +1,32 @@
-   <ruby>
+##
+# Script: geo_location.rc
+# Author: r00t-3xp10it <pedroubuntu10[at]gmail.com>
+# GitHub: https://github.com/r00t-3xp10it/resource_files
+# -
+# [OPTIONS]
+# setg TXT_IMPORT /root/hosts_list.txt - Import a list of hosts to be added to db.
+# setg USE_CURL true - Use curl ipapi.co/ip insted of geoiplookup (default) package.
+# setg GOOGLE_MAP true - Use geoiplookup and iptracker to geolocate (google maps url link).
+# setg RHOSTS 162.246.22.133 104.96.180.140 - Add hosts to database and scan for geolocation.
+# setg GEOIP_PATH /usr/bin/geoiplookup - Geoiplookup package installation absoluct path (local).
+# setg RESOLVER true - Resolve YOUR internal ip addr into external ip, add it to db and geolocate
+# -
+# [SYNTAX EXAMPLES]
+# msf5 > setg RESOLVER true;resource /root/geo_location.rc'
+# msfconsole -q -x 'setg RESOLVER true;resource /root/geo_location.rc'
+##
+  <ruby>
       help = %Q|
+                                                🦟__________       
+              _______🦟________________________  ____(_)_  /______🦟
+           __  __  __ \\  __ \\_  ___/  __  /  / / /_  /_  __/  __ \\
+         🦟_  / / / / / /_/ /(__  )/ /_/ // /_/ /_  / / /_ / /_/ /
+           /_/ /_/ /_/\\____//____/ \\__, / \\__,_/ /_/  \\__/ \\____/
+                                  🦟 /_/                       🦟
 
-        Description:
-          setg TXT_IMPORT /root/hosts_list.txt - Import a list of hosts to be added to db.
-          setg USE_CURL true - Use curl ipapi.co/ip insted of geoiplookup (default) package.
-          setg GOOGLE_MAP true - Use geoiplookup and iptracker to geolocate (google maps url link).
-          setg RHOSTS 162.246.22.133 104.96.180.140 - Add hosts to database and scan for geolocation.
-          setg GEOIP_PATH /usr/bin/geoiplookup - Geoiplookup package installation absoluct path (local).
-          setg RESOLVER true - Resolve YOUR internal ip addr into external ip, add it to db and geolocate.
-          geo_location.rc requires geoiplookup (geoip-bin) or curl (ipapi.co) packages to retrieve the
-          geolocation of all hosts in msf database. (curl will provide more detailed geolocation reports).
-          'IF none value (setg) has povided then this script will scan all hosts in db using geoiplookup'
-
-        Execute in msfconsole:
-          setg RESOLVER <true-or-blank>
-          setg USE_CURL <true-or-blank>
-          setg GOOGLE_MAP <true-or-blank>
-          setg RHOSTS <hosts-separated-by-spaces>
-          setg TXT_IMPORT <absoluct-path-of-hosts-file>
-          setg GEOIP_PATH <absoluct-path-of-geoiplookup>
-          resource <path-to-script>/geo_location.rc
-
-        Author:
-          r00t-3xp10it  <pedroubuntu10[at]gmail.com>
+    Script: geo_location.rc
+    Author: r00t-3xp10it <pedroubuntu10[at]gmail.com>
+    GitHub: https://github.com/r00t-3xp10it/resource_files
 
       |
       print_line(help)
@@ -55,14 +59,14 @@
         Rex::sleep(2.0)
         err = %Q|
 
-        Remark
-        ------
-        This resource script requires the msf database connected to postgresql.
+    Remark
+    ------
+    This resource script requires the msf database connected to postgresql.
 
-        Connect DB To Postgresql
-        ------------------------
-        [execute] service postgresql start
-        [execute] msfconsole -q -x 'resource geo_location.rc'
+    Connect DB To Postgresql
+    ------------------------
+    [execute] service postgresql start
+    [execute] msfconsole -q -x 'resource geo_location.rc'
 
         |
         print_line(err)
@@ -72,6 +76,7 @@
         run_single("exit -y")
         return nil
       else
+        local = Dir.pwd
         work_name = framework.db.workspace.name
         print_good("Database connected to postgresql.")
         Rex::sleep(0.5)
@@ -99,17 +104,17 @@
               Rex::sleep(2.0)
               err = %Q|
 
-        Remark
-        ------
-        This function allow us to import a list of hosts contain inside a text file
-        (one-per-line-entries). Metasploit framework only has the 'db_import' command
-        That allow us to import .xml files, this command presents a diferent import
-        function (.txt) available to users.
+    Remark
+    ------
+    This function allow us to import a list of hosts contain inside a text file
+    (one-per-line-entries). Metasploit framework only has the 'db_import' command
+    That allow us to import .xml files, this command presents a diferent import
+    function (.txt) available to users.
 
-        Import hosts list
-        -----------------
-        [execute] setg TXT_IMPORT bin/remote_hosts.txt
-        [execute] resource geo_location.rc
+    Import hosts list
+    -----------------
+    [execute] setg TXT_IMPORT bin/remote_hosts.txt
+    [execute] resource geo_location.rc
 
               |
               print_line(err)
@@ -148,26 +153,26 @@
            Rex::sleep(2.0)
            err = %Q|
 
-        Remark
-        ------
-        This resource script will scan all hosts in database, If the database
-        its empty we can populate it by using 'setg RHOSTS' msf global variable.
+    Remark
+    ------
+    This resource script will scan all hosts in database, If the database
+    its empty we can populate it by using 'setg RHOSTS' msf global variable.
 
-        Add Hosts To Database
-        ---------------------
-        [execute] setg RHOSTS 162.246.22.133 104.96.180.140
-        [execute] resource geo_location.rc
+    Add Hosts To Database
+    ---------------------
+    [execute] setg RHOSTS 162.246.22.133 104.96.180.140
+    [execute] resource geo_location.rc
 
 
-        Remark
-        ------
-        This resource script also gives to is users the ability to import (to db)
-        a list of hosts contained inside a local text file (one-per-line-entries)
+    Remark
+    ------
+    This resource script also gives to is users the ability to import (to db)
+     a list of hosts contained inside a local text file (one-per-line-entries)
 
-        Import a hosts list
-        -------------------
-        [execute] setg TXT_IMPORT bin/remote_hosts.txt
-        [execute] resource geo_location.rc
+    Import a hosts list
+    -------------------
+    [execute] setg TXT_IMPORT bin/remote_hosts.txt
+    [execute] resource geo_location.rc
 
            |
            print_line(err)
@@ -187,43 +192,43 @@
             Rex::sleep(2.0)
             err = %Q|
 
-        Remark
-        ------
-        This function requires geoiplookup package (geoip-bin) installed
-        to be abble to retry target host geolocation, if we dont want to
-        install the package we can still use this script by setting the
-        geolocation software to use curl ipapi.co insted. (linux native) 
+    Remark
+    ------
+    This function requires geoiplookup package (geoip-bin) installed
+    to be abble to retry target host geolocation, if we dont want to
+    install the package we can still use this script by setting the
+    geolocation software to use curl ipapi.co insted. (linux native) 
 
-        Install Geoip-Bin
-        -----------------
-        [execute] apt-get update
-        [execute] apt-get install geoip-bin
-        [execute] resource geo_location.rc
-
-
-        Remark
-        ------
-        If we have geoiplookup package installed on a diferent location
-        we can set the correct path using 'GEOIP_PATH' msf global variable
-        before executing this script (global vars will be clean on exit).
-
-        Set Geoiplookup Path
-        --------------------
-        [execute] setg GEOIP_PATH /usr/bin/geoiplookup
-        [execute] resource geo_location.rc
+    Install Geoip-Bin
+     -----------------
+    [execute] apt-get update
+    [execute] apt-get install geoip-bin
+    [execute] resource geo_location.rc
 
 
-        Remark
-        ------
-        If we dont want to install geoiplookup package, we can still use
-        this scipt by setting the geolocation to curl ipinfo (linux native)
-        using 'USE_CURL' msf global variable before executing this script.
-        HINT: Using curl will provide more detailed geolocation report(s).
+    Remark
+    ------
+    If we have geoiplookup package installed on a diferent location
+    we can set the correct path using 'GEOIP_PATH' msf global variable
+    before executing this script (global vars will be clean on exit).
 
-        Use Curl ipapi.co
-        ------------------
-        [execute] setg USE_CURL true
-        [execute] resource geo_location.rc
+    Set Geoiplookup Path
+    --------------------
+    [execute] setg GEOIP_PATH /usr/bin/geoiplookup
+    [execute] resource geo_location.rc
+
+
+    Remark
+    ------
+    If we dont want to install geoiplookup package, we can still use
+    this scipt by setting the geolocation to curl ipinfo (linux native)
+    using 'USE_CURL' msf global variable before executing this script.
+    HINT: Using curl will provide more detailed geolocation report(s).
+
+    Use Curl ipapi.co
+    ------------------
+    [execute] setg USE_CURL true
+    [execute] resource geo_location.rc
 
             |
             print_line(err)
@@ -236,6 +241,7 @@
       end
 
 
+      run_single("spool #{local}/logs/geo_location.log")
       print_line("")
       run_single("hosts -c address,os_name,purpose")
       print_line("")
@@ -297,6 +303,11 @@
    run_single("unsetg all")
    Rex::sleep(1.0)
    print_status("Module execution finished.")
+   print_warning("Logfile stored under: #{local}/logs/geo_location.log")
    print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location")
+   dtr = `date`
+   ## Writting ['xhost(s)'] to mosquito logfile
+   run_single("echo \"[#{dtr}] geo_location: #{xhost}\" >> logs/mosquito.log")
    run_single("back")
 </ruby>
+
