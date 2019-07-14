@@ -67,7 +67,7 @@ Mosquito also allow us to search-scan-exploit-brute-force multiple targets at th
 
 ![mosquito_multi_targets](https://i.imgur.com/r3BXpZa.png)
 
-And each valid credentials found (brute-force or exploitation) will spawn a shell session to the remote host in msf prompt.
+And each valid credentials found (brute-force) will spawn a shell session to remote host.
 
 ![mosquito_banner](http://i65.tinypic.com/280v0hc.png)
 ![mosquito_banner](http://i64.tinypic.com/1zdm43t.png)
