@@ -137,6 +137,7 @@
 
       ## Make sure that freevulnseach.nse exists
       Rex::sleep(2.0)
+      nse = "/usr/share/nmap/scripts/freevulnsearch.nse"
       unless (File.exist?(nse))
            print_error("[ERROR] freevulnsearch.nse/vulners.nse script(s) not found in nmap db.")
            print_error("[ERROR] Download nse script(s) and install it before running this rc file.")
