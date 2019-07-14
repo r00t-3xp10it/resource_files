@@ -49,8 +49,8 @@ Mosquito.sh (**BASH**) script was written for the purpose of automating the reso
 Mosquito as first step uses nmap to seach-recon hosts information (or possible targets), then adds all the hosts found (with open ports) to metasploit database to be used in further recon, exploration or brute force jobs carried out later with msf.
 
 ![mosquito_banner](http://i66.tinypic.com/v5bix0.png)
-![mosquito_banner](http://i63.tinypic.com/2e5pce9.png)
 ![mosquito_banner](https://i.imgur.com/wHtS6v0.png)
+![mosquito_banner](http://i63.tinypic.com/2e5pce9.png)
 
 Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike msf the scans performed by nmap will use a fake UserAgent (IPhone/Safari) stealth scans (SYN ack) and Cloak scan(s) with decoys (-D decoy_ip,decoy_ip,ME) that makes forensic IDS analysis more dificult to identify the attack.
 
