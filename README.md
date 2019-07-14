@@ -50,6 +50,7 @@ Mosquito as first step uses nmap to seach-recon hosts information (or possible t
 
 ![mosquito_banner](http://i66.tinypic.com/v5bix0.png)
 ![mosquito_banner](http://i63.tinypic.com/2e5pce9.png)
+![mosquito_banner](https://i.imgur.com/wHtS6v0.png)
 
 Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike msf the scans performed by nmap will use a fake UserAgent (IPhone/Safari) stealth scans (SYN ack) and Cloak scan(s) with decoys (-D decoy_ip,decoy_ip,ME) that makes forensic IDS analysis more dificult to identify the attack.
 
@@ -100,8 +101,9 @@ All dictionary files can be found in project working directory under: 'resource_
 |geoiplookup| hosts geo location | sudo apt-get install geoip-bin * |
 |curl| hosts geo location | sudo apt-get install curl * |
 |dig| ip address resolver | Linux native installed package ** |
-|http-winrm.nse| http winrm recon | mosquito native nse script * |
+|vulners.nse| CVE recon | mosquito native nse script * |
 |freevulnsearch.nse| CVE recon | mosquito native nse script * |
+|http-winrm.nse| http winrm recon | mosquito native nse script * |
 
     * ./mosquito.sh -i = to install all packages/scripts/modules
     ** Linux native installed package = no need to install it
@@ -168,6 +170,7 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 
 ### Project Acknowledgment
 @fyodor - nmap framework<br />
+@gmedian - vulners.nse script<br />
 @HD Moore - metasploit framework<br />
 @Sean Warnock - http-winrm.nse script<br />
 @Mathias Gut - freevulnsearch.nse script<br />
