@@ -32,7 +32,6 @@
       print_line(help)
       Rex::sleep(1.5)
 
-
       ## Make sure we are connected to db
       unless framework.db.active
         print_error("[ERROR] Database not connected to postgresql.")
@@ -55,7 +54,14 @@
            run_single("setg LIMMIT 300")
            print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
          else
-           print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
+           ## Make sure we didnt have exceded the limmit value
+           if ("#{framework.datastore['LIMMIT']}" > "1024")
+              print_error("LIMMIT SET TO HIGTH:#{framework.datastore['LIMMIT']}, SETTING TO DEFAULT..")
+              run_single("setg LIMMIT 400")
+              Rex::sleep(2.0)
+           else
+              print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
+           end
            print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
          end
       elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
@@ -81,7 +87,6 @@
       else
          run_single("db_nmap -sS -v -Pn -T4 -O -p 21 --open --script=banner.nse,http-headers.nse,ftp-anon.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
       end
-
 
       ## Read the database
       if File.directory?("#{local}/logs")
@@ -135,7 +140,6 @@
             return nil
          end
 
-
       ## Make sure that freevulnseach.nse exists
       Rex::sleep(2.0)
       nse = "/usr/share/nmap/scripts/freevulnsearch.nse"
@@ -169,7 +173,6 @@
            print_good("freevulnsearch.nse/vulners.nse script(s) found.")
       end
 
-
          ## Run gather/brute-force modules
          if xport =~ /21/ or proto =~ /ftp/i
               print_warning("Remote Target port: 21 ftp found")
@@ -194,7 +197,7 @@
          end
 
          ## Running freevulnsearch.nse (scan for CVE's)
-         print "[+] Scan for possible CVE's? (y/n): "
+         print "[?] Scan for possible CVE's? (y/n): "
             question = gets.chomp
 
          if question == "y" or question == "Y"

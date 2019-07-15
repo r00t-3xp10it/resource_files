@@ -2,6 +2,6 @@
 #       .----------------- MOSQUITO CORE VERSION
 #       |  .-------------- RESOURCE SCRIPTS VERSION
 #       |  | .------------ NMAP\MSF MODULES VERSION
-#       |  | |  
-#       |  | |
-version=3.11.3
+#       |  | |  .--------- SOURCECODE BETA CORRECTIONS
+#       |  | |  |
+version=3.11.3.01

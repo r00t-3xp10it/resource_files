@@ -32,7 +32,6 @@
       print_line(help)
       Rex::sleep(1.5)
 
-
       ## Make sure we are connected to db
       unless framework.db.active
         print_error("[ERROR] Database not connected to postgresql.")
@@ -55,7 +54,14 @@
            run_single("setg LIMMIT 300")
            print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
          else
-           print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
+           ## Make sure we didnt have exceded the limmit value
+           if ("#{framework.datastore['LIMMIT']}" > "1024")
+              print_error("LIMMIT SET TO HIGTH:#{framework.datastore['LIMMIT']}, SETTING TO DEFAULT..")
+              run_single("setg LIMMIT 250")
+              Rex::sleep(2.0)
+           else
+              print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
+           end
            print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
          end
       elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
@@ -134,7 +140,6 @@
             return nil
          end
 
-
       ## Make sure that freevulnseach.nse exists
       Rex::sleep(2.0)
       nse = "/usr/share/nmap/scripts/freevulnsearch.nse"
@@ -167,7 +172,6 @@
       else
            print_good("freevulnsearch.nse/vulners.nse script(s) found.")
       end
-
 
          ## Run gather/brute-force modules
          if xport =~ /21/ or proto =~ /ftp/i
@@ -326,9 +330,8 @@
               run_single("exploit")
          end
 
-
          ## Running freevulnsearch.nse (scan for CVE's)
-         print "[+] Scan for possible CVE's? (y/n): "
+         print "[?] Scan for possible CVE's? (y/n): "
             question = gets.chomp
 
          if question == "y" or question == "Y"
@@ -349,7 +352,6 @@
             print_warning("Running CVE checks againts: #{framework.datastore['RHOSTS']}")
             run_single("db_nmap -sV -T4 -Pn --script=freevulnsearch.nse,vulners.nse #{framework.datastore['RHOSTS']}")
          end
-
 
       ## Save current database to local file (database.xml)
       if (framework.datastore['SAVE_DB'] == "true")

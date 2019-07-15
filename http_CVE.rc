@@ -32,7 +32,6 @@
       print_line(help)
       Rex::sleep(2.0)
 
-
       ## Make sure we are connected to db
       unless framework.db.active
         print_error("Database not connected to postgresql.")
@@ -55,7 +54,14 @@
            run_single("setg LIMMIT 300")
            print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
          else
-           print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
+           ## Make sure we didnt have exceded the limmit value
+           if ("#{framework.datastore['LIMMIT']}" > "1024")
+              print_error("LIMMIT SET TO HIGTH:#{framework.datastore['LIMMIT']}, SETTING TO DEFAULT..")
+              run_single("setg LIMMIT 250")
+              Rex::sleep(2.0)
+           else
+              print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
+           end
            print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
          end
       elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
@@ -183,7 +189,7 @@
          end
 
          ## Running freevulnsearch.nse (scan for CVE's)
-         print "[+] Scan for possible CVE's? (y/n): "
+         print "[?] Scan for possible CVE's? (y/n): "
             question = gets.chomp
 
          if question == "y" or question == "Y"

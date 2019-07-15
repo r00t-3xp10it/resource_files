@@ -12,7 +12,7 @@ resize -s 38 120 > /dev/nul
 # variable declarations _______________________________________
 #                                                             |
 OS=`uname`                                                    # grab OS
-ver="3.10.3"                                                  # mosquito  version
+ver="3.11.3"                                                  # mosquito  version
 SaIU=`arch`                                                   # grab arch in use
 IPATH=`pwd`                                                   # grab mosquito path
 htn=$(hostname)                                               # grab hostname
@@ -634,7 +634,7 @@ sh_twelve () {
    #
    elif [ "$scan" = "Random search WAN for rhosts" ]; then
       echo "${BlueF}[☠]${white} Random Search WAN for rhosts"${Reset};
-      sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 200 (max = 1024)" --width 300) > /dev/null 2>&1
+      sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 250 (max = 1024)" --width 300) > /dev/null 2>&1
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
       msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;resource snmp_brute.rc"
    else
