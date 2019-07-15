@@ -53,14 +53,7 @@
            run_single("setg LIMMIT 800")
            print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
          else
-           ## Make sure we didnt have exceded the limmit value
-           if ("#{framework.datastore['LIMMIT']}" > "1024")
-              print_error("LIMMIT SET TO HIGTH:#{framework.datastore['LIMMIT']}, SETTING TO DEFAULT..")
-              run_single("setg LIMMIT 500")
-              Rex::sleep(2.0)
-           else
-              print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
-           end
+           print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
            print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
          end
       elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
