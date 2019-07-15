@@ -4,7 +4,7 @@ resize -s 38 114 > /dev/nul
 # variable declarations _________________________________
 #                                                        |
 OS=`uname`                                               # grab OS
-ver="3.11.3"                                             # toolkit version
+ver="3.12.3"                                             # toolkit version
 DiStRo=`awk '{print $1}' /etc/issue`                     # grab distribution -  Ubuntu or Kali
 IPATH=`pwd`                                              # grab install.sh install path
 user=`who | awk {'print $1'}`                            # grab username

@@ -12,7 +12,7 @@ resize -s 38 120 > /dev/nul
 # variable declarations _______________________________________
 #                                                             |
 OS=`uname`                                                    # grab OS
-ver="3.11.3"                                                  # mosquito  version
+ver="3.12.3"                                                  # mosquito  version
 SaIU=`arch`                                                   # grab arch in use
 IPATH=`pwd`                                                   # grab mosquito path
 htn=$(hostname)                                               # grab hostname
