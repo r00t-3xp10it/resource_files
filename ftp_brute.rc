@@ -34,6 +34,7 @@
 
       ## Make sure we are connected to db
       unless framework.db.active
+        File.delete("ip_range.txt") if File.exist?("ip_range.txt")
         print_error("[ERROR] Database not connected to postgresql.")
         print_warning("[execute] service postgresql start")
         run_single("exit")
@@ -97,6 +98,7 @@
 
          ## Make sure that exists hosts/ports (open) in database
          if xhost.nil? or xhost == '' or xhost == ' '
+              File.delete("ip_range.txt") if File.exist?("ip_range.txt")
               print_error("[ERROR] db_nmap scan did not find any alive connections.")
               print_error("please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
@@ -104,6 +106,7 @@
               run_single("workspace -d mosquito")
               return nil
          elsif xport.nil? or xport == '' or xport == ' '
+              File.delete("ip_range.txt") if File.exist?("ip_range.txt")
               print_error("[ERROR] db_nmap did not find any 21 (ftp) open ports.")
               print_error("please wait, cleaning recent configurations.")
               Rex::sleep(1.0)
@@ -130,6 +133,7 @@
            Rex::sleep(1.0)
             run_single("unsetg all")
             run_single("workspace -d mosquito")
+            File.delete("ip_range.txt") if File.exist?("ip_range.txt")
             return nil
          end
 
@@ -161,6 +165,7 @@
            Rex::sleep(1.0)
            run_single("unsetg all")
            run_single("workspace -d mosquito")
+           File.delete("ip_range.txt") if File.exist?("ip_range.txt")
            return nil
       else
            print_good("freevulnsearch.nse/vulners.nse script(s) found.")

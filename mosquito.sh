@@ -263,6 +263,7 @@ sh_two () {
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 250 (max = 1024)" --width 300) > /dev/null 2>&1
 
       max="1024"
+      rm -f 1024 > /dev/nul 2>&1
       ## Make sure the LIMMIT value did not have exceded the max allowed
       if [ $sealing -gt $max ]; then
          echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
@@ -310,6 +311,7 @@ sh_tree () {
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 500 (max = 1024)" --width 300) > /dev/null 2>&1
 
       max="1024"
+      rm -f 1024 > /dev/nul 2>&1
       ## Make sure the LIMMIT value did not have exceded the max allowed
       if [ $sealing -gt $max ]; then
          echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
@@ -401,6 +403,7 @@ sh_cinco () {
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 400 (max = 1024)" --width 300) > /dev/null 2>&1
 
       max="1024"
+      rm -f 1024 > /dev/nul 2>&1
       ## Make sure the LIMMIT value did not have exceded the max allowed
       if [ $sealing -gt $max ]; then
          echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
@@ -446,6 +449,7 @@ sh_six () {
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 250 (max = 1024)" --width 300) > /dev/null 2>&1
 
       max="1024"
+      rm -f 1024 > /dev/nul 2>&1
       ## Make sure the LIMMIT value did not have exceded the max allowed
       if [ $sealing -gt $max ]; then
          echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
@@ -492,6 +496,7 @@ sh_seven () {
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 800 (max = 1024)" --width 300) > /dev/null 2>&1
 
       max="1024"
+      rm -f 1024 > /dev/nul 2>&1
       ## Make sure the LIMMIT value did not have exceded the max allowed
       if [ $sealing -gt $max ]; then
          echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
@@ -537,6 +542,7 @@ sh_oito () {
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 500 (max = 1024)" --width 300) > /dev/null 2>&1
 
       max="1024"
+      rm -f 1024 > /dev/nul 2>&1
       ## Make sure the LIMMIT value did not have exceded the max allowed
       if [ $sealing -gt $max ]; then
          echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
@@ -582,6 +588,7 @@ sh_nine () {
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 500 (max = 1024)" --width 300) > /dev/null 2>&1
 
       max="1024"
+      rm -f 1024 > /dev/nul 2>&1
       ## Make sure the LIMMIT value did not have exceded the max allowed
       if [ $sealing -gt $max ]; then
          echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
@@ -627,6 +634,7 @@ sh_ten () {
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 600 (max = 1024)" --width 300) > /dev/null 2>&1
 
       max="1024"
+      rm -f 1024 > /dev/nul 2>&1
       ## Make sure the LIMMIT value did not have exceded the max allowed
       if [ $sealing -gt $max ]; then
          echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
@@ -672,6 +680,7 @@ sh_onze () {
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 800 (max = 1024)" --width 300) > /dev/null 2>&1
 
       max="1024"
+      rm -f 1024 > /dev/nul 2>&1
       ## Make sure the LIMMIT value did not have exceded the max allowed
       if [ $sealing -gt $max ]; then
          echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
@@ -717,6 +726,7 @@ sh_twelve () {
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 250 (max = 1024)" --width 300) > /dev/null 2>&1
 
       max="1024"
+      rm -f 1024 > /dev/nul 2>&1
       ## Make sure the LIMMIT value did not have exceded the max allowed
       if [ $sealing -gt $max ]; then
          echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
@@ -762,6 +772,7 @@ sh_twelve () {
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 500 (max = 1024)" --width 300) > /dev/null 2>&1
 
       max="1024"
+      rm -f 1024 > /dev/nul 2>&1
       ## Make sure the LIMMIT value did not have exceded the max allowed
       if [ $sealing -gt $max ]; then
          echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
@@ -807,7 +818,6 @@ scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning metho
 #                   * 🦟 MOSQUITO MAIN MENU 🦟 *                  #
 ###################################################################
 sh_main () {
-rm -f ip_range.txt > /dev/nul 2>&1
 rm -f 1024 > /dev/nul 2>&1
 }
 # loop forever
