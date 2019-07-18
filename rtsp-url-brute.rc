@@ -6,6 +6,7 @@
 # [OPTIONS]
 # setg SAVE_DB true - Save workspace mosquito to database.xml
 # setg LIMMIT 1000 - Limmit the number of random WAN hosts to search
+# setg CHOST 192.168.1.71 - LHOST address to use in payload delivery
 # setg RANDOM_HOSTS true - To instruct db_nmap to random search in WAN for hosts with ports open
 # setg RHOSTS 201.203.27.251 159.121.101.207 - To instruct db_nmap to scan hosts for ports open.
 # -
