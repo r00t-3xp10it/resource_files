@@ -142,20 +142,20 @@
 
 
          ## Make sure we have LHOST option set
-         if (framework.datastore['LHOST'] == nil or framework.datastore['LHOST'] == '')
-         print_error("[ERROR] LHOST option not set.")
+         if (framework.datastore['CHOST'] == nil or framework.datastore['CHOST'] == '')
+         print_error("[ERROR] CHOST option not set.")
          Rex::sleep(2.0)
            err = %Q|
 
     Remark
     ------
-    This resource script requires LHOST option set to be abble
+    This resource script requires CHOST option set to be abble
     to send a payload to target hosts to spawn a session back.
 
-    Set your local host (LHOST)
+    Set your local host (CHOST)
     ---------------------------
-    [execute] setg LHOST 192.168.1.71
-    [execute] resource ms17_010.rc
+    [execute] setg CHOST 192.168.1.71
+    [execute] resource rtsp-url-brute.rc
 
            |
            print_line(err)
@@ -165,7 +165,7 @@
            File.delete("ip_range.txt") if File.exist?("ip_range.txt")
            return nil
          else
-            local_ip = "#{framework.datastore['LHOST']}"
+            local_ip = "#{framework.datastore['CHOST']}"
          end
 
          ## Run gather/brute-force modules
