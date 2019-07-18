@@ -800,14 +800,14 @@ sh_quatorze () {
    #
    if [ "$scan" = "Scan Local Lan" ]; then
       echo "${BlueF}[☠]${white} Scanning Local Lan: $RANGE.0/24"${Reset};
-      msfconsole -q -x "setg RHOSTS $RANGE.0/24;setg CHOST $IPADDR;resource rtsp-url-brute.rc"
+      msfconsole -q -x "setg RHOSTS $RANGE.0/24;setg LHOST $IPADDR;resource rtsp-url-brute.rc"
    #
    # scanning user inputs
    #
    elif [ "$scan" = "Scan user input rhosts" ]; then
       echo "${BlueF}[☠]${white} Scanning User input rhosts"${Reset};
       rhost=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Input rhosts separated by blank spaces\nExample: 201.203.27.251 159.121.101.207" --width 450) > /dev/null 2>&1
-      msfconsole -q -x "setg RHOSTS $rhost;setg CHOST $IPADDR;resource rtsp-url-brute.rc"
+      msfconsole -q -x "setg RHOSTS $rhost;setg LHOST $IPADDR;resource rtsp-url-brute.rc"
    #
    # scanning ramdom WAN hosts
    #
@@ -824,7 +824,7 @@ sh_quatorze () {
          sleep 1
       fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
-      msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;setg CHOST $IPADDR;resource rtsp-url-brute.rc"
+      msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;setg LHOST $IPADDR;resource rtsp-url-brute.rc"
    else
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
@@ -902,7 +902,7 @@ cat << !
     ║   11     ║     rpc_brute         ║   scan - brute remote rpc service      ║
     ║   12     ║     snmp_brute        ║   scan - brute remote snmp service     ║
     ║   13     ║     postgres_brute    ║   scan - brute remote postgres serv    ║
-    ║   14     ║     rtsp_url_brute    ║   scan for remote live webcam's        ║
+    ║   14     ║     rtsp_url_brute    ║   scan for remote live webcam's url's  ║
     ╠──────────╩───────────────────────╩────────────────────────────────────────╣
     ║    E     -     Exit mosquito                                              ║
     ╚───────────────────────────────────────────────────────────────────────────╣

@@ -237,6 +237,8 @@
               run_single("services -c name -S pop3 -R")
               run_single("exploit")
               run_single("use auxiliary/scanner/pop3/pop3_login")
+              run_single("unset USER_FILE")
+              run_single("unset PASS_FILE")
               run_single("set STOP_ON_SUCCESS true")
               run_single("set THREADS 14")
               print_line("")
