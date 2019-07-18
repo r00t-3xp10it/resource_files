@@ -1,3 +1,4 @@
+web
 root
 user
 admin
@@ -7,6 +8,9 @@ adm adm
 sql sql
 irc irc
 msf msf
+sysadmin
+netadmin
+webadmin
 root root
 anon anon
 test test

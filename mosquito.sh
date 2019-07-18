@@ -789,6 +789,49 @@ sh_twelve () {
 
 
 
+sh_quatorze () {
+   echo "${BlueF}[${YellowF}running${BlueF}]:${white} rtsp_url_brute resource_"${Reset};
+   sleep 1
+   IPADDR=`ifconfig $InT3R | egrep -w "inet" | awk {'print $2'}` # grab local ip address
+   scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
+   echo "$RANGE" > ip_range.txt
+   #
+   # Sellect the type of scan to use
+   #
+   if [ "$scan" = "Scan Local Lan" ]; then
+      echo "${BlueF}[☠]${white} Scanning Local Lan: $RANGE.0/24"${Reset};
+      msfconsole -q -x "setg RHOSTS $RANGE.0/24;setg CHOST $IPADDR;resource rtsp-url-brute.rc"
+   #
+   # scanning user inputs
+   #
+   elif [ "$scan" = "Scan user input rhosts" ]; then
+      echo "${BlueF}[☠]${white} Scanning User input rhosts"${Reset};
+      rhost=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Input rhosts separated by blank spaces\nExample: 201.203.27.251 159.121.101.207" --width 450) > /dev/null 2>&1
+      msfconsole -q -x "setg RHOSTS $rhost;setg CHOST $IPADDR;resource rtsp-url-brute.rc"
+   #
+   # scanning ramdom WAN hosts
+   #
+   elif [ "$scan" = "Random search WAN for rhosts" ]; then
+      echo "${BlueF}[☠]${white} Random Search WAN for rhosts"${Reset};
+      sealing=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Limmit the number of rhosts to find\nDefault: 700 (max = 1024)" --width 300) > /dev/null 2>&1
+
+      max="1024"
+      rm -f 1024 > /dev/nul 2>&1
+      ## Make sure the LIMMIT value did not have exceded the max allowed
+      if [ $sealing -gt $max ]; then
+         echo ${RedF}"[x]${white} LIMMIT SET TO HIGTH:${RedF}$sealing${white}, SETTING TO MAX ALLOWED.."${Reset};
+         sealing="1024"
+         sleep 1
+      fi
+      echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
+      msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;setg CHOST $IPADDR;resource rtsp-url-brute.rc"
+   else
+      echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
+      sleep 2 && sh_main
+   fi
+}
+
+
 sh_easter_egg () {
 echo "${BlueF}[${YellowF}running${BlueF}]:${white} 🦟easter_egg🦟 ${BlueF}:[${YellowF}BlueTeam${BlueF}]${white}"${Reset};
 sleep 1
@@ -859,6 +902,7 @@ cat << !
     ║   11     ║     rpc_brute         ║   scan - brute remote rpc service      ║
     ║   12     ║     snmp_brute        ║   scan - brute remote snmp service     ║
     ║   13     ║     postgres_brute    ║   scan - brute remote postgres serv    ║
+    ║   14     ║     rtsp_url_brute    ║   scan for remote live webcam's        ║
     ╠──────────╩───────────────────────╩────────────────────────────────────────╣
     ║    E     -     Exit mosquito                                              ║
     ╚───────────────────────────────────────────────────────────────────────────╣
@@ -908,6 +952,9 @@ case $choice in
 ;;
 13)
     sh_treze  # POSTGRES function
+;;
+14)
+    sh_quatorze  # RTSP (webcams) function
 ;;
 easter_egg)
     ## Mosquito Hidden option

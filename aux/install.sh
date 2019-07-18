@@ -215,7 +215,6 @@ while getopts ":h,:u," opt; do
                     sleep 2
                     sudo cp $IPATH/freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
                     echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
-                    sudo nmap --script-updatedb
 
                     echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
                     sleep 2
@@ -226,8 +225,25 @@ while getopts ":h,:u," opt; do
                     sudo cp $IPATH/vulners.nse /usr/share/nmap/scripts/vulners.nse
                     echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
 
+                    echo ${BlueF}[*]${white} "Downloading nmap nse script/lib from github"${Reset};
+                    sleep 2
+                    sudo rm -f rtsp.lua > /dev/nul 2>&1
+                    sudo rm -f rtsp-url-brute.nse > /dev/nul 2>&1
+                    sudo wget -qq http://nmap.org/svn/nselib/rtsp.lua
+                    sudo wget -qq http://nmap.org/svn/scripts/rtsp-url-brute.nse
+                    sudo wget -qq https://raw.githubusercontent.com/nmap/nmap/master/scripts/rtsp-methods.nse
+                    sudo wget -qq https://raw.githubusercontent.com/nmap/nmap/master/nselib/data/rtsp-urls.txt
+                    echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/rtsp-url-brute.nse"${Reset};
+                    sleep 2
+                    sudo cp $IPATH/rtsp.lua /usr/share/nmap/nselib/rtsp.lua
+                    sudo mv $IPATH/rtsp-urls.txt /usr/share/nmap/nselib/data/rtsp-urls.txt
+                    sudo mv $IPATH/rtsp-methods.nse /usr/share/nmap/scripts/rtsp-methods.nse
+                    sudo mv $IPATH/rtsp-url-brute.nse /usr/share/nmap/scripts/rtsp-url-brute.nse
+                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
+                    sudo nmap --script-updatedb
 
-                    cd .. && cd bin
+
+                    cd bin
                     echo "[i] Updating remote_hosts.txt"
                     rm -f remote_hosts.txt > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/remote_hosts.txt > /dev/nul 2>&1
@@ -590,6 +606,44 @@ if [ "$op" = "y" ] || [ "$op" = "Y" ]; then
        time=$(date | awk {'print $3,$4,$5,$6'})
        echo "[$time] Installing vulners dependencie" >> install.log
     fi
+
+
+
+    ## scan for live webcam's
+    echo ${BlueF}[*]${white} "query nmap nse rtsp-url-brute.nse installation .."${Reset};
+    sleep 2
+    echo ${BlueF}[*]${white} "Path: /usr/share/nmap/scripts/rtsp-url-brute.nse"${Reset};
+    sleep 1
+    if [ -e "/usr/share/nmap/scripts/rtsp-url-brute.nse" ]; then
+       echo ${BlueF}[${GreenF}✔${BlueF}]${white} "Nmap nse script found in database => ${GreenF}(no need to install)"${Reset};
+       sleep 2
+    else
+       echo ${RedF}[x] "Nmap nse script NOT found in database."${Reset};
+       sleep 2
+       echo ${BlueF}[*]${white} "Downloading nmap nse script/lib from github"${Reset};
+       sleep 2
+       sudo rm -f rtsp.lua > /dev/nul 2>&1
+       echo "------------------------------------------"
+       sudo wget -qq http://nmap.org/svn/nselib/rtsp.lua
+       sudo wget -qq http://nmap.org/svn/scripts/rtsp-url-brute.nse
+       sudo wget -qq https://raw.githubusercontent.com/nmap/nmap/master/scripts/rtsp-methods.nse
+       sudo wget -qq https://raw.githubusercontent.com/nmap/nmap/master/nselib/data/rtsp-urls.txt
+       echo "------------------------------------------"
+       echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/rtsp-url-brute.nse"${Reset};
+       sleep 2
+       sudo cp $IPATH/rtsp.lua /usr/share/nmap/nselib/rtsp.lua
+       sudo mv $IPATH/rtsp-urls.txt /usr/share/nmap/nselib/data/rtsp-urls.txt
+       sudo mv $IPATH/rtsp-methods.nse /usr/share/nmap/scripts/rtsp-methods.nse
+       sudo mv $IPATH/rtsp-url-brute.nse /usr/share/nmap/scripts/rtsp-url-brute.nse
+
+       echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
+       sudo nmap --script-updatedb
+       ## module settings (install.log)
+       time=$(date | awk {'print $3,$4,$5,$6'})
+       echo "[$time] Installing rtsp-url-brute.nse dependencie" >> install.log
+    fi
+
+
 
     ## FINAL DISPLAYS
     fds=$(date | awk {'print $4'})

