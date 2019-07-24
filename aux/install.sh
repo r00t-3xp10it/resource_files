@@ -53,7 +53,7 @@ while getopts ":h,:u," opt; do
            if [ "$local" "<" "$remote" ]; then
               echo "    Local version   Remote version   Status"
               echo "    -------------   --------------   ------"
-              echo "    $local          $remote           ${GreenF}Updates Available"${YellowF}
+              echo "    $local          $remote           ${GreenF}Updates Available"${Reset};
               echo "" && echo ""
               cd .. 
 

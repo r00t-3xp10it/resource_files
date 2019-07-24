@@ -18,8 +18,6 @@ version=3.13.3
 #  5) - vulnerabilitys found exported to logs/<resource_name.CSV>
 #  6) - pop3 service (port 110) bruteforce dictionary confs bugfix
 ##
-
-##
 # Module: CORE (main folder)
 # Update: git clone https://github.com/r00t-3xp10it/resource_files.git
 # --------------------------------------------------------------------
