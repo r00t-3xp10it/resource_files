@@ -1,10 +1,10 @@
 #!/bin/sh
-resize -s 38 114 > /dev/nul
+resize -s 38 120 > /dev/nul
 #
 # variable declarations _________________________________
 #                                                        |
 OS=`uname`                                               # grab OS
-ver="3.12.3"                                             # toolkit version
+ver="3.13.3"                                             # toolkit version
 DiStRo=`awk '{print $1}' /etc/issue`                     # grab distribution -  Ubuntu or Kali
 IPATH=`pwd`                                              # grab install.sh install path
 user=`who | awk {'print $1'}`                            # grab username
@@ -53,8 +53,23 @@ while getopts ":h,:u," opt; do
            if [ "$local" "<" "$remote" ]; then
               echo "    Local version   Remote version   Status"
               echo "    -------------   --------------   ------"
-              echo "    $local          $remote            ${GreenF}Updates Available"
+              echo "    $local          $remote           ${GreenF}Updates Available"${YellowF}
               echo "" && echo ""
+              cd .. 
+
+              cat bin/version
+              cd aux
+              echo ""
+              echo -n ${BlueF}"[${YellowF}i${BlueF}] Do you wish to install updates? (y/n)${RedF}:${white}"${Reset};
+              read keyop
+              if [ "$keyop" = "n" ] || [ "$keyop" = "N" ]; then
+                 echo ${BlueF}"[${RedF}x${BlueF}] Aborting mosquito [${YellowF}$remote${BlueF}] updates .."${Reset};
+                 cd ..
+                 rm bin/backup > /dev/nul 2>&1
+                 exit
+              fi
+
+              echo "" && echo ""${Reset};
               sleep 3
                  if [ "$msf_local" "<" "$msf_remote" ]; then
                     echo "[i] Updating post-exploitation modules"

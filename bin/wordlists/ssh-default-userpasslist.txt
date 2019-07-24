@@ -1,6 +1,15 @@
+sa sa
+sa admin
+sa default
+sa Pass@123
+sa password
+sa sqlserver
+sa SECAdmin1
+sa Administrator1
 root 5up
 root fai
 root xoa
+root ssh
 root root
 root toor
 root ubnt
@@ -8,6 +17,8 @@ root plex
 root linux
 root zlxx.
 root video
+guest test
+guest guest
 root D13HH[
 root root01
 root NM1$88
@@ -67,6 +78,7 @@ admin ManagementConsole2015
 Administrator Vision2
 Administrator p@ssw0rd
 administrator password
+administrator password1
 administrator Amx1234!
 Administrator Administrator
 root
@@ -78,6 +90,8 @@ nao nao
 ftp ftp
 demo fai
 user user
+USER USER
+User User
 ubnt ubnt
 m202 m202
 ftp video

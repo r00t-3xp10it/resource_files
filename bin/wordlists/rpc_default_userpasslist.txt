@@ -1,13 +1,17 @@
 root
 user
+User
+USER
 guest
 admin
 msf msf
 msf nsa
 msf cia
 msf 123
+msf toor
 msf kali
 msf 1234
+msf passw
 msf admin
 msf haxor
 msf linux
@@ -23,6 +27,7 @@ admin toor
 root admin
 msf parrot
 admin admin
+msf password
 msf fsociety
 msf webmaster
 msfuser msfuser

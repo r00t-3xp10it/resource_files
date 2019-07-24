@@ -1,6 +1,6 @@
 #!/bin/sh
 # Author: r00t-3xp10it
-# mosquito framework v:3.10.3 [STABLE]
+# mosquito framework v:3.13.3 [STABLE]
 # Automate remote brute force tasks over WAN/LAN networks
 # GitHub: https://github.com/r00t-3xp10it/resource_files
 # Suspicious Shell Activity - redteam @2019
@@ -12,7 +12,7 @@ resize -s 38 120 > /dev/nul
 # variable declarations _______________________________________
 #                                                             |
 OS=`uname`                                                    # grab OS
-ver="3.12.3"                                                  # mosquito  version
+ver="3.13.3"                                                  # mosquito  version
 SaIU=`arch`                                                   # grab arch in use
 IPATH=`pwd`                                                   # grab mosquito path
 htn=$(hostname)                                               # grab hostname
@@ -746,7 +746,7 @@ sh_twelve () {
 #
 # Brute Force postgres service :: done
 #
-sh_twelve () {
+sh_treze () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} postgres_brute resource_"${Reset};
    sleep 1
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
@@ -906,12 +906,12 @@ cat << !
     ╠──────────╩───────────────────────╩────────────────────────────────────────╣
     ║    E     -     Exit mosquito                                              ║
     ╚───────────────────────────────────────────────────────────────────────────╣
-                                     Suspicious-Shell-Activity©🦟redteam @2019🦟╝
-
 !
+echo "                                                           🦟${white}SSA${YellowF}©${RedF}RedTeam${YellowF}@${white}2019🦟─╝"${Reset};
+echo ""
 echo "${BlueF}[☠]${white} mosquito framework"${Reset}
 sleep 1
-echo -n "${BlueF}[${GreenF}➽${BlueF}]${white} Chose Option number${RedF}:${white}"${Reset}
+echo -n "${BlueF}[${GreenF}➽${BlueF}]${white} Chose Option number${RedF}:${white}"${Reset};
 read choice
 case $choice in
 1)

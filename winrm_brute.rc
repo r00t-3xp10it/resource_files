@@ -263,19 +263,26 @@
          run_single("db_export -f xml -a #{local}/logs/database_#{rand}.xml")
       end
 
+      print_line("")
+      ## Display active sessions
+      run_single("sessions -l")
+      print_line("")
       ## Cleaning database and unset global variables
-      print_warning("Please wait, Cleaning global variables.")
+      print_warning("Cleaning global variables.")
       Rex::sleep(1.5)
       run_single("unsetg all")
       run_single("unset all")
       run_single("workspace -d mosquito")
 
-      dtr = `date`
       ## Writting ['xhost(s)'] to mosquito logfile
       if File.directory?("#{local}/logs")
-         print_warning("Session Logfile stored under: #{local}/logs/winrm_brute.log")
-         run_single("echo \"[#{dtr}] winrm_brute: #{xhost}\" >> logs/mosquito.log")
+         print_status("Logfile stored under: #{local}/logs/winrm_brute.log")
+         ## Store vulns log if exists open sessions
+         if (framework.sessions.length > 0)
+            run_single("vulns -o #{local}/logs/winrm_brute.csv")
+         end
       end
+
       File.delete("ip_range.txt") if File.exist?("ip_range.txt")
       run_single("back")
    </ruby>

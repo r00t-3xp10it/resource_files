@@ -1,3 +1,7 @@
+root
+user
+admin
+guest
 dm ftp
 apc apc
 a avery
@@ -33,10 +37,6 @@ root 123456
 root 12hrs37
 admin 123456
 MELSEC MELSEC
-root
-user
-admin
-guest
 user password
 root password
 admin default

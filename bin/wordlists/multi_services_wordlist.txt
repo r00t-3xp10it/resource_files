@@ -727,6 +727,8 @@ bred bred
 http http
 shop shop
 user user
+User User
+USER USER
 java java
 webs webs
 ming ming
