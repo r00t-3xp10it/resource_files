@@ -152,6 +152,7 @@ while getopts ":h,:u," opt; do
                     echo ${BlueF}[*]${white} "Downloading nmap nse script/lib from github"${Reset};
                     sleep 2
                     sudo rm -f rtsp.lua > /dev/nul 2>&1
+                    sudo rm -f rtsp-urls.txt > /dev/nul 2>&1
                     sudo wget -qq http://nmap.org/svn/nselib/rtsp.lua
                     sudo wget -qq https://raw.githubusercontent.com/nmap/nmap/master/nselib/data/rtsp-urls.txt
                     echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/nslib/rtsp.lua"${Reset};
@@ -159,13 +160,15 @@ while getopts ":h,:u," opt; do
                     sudo cp $IPATH/rtsp.lua /usr/share/nmap/nselib/rtsp.lua
                     sudo cp $IPATH/rtsp-urls.txt /usr/share/nmap/nselib/data/rtsp-urls.txt
                     echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
+                    echo ""
                     sudo nmap --script-updatedb
+                    echo ""
 
-                    cd ..
+                    cd .. && cd bin
                     rm -f backup > /dev/nul 2>&1
                     echo "[i] Directory: /aux Updated."
                     sleep 1
-                    cd $IPATH
+                    cd ..
                  fi
 
                  if [ "$core_local" "<" "$core_remote" ]; then
