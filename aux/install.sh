@@ -241,7 +241,7 @@ while getopts ":h,:u," opt; do
                     echo "[i] Updating Project core files"
                     echo "[i] ---------------------------"
                     sleep 2
-                    cd .. && cd logs
+                    cd logs
                     time=$(date | awk {'print $3,$4,$5,$6'})
                     echo "[$time] Updating Project core files" >> mosquito.log
                     cd .. && cd aux
