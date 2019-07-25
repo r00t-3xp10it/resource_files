@@ -269,13 +269,14 @@ while getopts ":h,:u," opt; do
      wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/wordlists/multi_services_wordlist.txt > /dev/nul 2>&1
                     cd ..
                     rm -f backup > /dev/nul 2>&1
+                    cd ..
+                    rm -f mosquito.sh > /dev/nul 2>&1
+                    echo "[i] Updating mosquito.sh main script"
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mosquito.sh > /dev/nul 2>&1
+                    chmod +x mosquito.sh
                     echo "[i] ------------------------------------"
                     echo "[i] Directory: /aux and /bin Updated."
                     sleep 1
-                    cd ..
-                    rm -f mosquito.sh > /dev/nul 2>&1
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mosquito.sh > /dev/nul 2>&1
-                    chmod +x mosquito.sh
                  fi
                  fin_time=$(date | awk {'print $4'})
                  echo "[i] Database updated at: $fin_time"
