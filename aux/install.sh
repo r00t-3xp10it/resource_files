@@ -157,7 +157,7 @@ while getopts ":h,:u," opt; do
                     echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/nslib/rtsp.lua"${Reset};
                     sleep 2
                     sudo cp $IPATH/rtsp.lua /usr/share/nmap/nselib/rtsp.lua
-                    sudo mv $IPATH/rtsp-urls.txt /usr/share/nmap/nselib/data/rtsp-urls.txt
+                    sudo cp $IPATH/rtsp-urls.txt /usr/share/nmap/nselib/data/rtsp-urls.txt
                     echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
                     sudo nmap --script-updatedb
 
