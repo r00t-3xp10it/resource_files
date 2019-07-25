@@ -63,8 +63,8 @@ while getopts ":h,:u," opt; do
               read keyop
               if [ "$keyop" = "n" ] || [ "$keyop" = "N" ]; then
                  echo ${BlueF}"[${RedF}x${BlueF}] Aborting mosquito [${YellowF}$remote${BlueF}] updates .."${Reset};
-                 cd ..
-                 mv bin/backup /bin/version
+                 cd bin
+                 mv backup version
                  exit
               fi
 
