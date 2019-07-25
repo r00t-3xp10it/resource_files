@@ -172,7 +172,7 @@ while getopts ":h,:u," opt; do
                     echo "[i] Updating Resource files"
                     echo "[i] -----------------------"
                     sleep 2
-                    cd .. && cd logs
+                    cd logs
                     time=$(date | awk {'print $3,$4,$5,$6'})
                     echo "[$time] Updating Resource files" >> mosquito.log
                     cd .. && cd aux
@@ -270,7 +270,6 @@ while getopts ":h,:u," opt; do
                     echo "[i] Directory: /aux and /bin Updated."
                     sleep 1
                     cd ..
-                    echo "[i] Updating mosquito.sh main script"
                     rm -f mosquito.sh > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mosquito.sh > /dev/nul 2>&1
                     chmod +x mosquito.sh
