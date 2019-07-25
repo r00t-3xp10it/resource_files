@@ -11,6 +11,8 @@ user=`who | awk {'print $1'}`                            # grab username
 # _______________________________________________________|
 
 
+
+
 # -----------------------------------
 # Colorise shell Script output leters
 # -----------------------------------
@@ -63,8 +65,8 @@ while getopts ":h,:u," opt; do
               read keyop
               if [ "$keyop" = "n" ] || [ "$keyop" = "N" ]; then
                  echo ${BlueF}"[${RedF}x${BlueF}] Aborting mosquito [${YellowF}$remote${BlueF}] updates .."${Reset};
-                 cd bin
-                 mv backup version
+                 cd ..
+                 mv bin/backup bin/version
                  exit
               fi
 
