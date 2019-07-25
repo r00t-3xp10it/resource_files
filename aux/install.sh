@@ -163,7 +163,8 @@ while getopts ":h,:u," opt; do
 
                     cd .. && cd bin
                     rm -f backup > /dev/nul 2>&1
-                    echo "${YellowF}[i]${white} Directory: /aux Updated."${Reset};
+                    echo "[*] -----------------------"
+                    echo "[i] Directory: /aux Updated."
                     sleep 1
                     cd ..
                  fi
@@ -231,8 +232,8 @@ while getopts ":h,:u," opt; do
                     cd bin && rm -f backup > /dev/nul 2>&1
 
                     cd .. && cd aux
-                    echo "${BlueF}[*]${white} -----------------------"${Reset};
-                    echo "${YellowF}[i]${white} Directory: /resource_files Updated."${Reset};
+                    echo "[*] -----------------------"
+                    echo "[i] Directory: /resource_files Updated."
                     sleep 1
                     cd ..
                  fi
@@ -271,8 +272,8 @@ while getopts ":h,:u," opt; do
                     echo "${YellowF}[i]${white} Updating mosquito.sh main script"${Reset};
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mosquito.sh > /dev/nul 2>&1
                     chmod +x mosquito.sh
-                    echo "${BlueF}[*]${white} ------------------------------------"${Reset};
-                    echo "${YellowF}[i]${white} Directory: /aux and /bin Updated."${Reset};
+                    echo "[*] ------------------------------------"
+                    echo "[i] Directory: /aux and /bin Updated."
                     sleep 1
                  fi
                  fin_time=$(date | awk {'print $4'})
