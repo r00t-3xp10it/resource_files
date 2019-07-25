@@ -74,12 +74,12 @@
       ## db_nmap WAN or RHOSTS or LOCAL_LAN scan settings
       # HINT: nmap will use a fake user-agent string (iPhone:Safari) while scanning.
       if (framework.datastore['RHOSTS'] == "#{ip_range}.0/24")
-         run_single("db_nmap -sU -v -Pn -T4 -O -p U:161 --open --script=banner.nse,snmp-info.nse,snmp-brute.nse,snmp-netstat.nse,snmp-win32-software.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sU -v -Pn -n -T4 -O -p U:161 --open --script=banner.nse,snmp-info.nse,snmp-brute.nse,snmp-netstat.nse,snmp-win32-software.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
       elsif (framework.datastore['RANDOM_HOSTS'] == "true")
          print_status("Nmap: search for random remote hosts with ports U:161 open")
-         run_single("db_nmap -sU -vvv -Pn -T5 -iR #{framework.datastore['LIMMIT']} -p U:161 --open --script=banner.nse,snmp-info.nse,snmp-brute.nse,snmp-netstat.nse,snmp-win32-software.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\"")
+         run_single("db_nmap -sU -vvv -Pn -n -T5 -iR #{framework.datastore['LIMMIT']} -p U:161 --open --script=banner.nse,snmp-info.nse,snmp-brute.nse,snmp-netstat.nse,snmp-win32-software.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\"")
       else
-         run_single("db_nmap -sU -v -Pn -T4 -O -p U:161 --open --script=banner.nse,snmp-info.nse,snmp-brute.nse,snmp-netstat.nse,snmp-win32-software.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sU -v -Pn -n -T4 -O -p U:161 --open --script=banner.nse,snmp-info.nse,snmp-brute.nse,snmp-netstat.nse,snmp-win32-software.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
       end
 
       ## Read the database

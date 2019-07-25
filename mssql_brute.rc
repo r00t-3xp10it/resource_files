@@ -77,12 +77,12 @@
 
       ## db_nmap WAN or RHOSTS scan settings
       if (framework.datastore['RHOSTS'] == "#{ip_range}.0/24")
-         run_single("db_nmap -sS -v -Pn -T4 -O -p 1433 --open --script=banner.nse,ms-sql-info.nse,ms-sql-empty-password.nse,ms-sql-dump-hashes.nse,ms-sql-ntlm-info.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 1433 --open --script=banner.nse,ms-sql-info.nse,ms-sql-empty-password.nse,ms-sql-dump-hashes.nse,ms-sql-ntlm-info.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
       elsif (framework.datastore['RANDOM_HOSTS'] == "true")
          print_status("Nmap: search for random remote hosts with ports 1433 open")
-         run_single("db_nmap -sS -vvv -Pn -T4 -iR #{framework.datastore['LIMMIT']} -p 1433 --open --script=banner.nse,ms-sql-info.nse,ms-sql-empty-password.nse,ms-sql-dump-hashes.nse,ms-sql-ntlm-info.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
+         run_single("db_nmap -sS -vvv -Pn -n -T4 -iR #{framework.datastore['LIMMIT']} -p 1433 --open --script=banner.nse,ms-sql-info.nse,ms-sql-empty-password.nse,ms-sql-dump-hashes.nse,ms-sql-ntlm-info.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
       else
-         run_single("db_nmap -sS -v -Pn -T4 -O -p 1433 --open --script=banner.nse,ms-sql-info.nse,ms-sql-empty-password.nse,ms-sql-dump-hashes.nse,ms-sql-ntlm-info.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 1433 --open --script=banner.nse,ms-sql-info.nse,ms-sql-empty-password.nse,ms-sql-dump-hashes.nse,ms-sql-ntlm-info.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
       end
 
       ## Read the database

@@ -75,11 +75,11 @@
       # HINT: nmap will use a fake user-agent string (iPhone:Safari) while scanning.
       # HINT: nmap will use stealth scans (SYN ACK) and cloack scan(s) with DECOYS.
       if (framework.datastore['RHOSTS'] == "#{ip_range}.0/24")
-         run_single("db_nmap -sS -v -Pn -T4 -O -p 23 --open --script=banner.nse,telnet-ntlm-info.nse,telnet-encryption.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 23 --open --script=banner.nse,telnet-ntlm-info.nse,telnet-encryption.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
       elsif (framework.datastore['RANDOM_HOSTS'] == "true")
-         run_single("db_nmap -sS -vvv -Pn -T4 -iR #{framework.datastore['LIMMIT']} -p 23 --open --script=banner.nse,telnet-ntlm-info.nse,telnet-encryption.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
+         run_single("db_nmap -sS -vvv -Pn -n -T4 -iR #{framework.datastore['LIMMIT']} -p 23 --open --script=banner.nse,telnet-ntlm-info.nse,telnet-encryption.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
       else
-         run_single("db_nmap -sS -v -Pn -T4 -O -p 23 --open --script=banner.nse,telnet-ntlm-info.nse,telnet-encryption.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 23 --open --script=banner.nse,telnet-ntlm-info.nse,telnet-encryption.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
       end
 
       ## Read the database

@@ -4,7 +4,7 @@ resize -s 38 120 > /dev/nul
 # variable declarations _________________________________
 #                                                        |
 OS=`uname`                                               # grab OS
-ver="3.13.3"                                             # toolkit version
+ver="3.14.3"                                             # toolkit version
 DiStRo=`awk '{print $1}' /etc/issue`                     # grab distribution -  Ubuntu or Kali
 IPATH=`pwd`                                              # grab install.sh install path
 user=`who | awk {'print $1'}`                            # grab username
@@ -58,7 +58,6 @@ while getopts ":h,:u," opt; do
               cd .. 
 
               cat bin/version
-              cd aux
               echo ""
               echo -n ${BlueF}"[${YellowF}i${BlueF}] Do you wish to install updates? (y/n)${RedF}:${white}"${Reset};
               read keyop
@@ -81,7 +80,7 @@ while getopts ":h,:u," opt; do
                     cd .. && cd aux
                     echo "[$time] Updating post-exploitation modules" >> install.log
 
-                    ## Updating msf modules
+                    ## Updating MSF modules
                     rm -f enum_protections.rb > /dev/nul 2>&1
                     echo "[i] Downloading enum_protections.rb"
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/enum_protections.rb > /dev/nul 2>&1
@@ -122,16 +121,50 @@ while getopts ":h,:u," opt; do
                     sudo msfconsole -q -x 'db_status;reload_all;exit -y'
                     echo ""
 
-                    cd .. && cd bin/wordlists
-                    rm -f multi_services_wordlist.txt > /dev/nul 2>&1
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/wordlists/multi_services_wordlist.txt > /dev/nul 2>&1
+                    ## NMAP NSE SCRIPTS
+                    echo ${BlueF}[*]${white} "Downloading nmap nse script(s) from github"${Reset};
+                    sleep 2
+                    sudo rm -f http-winrm.nse > /dev/nul 2>&1
+                    sudo wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/http-winrm.nse
+                    echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/http-winrm.nse"${Reset};
+                    sleep 2
+                    sudo cp $IPATH/http-winrm.nse /usr/share/nmap/scripts/http-winrm.nse
+                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
+
+                    echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
+                    sleep 2
+                    sudo rm -f freevulnsearch.nse > /dev/nul 2>&1
+                    sudo wget -qq https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse
+                    echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/freevulnsearch.nse"${Reset};
+                    sleep 2
+                    sudo cp $IPATH/freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
+                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
+
+                    echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
+                    sleep 2
+                    sudo rm -f vulners.nse > /dev/nul 2>&1
+                    sudo wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/vulners.nse
+                    echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/vulners.nse"${Reset};
+                    sleep 2
+                    sudo cp $IPATH/vulners.nse /usr/share/nmap/scripts/vulners.nse
+                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
+
+                    echo ${BlueF}[*]${white} "Downloading nmap nse script/lib from github"${Reset};
+                    sleep 2
+                    sudo rm -f rtsp.lua > /dev/nul 2>&1
+                    sudo wget -qq http://nmap.org/svn/nselib/rtsp.lua
+                    sudo wget -qq https://raw.githubusercontent.com/nmap/nmap/master/scripts/rtsp-methods.nse
+                    sudo wget -qq https://raw.githubusercontent.com/nmap/nmap/master/nselib/data/rtsp-urls.txt
+                    echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/nslib/rtsp.lua"${Reset};
+                    sleep 2
+                    sudo cp $IPATH/rtsp.lua /usr/share/nmap/nselib/rtsp.lua
+                    sudo mv $IPATH/rtsp-urls.txt /usr/share/nmap/nselib/data/rtsp-urls.txt
+                    sudo mv $IPATH/rtsp-methods.nse /usr/share/nmap/scripts/rtsp-methods.nse
+                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
+                    sudo nmap --script-updatedb
+
                     cd ..
                     rm -f backup > /dev/nul 2>&1
-                    cd .. && cd aux
-                    rm -f recon.rc > /dev/nul 2>&1
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon.rc > /dev/nul 2>&1
-                    rm -f recon_linux.rc > /dev/nul 2>&1
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon_linux.rc > /dev/nul 2>&1
                     echo "[i] Directory: /aux Updated."
                     sleep 1
                     cd $IPATH
@@ -146,13 +179,9 @@ while getopts ":h,:u," opt; do
                     echo "[$time] Updating Resource files" >> mosquito.log
                     cd .. && cd aux
                     echo "[$time] Updating Resource files" >> install.log
+                    cd ..
 
-                    rm -f *.rc > /dev/nul 2>&1
-                    ## Install geo-location plugin
-                    imp=`which geoiplookup`
-                    if ! [ "$?" -eq "0" ]; then
-                       sudo apt-get update && apt-get install geoiplookup > /dev/nul 2>&1
-                    fi
+                    ## Updating RC scripts
                     echo "[i] Updating handler.rc"
                     rm -f handler.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/handler.rc > /dev/nul 2>&1
@@ -186,12 +215,28 @@ while getopts ":h,:u," opt; do
                     echo "[i] Updating winrm_brute.rc"
                     rm -f winrm_brute.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/winrm_brute.rc > /dev/nul 2>&1
+                    echo "[i] Updating ssh_brute.rc"
+                    rm -f ssh_brute.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/ssh_brute.rc > /dev/nul 2>&1
+                    echo "[i] Updating telnet_brute.rc"
+                    rm -f telnet_brute.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/telnet_brute.rc > /dev/nul 2>&1
+                    echo "[i] Updating rtsp-url-brute.rc"
+                    rm -f rtsp-url-brute.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/rtsp-url-brute.rc > /dev/nul 2>&1
+                    echo "[i] Updating postgres_brute.rc"
+                    rm -f postgres_brute.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/postgres_brute.rc > /dev/nul 2>&1
+                    echo "[i] Updating rpc_brute.rc"
+                    rm -f rpc_brute.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/rpc_brute.rc > /dev/nul 2>&1
                     cd bin && rm -f backup > /dev/nul 2>&1
+
                     cd .. && cd aux
                     echo "[i] -----------------------"
                     echo "[i] Directory: /resource_files Updated."
                     sleep 1
-                    cd $IPATH
+                    cd ..
                  fi
 
                  if [ "$main_local" "<" "$main_remote" ]; then
@@ -204,61 +249,13 @@ while getopts ":h,:u," opt; do
                     cd .. && cd aux
                     echo "[$time] Updating Project core files" >> install.log
 
+                    ## Install geo-location plugin
+                    imp=`which geoiplookup`
+                    if ! [ "$?" -eq "0" ]; then
+                       sudo apt-get update && apt-get install geoip-bin > /dev/nul 2>&1
+                    fi
 
-                    echo "[i] Updating recon.rc"
-                    rm -f recon.rc > /dev/nul 2>&1
-                    wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon.rc > /dev/nul 2>&1
-                    echo "[i] Updating recon_linux.rc"
-                    rm -f recon_linux.rc > /dev/nul 2>&1
-                    wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/recon_linux.rc > /dev/nul 2>&1
-
-                    ## NMAP NSE SCRIPTS
-                    echo ${BlueF}[*]${white} "Downloading nmap nse script(s) from github"${Reset};
-                    sleep 2
-                    sudo rm -f http-winrm.nse > /dev/nul 2>&1
-                    sudo wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/http-winrm.nse
-                    echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/http-winrm.nse"${Reset};
-                    sleep 2
-                    sudo cp $IPATH/http-winrm.nse /usr/share/nmap/scripts/http-winrm.nse
-                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
-
-                    echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
-                    sleep 2
-                    sudo rm -f freevulnsearch.nse > /dev/nul 2>&1
-                    sudo wget -qq https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse
-                    echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/freevulnsearch.nse"${Reset};
-                    sleep 2
-                    sudo cp $IPATH/freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
-                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
-
-                    echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
-                    sleep 2
-                    sudo rm -f vulners.nse > /dev/nul 2>&1
-                    sudo wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/vulners.nse
-                    echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/vulners.nse"${Reset};
-                    sleep 2
-                    sudo cp $IPATH/vulners.nse /usr/share/nmap/scripts/vulners.nse
-                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
-
-                    echo ${BlueF}[*]${white} "Downloading nmap nse script/lib from github"${Reset};
-                    sleep 2
-                    sudo rm -f rtsp.lua > /dev/nul 2>&1
-                    sudo rm -f rtsp-url-brute.nse > /dev/nul 2>&1
-                    sudo wget -qq http://nmap.org/svn/nselib/rtsp.lua
-                    sudo wget -qq http://nmap.org/svn/scripts/rtsp-url-brute.nse
-                    sudo wget -qq https://raw.githubusercontent.com/nmap/nmap/master/scripts/rtsp-methods.nse
-                    sudo wget -qq https://raw.githubusercontent.com/nmap/nmap/master/nselib/data/rtsp-urls.txt
-                    echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/rtsp-url-brute.nse"${Reset};
-                    sleep 2
-                    sudo cp $IPATH/rtsp.lua /usr/share/nmap/nselib/rtsp.lua
-                    sudo mv $IPATH/rtsp-urls.txt /usr/share/nmap/nselib/data/rtsp-urls.txt
-                    sudo mv $IPATH/rtsp-methods.nse /usr/share/nmap/scripts/rtsp-methods.nse
-                    sudo mv $IPATH/rtsp-url-brute.nse /usr/share/nmap/scripts/rtsp-url-brute.nse
-                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
-                    sudo nmap --script-updatedb
-
-
-                    cd bin
+                    cd .. && cd bin
                     echo "[i] Updating remote_hosts.txt"
                     rm -f remote_hosts.txt > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/remote_hosts.txt > /dev/nul 2>&1
@@ -268,13 +265,16 @@ while getopts ":h,:u," opt; do
                     cd wordlists
                     echo "[i] Updating multi_services_wordlist.txt"
                     rm -f multi_services_wordlist.txt > /dev/nul 2>&1
-                    wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/wordlists/multi_services_wordlist.txt > /dev/nul 2>&1
+     wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/wordlists/multi_services_wordlist.txt > /dev/nul 2>&1
                     cd ..
                     rm -f backup > /dev/nul 2>&1
-                    cd .. cd aux
                     echo "[i] ------------------------------------"
                     echo "[i] Directory: /aux and /bin Updated."
                     sleep 1
+                    cd ..
+                    rm -f mosquito.sh > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mosquito.sh > /dev/nul 2>&1
+                    find ./ -name "*.sh" -exec chmod +x {} \;
                  fi
                  fin_time=$(date | awk {'print $4'})
                  echo "[i] Database updated at: $fin_time"
