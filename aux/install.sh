@@ -74,7 +74,7 @@ while getopts ":h,:u," opt; do
                     echo "[i] Updating post-exploitation modules"
                     echo "[i] ----------------------------------"
                     sleep 2
-                    cd .. && cd logs
+                    cd logs
                     time=$(date | awk {'print $3,$4,$5,$6'})
                     echo "[$time] Updating post-exploitation modules" >> mosquito.log
                     cd .. && cd aux
@@ -153,13 +153,11 @@ while getopts ":h,:u," opt; do
                     sleep 2
                     sudo rm -f rtsp.lua > /dev/nul 2>&1
                     sudo wget -qq http://nmap.org/svn/nselib/rtsp.lua
-                    sudo wget -qq https://raw.githubusercontent.com/nmap/nmap/master/scripts/rtsp-methods.nse
                     sudo wget -qq https://raw.githubusercontent.com/nmap/nmap/master/nselib/data/rtsp-urls.txt
                     echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/nslib/rtsp.lua"${Reset};
                     sleep 2
                     sudo cp $IPATH/rtsp.lua /usr/share/nmap/nselib/rtsp.lua
                     sudo mv $IPATH/rtsp-urls.txt /usr/share/nmap/nselib/data/rtsp-urls.txt
-                    sudo mv $IPATH/rtsp-methods.nse /usr/share/nmap/scripts/rtsp-methods.nse
                     echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
                     sudo nmap --script-updatedb
 
@@ -274,7 +272,7 @@ while getopts ":h,:u," opt; do
                     cd ..
                     rm -f mosquito.sh > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mosquito.sh > /dev/nul 2>&1
-                    find ./ -name "*.sh" -exec chmod +x {} \;
+                    chmod +x mosquito.sh
                  fi
                  fin_time=$(date | awk {'print $4'})
                  echo "[i] Database updated at: $fin_time"
