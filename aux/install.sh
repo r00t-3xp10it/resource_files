@@ -270,6 +270,7 @@ while getopts ":h,:u," opt; do
                     echo "[i] Directory: /aux and /bin Updated."
                     sleep 1
                     cd ..
+                    echo "[i] Updating mosquito.sh main script"
                     rm -f mosquito.sh > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mosquito.sh > /dev/nul 2>&1
                     chmod +x mosquito.sh
