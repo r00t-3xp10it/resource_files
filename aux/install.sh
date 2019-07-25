@@ -82,41 +82,41 @@ while getopts ":h,:u," opt; do
 
                     ## Updating MSF modules
                     rm -f enum_protections.rb > /dev/nul 2>&1
-                    echo "[i] Downloading enum_protections.rb"
+                    echo "${BlueF}[*]${white} Downloading enum_protections.rb"${Reset};
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/enum_protections.rb > /dev/nul 2>&1
-                    echo "[i] Locate metasploit absoluct path"
+                    echo "${BlueF}[*]${white} Locate metasploit absoluct path"${Reset};
                     aV_path=$(locate modules/post/windows/recon | grep -v '\doc' | grep -v '\documentation' | head -n 1) > /dev/nul 2>&1
-                    echo "[i] Copy Module to metasploit database"
+                    echo "${YellowF}[i]${white} Copy Module to metasploit database"${Reset};
                     sudo cp $IPATH/enum_protections.rb $aV_path/enum_protections.rb > /dev/nul 2>&1
                     if [ "$?" -eq "1" ]; then
-                       echo "[x] [ERROR] enum_protections.rb Fail to copy to: $aV_path"
+                       echo "${RedF}[x]${white} [ERROR] enum_protections.rb Fail to copy to: $aV_path"${Reset};
                     fi
 
                     rm -f SCRNSAVE_T1180_persistence.rb > /dev/nul 2>&1
-                    echo "[i] Downloading SCRNSAVE_T1180_persistence.rb"
+                    echo "${BlueF}[*]${white} Downloading SCRNSAVE_T1180_persistence.rb"${Reset};
                   wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/SCRNSAVE_T1180_persistence.rb > /dev/nul 2>&1
-                    echo "[i] Locate metasploit absoluct path"
+                    echo "${BlueF}[*]${white} Locate metasploit absoluct path"${Reset};
                   t1180_path=$(locate modules/post/windows/escalate | grep -v '\doc' | grep -v '\documentation' | head -n 1) > /dev/nul 2>&1
-                    echo "[i] Copy Module to metasploit database"
+                    echo "${YellowF}[i]${white} Copy Module to metasploit database"${Reset};
                     sudo cp $IPATH/SCRNSAVE_T1180_persistence.rb $t1180_path/SCRNSAVE_T1180_persistence.rb > /dev/nul 2>&1
                     if [ "$?" -eq "1" ]; then
-                       echo "[x] [ERROR] SCRNSAVE_T1180_persistence.rb Fail to copy to: $t1180_path"
+                       echo "${RedF}[x]${white} [ERROR] SCRNSAVE_T1180_persistence.rb Fail to copy to: $t1180_path"${Reset};
                     fi
 
                     rm -f linux_hostrecon.rb > /dev/nul 2>&1
-                    echo "[i] Downloading linux_hostrecon.rb"
+                    echo "${BlueF}[*]${white} Downloading linux_hostrecon.rb"${Reset};
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/linux_hostrecon.rb > /dev/nul 2>&1
-                    echo "[i] Locate metasploit absoluct path"
+                    echo "${BlueF}[*]${white} Locate metasploit absoluct path"${Reset};
                     Linux_path=$(locate modules/post/linux/gather | grep -v '\doc' | grep -v '\documentation' | head -n 1) > /dev/nul 2>&1
-                    echo "[i] Copy Module to metasploit database"
+                    echo "${YellowF}[i]${white} Copy Module to metasploit database"${Reset};
                     sudo cp $IPATH/linux_hostrecon.rb $Linux_path/linux_hostrecon.rb > /dev/nul 2>&1
                     if [ "$?" -eq "1" ]; then
-                       echo "[x] [ERROR] linux_hostrecon.rb Fail to copy to: $Linux_path"
+                       echo "${RedF}[x]${white} [ERROR] linux_hostrecon.rb Fail to copy to: $Linux_path"${Reset};
                     fi
 
                     ## reload msfdb
-                    echo "[i] ----------------------------------"
-                    echo "[i] Reloading msfdb (reload_all)"
+                    echo "${BlueF}[*]${white} ----------------------------------"${Reset};
+                    echo "${YellowF}[i]${white} Reloading msfdb (reload_all)"${Reset};
                     sudo service postgresql start > /dev/nul 2>&1
                     sudo msfconsole -q -x 'db_status;reload_all;exit -y'
                     echo ""
@@ -129,7 +129,6 @@ while getopts ":h,:u," opt; do
                     echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/http-winrm.nse"${Reset};
                     sleep 2
                     sudo cp $IPATH/http-winrm.nse /usr/share/nmap/scripts/http-winrm.nse
-                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
 
                     echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
                     sleep 2
@@ -138,7 +137,6 @@ while getopts ":h,:u," opt; do
                     echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/freevulnsearch.nse"${Reset};
                     sleep 2
                     sudo cp $IPATH/freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
-                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
 
                     echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
                     sleep 2
@@ -147,7 +145,6 @@ while getopts ":h,:u," opt; do
                     echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/vulners.nse"${Reset};
                     sleep 2
                     sudo cp $IPATH/vulners.nse /usr/share/nmap/scripts/vulners.nse
-                    echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
 
                     echo ${BlueF}[*]${white} "Downloading nmap nse script/lib from github"${Reset};
                     sleep 2
@@ -166,7 +163,7 @@ while getopts ":h,:u," opt; do
 
                     cd .. && cd bin
                     rm -f backup > /dev/nul 2>&1
-                    echo "[i] Directory: /aux Updated."
+                    echo "${YellowF}[i]${white} Directory: /aux Updated."${Reset};
                     sleep 1
                     cd ..
                  fi
@@ -183,59 +180,59 @@ while getopts ":h,:u," opt; do
                     cd ..
 
                     ## Updating RC scripts
-                    echo "[i] Updating handler.rc"
+                    echo "${YellowF}[i]${white} Updating handler.rc"${Reset};
                     rm -f handler.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/handler.rc > /dev/nul 2>&1
-                    echo "[i] Updating http_CVE.rc"
+                    echo "${YellowF}[i]${white} Updating http_CVE.rc"${Reset};
                     rm -f http_CVE.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/http_CVE.rc > /dev/nul 2>&1
-                    echo "[i] Updating manage_db.rc"
+                    echo "${YellowF}[i]${white} Updating manage_db.rc"${Reset};
                     rm -f manage_db.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/manage_db.rc > /dev/nul 2>&1
-                    echo "[i] Updating brute_force.rc"
+                    echo "${YellowF}[i]${white} Updating brute_force.rc"${Reset};
                     rm -f brute_force.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/brute_force.rc > /dev/nul 2>&1
-                    echo "[i] Updating mssql_brute.rc"
+                    echo "${YellowF}[i]${white} Updating mssql_brute.rc"${Reset};
                     rm -f mssql_brute.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mssql_brute.rc > /dev/nul 2>&1
-                    echo "[i] Updating mysql_brute.rc"
+                    echo "${YellowF}[i]${white} Updating mysql_brute.rc"${Reset};
                     rm -f mysql_brute.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mysql_brute.rc > /dev/nul 2>&1
-                    echo "[i] Updating geo_location.rc"
+                    echo "${YellowF}[i]${white} Updating geo_location.rc"${Reset};
                     rm -f geo_location.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/geo_location.rc > /dev/nul 2>&1
-                    echo "[i] Updating snmp_exploiter.rc"
+                    echo "${YellowF}[i]${white} Updating snmp_exploiter.rc"${Reset};
                     rm -f snmp_exploiter.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/snmp_exploiter.rc > /dev/nul 2>&1
-                    echo "[i] Updating post_exploitation.rc"
+                    echo "${YellowF}[i]${white} Updating post_exploitation.rc"${Reset};
                     rm -f post_exploitation.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/post_exploitation.rc > /dev/nul 2>&1
-                    echo "[i] Updating ms17_010.rc"
+                    echo "${YellowF}[i]${white} Updating ms17_010.rc"${Reset};
                     rm -f ms17_010.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/ms17_010.rc > /dev/nul 2>&1
-                    echo "[i] Updating winrm_brute.rc"
+                    echo "${YellowF}[i]${white} Updating winrm_brute.rc"${Reset};
                     rm -f winrm_brute.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/winrm_brute.rc > /dev/nul 2>&1
-                    echo "[i] Updating ssh_brute.rc"
+                    echo "${YellowF}[i]${white} Updating ssh_brute.rc"${Reset};
                     rm -f ssh_brute.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/ssh_brute.rc > /dev/nul 2>&1
-                    echo "[i] Updating telnet_brute.rc"
+                    echo "${YellowF}[i]${white} Updating telnet_brute.rc"${Reset};
                     rm -f telnet_brute.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/telnet_brute.rc > /dev/nul 2>&1
-                    echo "[i] Updating rtsp-url-brute.rc"
+                    echo "${YellowF}[i]${white} Updating rtsp-url-brute.rc"${Reset};
                     rm -f rtsp-url-brute.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/rtsp-url-brute.rc > /dev/nul 2>&1
-                    echo "[i] Updating postgres_brute.rc"
+                    echo "${YellowF}[i]${white} Updating postgres_brute.rc"${Reset};
                     rm -f postgres_brute.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/postgres_brute.rc > /dev/nul 2>&1
-                    echo "[i] Updating rpc_brute.rc"
+                    echo "${YellowF}[i]${white} Updating rpc_brute.rc"${Reset};
                     rm -f rpc_brute.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/rpc_brute.rc > /dev/nul 2>&1
                     cd bin && rm -f backup > /dev/nul 2>&1
 
                     cd .. && cd aux
-                    echo "[i] -----------------------"
-                    echo "[i] Directory: /resource_files Updated."
+                    echo "${BlueF}[*]${white} -----------------------"${Reset};
+                    echo "${YellowF}[i]${white} Directory: /resource_files Updated."${Reset};
                     sleep 1
                     cd ..
                  fi
@@ -257,29 +254,29 @@ while getopts ":h,:u," opt; do
                     fi
 
                     cd .. && cd bin
-                    echo "[i] Updating remote_hosts.txt"
+                    echo "${YellowF}[i]${white} Updating remote_hosts.txt"${Reset};
                     rm -f remote_hosts.txt > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/remote_hosts.txt > /dev/nul 2>&1
-                    echo "[i] Updating database_Exercise.xml"
+                    echo "${YellowF}[i]${white} Updating database_Exercise.xml"${Reset};
                     rm -f database_Exercise.xml > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/database_Exercise.xml > /dev/nul 2>&1
                     cd wordlists
-                    echo "[i] Updating multi_services_wordlist.txt"
+                    echo "${YellowF}[i]${white} Updating multi_services_wordlist.txt"${Reset};
                     rm -f multi_services_wordlist.txt > /dev/nul 2>&1
      wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/wordlists/multi_services_wordlist.txt > /dev/nul 2>&1
                     cd ..
                     rm -f backup > /dev/nul 2>&1
                     cd ..
                     rm -f mosquito.sh > /dev/nul 2>&1
-                    echo "[i] Updating mosquito.sh main script"
+                    echo "${YellowF}[i]${white} Updating mosquito.sh main script"${Reset};
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mosquito.sh > /dev/nul 2>&1
                     chmod +x mosquito.sh
-                    echo "[i] ------------------------------------"
-                    echo "[i] Directory: /aux and /bin Updated."
+                    echo "${BlueF}[*]${white} ------------------------------------"${Reset};
+                    echo "${YellowF}[i]${white} Directory: /aux and /bin Updated."${Reset};
                     sleep 1
                  fi
                  fin_time=$(date | awk {'print $4'})
-                 echo "[i] Database updated at: $fin_time"
+                 echo "${BlueF}[*]${white} Database updated at: $fin_time"${Reset};
 
 
 

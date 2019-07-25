@@ -27,7 +27,6 @@
 --   local response
 --   status, response = helper:describe(url)
 --   helper:close()
--- usr/share/nmap/nselib
 -- </code>
 
 --
