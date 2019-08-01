@@ -1,8 +1,11 @@
 web
 root
 user
+ubnt
 admin
 guest
+user 1
+admin1
 ftp ftp
 adm adm
 sql sql
@@ -11,15 +14,21 @@ msf msf
 sysadmin
 netadmin
 webadmin
+webmaster
 root root
 anon anon
 test test
 data data
 toor root
+ubnt ubnt
+supervisor
+ftp ftpuser
 admin admin
 ghost ghost
 guest guest
 mysql mysql
+admin secret
+admin s3cr3t
 Administrator
 secret secret
 office office
@@ -245,6 +254,7 @@ root aaa123
 root bbbbbb
 root cccccc
 root secret
+root s3cr3t
 root 1q2w3e
 root 1i2o3p
 root i1o2p3
@@ -802,6 +812,7 @@ nobody 123456
 backup 123456
 oracle 123456
 wwwrun wwwrun
+oracle 1234
 games games
 pgsql pgsql
 ident ident

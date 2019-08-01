@@ -46,7 +46,7 @@
        run_single("hosts -a #{framework.datastore['DBHOST']}")
        print_status("Scanning new targets (db_nmap)")
        Rex::sleep(1.0)
-       run_single("db_nmap -sV -Pn -T4 -O --open #{framework.datastore['DBHOST']}")
+       run_single("db_nmap -sV -v -Pn -T4 -n -O --open #{framework.datastore['DBHOST']}")
        Rex::sleep(1.0)
     end
 
@@ -70,7 +70,7 @@
           Rex::sleep(1.5)
           print_status("Scanning new targets (db_nmap)")
           Rex::sleep(1.0)
-          run_single("db_nmap -sV -Pn -T4 -O --open #{parse_data}")
+          run_single("db_nmap -sV -v -Pn -T4 -n -O --open #{parse_data}")
           Rex::sleep(2.5)
     end
 
@@ -94,7 +94,7 @@
 
     if (framework.datastore['LOCAL_SCAN'] == "true")
        print_warning("Scanning local lan for alive hosts (21:22:23:80:110:445:3306)")
-       run_single("db_nmap -sV -Pn -T4 -p 21,22,23,80,110,445,3306 --open 192.168.1.0/24")
+       run_single("db_nmap -sV -v -Pn -T4 -n -p 21,22,23,80,110,445,3306 --open 192.168.1.0/24")
     end
 
 
@@ -125,10 +125,10 @@
           len = xhost.length()
           if xhost.length() > 200
                print_status("LENGTH: #{len} => -T5 (scan speed)")
-               run_single("db_nmap -sV -Pn -T5 --open #{xhost}")
+               run_single("db_nmap -sV -v -Pn -T5 -n --open #{xhost}")
           else
                print_status("LENGTH: #{len} => -T4 (scan speed)")
-               run_single("db_nmap -sV -Pn -T4 -O --open #{xhost}")
+               run_single("db_nmap -sV -v -Pn -T4 -n -O --open #{xhost}")
           end
           print_line("")
           run_single("hosts -c address,name,os_name,purpose")

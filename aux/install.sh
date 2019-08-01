@@ -4,10 +4,10 @@ resize -s 38 120 > /dev/nul
 # variable declarations _________________________________
 #                                                        |
 OS=`uname`                                               # grab OS
-ver="3.14.3"                                             # toolkit version
 DiStRo=`awk '{print $1}' /etc/issue`                     # grab distribution -  Ubuntu or Kali
 IPATH=`pwd`                                              # grab install.sh install path
 user=`who | awk {'print $1'}`                            # grab username
+ver=$(cd .. && cd bin && cat version | grep "=" | cut -d '=' -f2)      # mosquito  version
 # _______________________________________________________|
 
 
@@ -286,7 +286,7 @@ while getopts ":h,:u," opt; do
            else
               echo "    Local version   Remote version   Status"
               echo "    -------------   --------------   ------"
-              echo "    $local          $remote            ${RedF}None Updates Available"
+              echo "    $local          $remote           ${RedF}None Updates Available"
               echo ""
               cd .. && cd bin
               rm -f version > /dev/nul 2>&1

