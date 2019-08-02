@@ -67,7 +67,7 @@ cat << !
 
 !
 echo "    ${BlueF}[${YellowF}execute${BlueF}]${white} sudo git clone https://github.com/r00t-3xp10it/resource_files.git"
-echo "    ${BlueF}[${YellowF}execute${BlueF}]${white} cd resource_files && sudo chmod +x -R *.sh"
+echo "    ${BlueF}[${YellowF}execute${BlueF}]${white} cd resource_files && sudo chmod +x *.sh"
 echo "    ${BlueF}[${YellowF}execute${BlueF}]${white} sudo ./mosquito.sh -h"
 echo "" && echo "---"
 sleep 1
@@ -846,24 +846,29 @@ sleep 1
 ## Local variable declarations
 IPADDR=`ifconfig $InT3R | egrep -w "inet" | awk {'print $2'}` # grab local ip address
 scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" TRUE "Scan Local Lan (fast)" FALSE "Scan Local Lan (discovery)" FALSE "Scan Local Lan (vulns)" FALSE "Scan User Input Host(s)" --width 330 --height 220) > /dev/null 2>&1
+## random database xml file generator
+rand=$(cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 6 | head -n 1)
 
    ## Scan Local Lan (fast)
    if [ "$scan" = "Scan Local Lan (fast)" ]; then
       echo "${BlueF}[☠]${white} Scanning Local Lan: $RANGE.0/24🦟"${Reset};
-      msfconsole -q -x "workspace -a mosquito;db_nmap -sn $RANGE.0/24;hosts -C address,name,os_name,purpose,info;workspace -d mosquito"
+      msfconsole -q -x "workspace -a mosquito;db_nmap -sn $RANGE.0/24;db_export -f xml -a $IPATH/logs/database_$rand.xml;hosts -C address,name,os_name,purpose,info;workspace -d mosquito"
    ## Scan Local Lan (nse discovery categorie)
    elif [ "$scan" = "Scan Local Lan (discovery)" ]; then
       echo "${BlueF}[☠]${white} Scanning Local Lan: $RANGE.0/24🦟"${Reset};
-      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -n -T4 -O --top-ports 1000 --open --script=nbstat.nse,smb-os-discovery.nse,smb-enum-shares.nse,smb-vuln-regsvc-dos.nse,telnet-ntlm-info.nse,ssl-ccs-injection.nse,http-slowloris-check.nse,http-mobileversion-checker.nse $RANGE.0/24;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
+      top_pp=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Input top-ports to scan\nExample: 1000" --width 450) > /dev/null 2>&1
+      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -n -T4 -O --top-ports $top_pp --open --script=nbstat.nse,smb-os-discovery.nse,smb-enum-shares.nse,smb-vuln-regsvc-dos.nse,telnet-ntlm-info.nse,ssl-ccs-injection.nse,http-slowloris-check.nse,http-mobileversion-checker.nse $RANGE.0/24;db_export -f xml -a $IPATH/logs/database_$rand.xml;hosts -C address,name,os_name,purpose,info;services -c port,proto,name,state;workspace -d mosquito"
    ## Scan Local Lan (nse vuln categorie)
    elif [ "$scan" = "Scan Local Lan (vulns)" ]; then
       echo "${BlueF}[☠]${white} Scanning Local Lan: $RANGE.0/24🦟"${Reset};
-      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -n -T4 -O --top-ports 1000 --open --script=vuln $RANGE.0/24;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse,vulners.nse $RANGE.0/24;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
+      top_pp=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Input top-ports to scan\nExample: 1000" --width 450) > /dev/null 2>&1
+      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -n -T4 -O --top-ports $top_pp --open --script=vuln $RANGE.0/24;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse,vulners.nse $RANGE.0/24;db_export -f xml -a $IPATH/logs/database_$rand.xml;hosts -C address,name,os_name,purpose,info;services -c port,proto,name,state;workspace -d mosquito"
    ## Scan User Input Host(s) (nse vuln categorie)
    elif [ "$scan" = "Scan User Input Host(s)" ]; then
       rhost=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Input rhosts separated by blank spaces\nExample: 192.168.1.71 192.168.1.254" --width 450) > /dev/null 2>&1
       echo "${BlueF}[☠]${white} Scanning Local Machine: $rhost🦟"${Reset};
-      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -n -T4 -O --top-ports 1000 --open --script=vuln $rhost;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse,vulners.nse $rhost;hosts -C address,name,os_name,purpose,info;services -c port,proto,state;workspace -d mosquito"
+      top_pp=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Input top-ports to scan\nExample: 1000" --width 450) > /dev/null 2>&1
+      msfconsole -q -x "workspace -a mosquito;db_nmap -sS -v -Pn -n -T4 -O --top-ports $top_pp --open --script=vuln $rhost;db_nmap -sV -T5 -Pn --script=freevulnsearch.nse,vulners.nse $rhost;db_export -f xml -a $IPATH/logs/database_$rand.xml;hosts -C address,name,os_name,purpose,info;services -c port,proto,name,state;workspace -d mosquito"
    else
       ## None option selected ..aborting..
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};

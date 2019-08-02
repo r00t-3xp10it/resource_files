@@ -131,8 +131,6 @@ root login
 root happy
 root 88888
 root nokia
-root crazy
-root music
 root party
 root money
 root india
@@ -172,7 +170,6 @@ root unlock
 root hiphop
 root toyota
 root suzuki
-root apache
 root badman
 root secure
 root abc123
@@ -186,7 +183,6 @@ root fucker
 root webmin
 root a1b2c3
 root 1a2b3c
-root asdfgh
 root poiuyt
 root 111111
 root 000000
@@ -242,12 +238,9 @@ root xswzaq
 root london
 root monkey
 root bio123
-root 1q2w3e
 root q1w2e3
-root 1a2s3d
 root a1s2d3
 root qwaszx
-root design
 root 112233
 root ghbdtn
 root aaa123
@@ -255,7 +248,6 @@ root bbbbbb
 root cccccc
 root secret
 root s3cr3t
-root 1q2w3e
 root 1i2o3p
 root i1o2p3
 root pqowie
@@ -303,7 +295,6 @@ root bagabu
 root ******
 root qwerty1
 root 4rfvgy7
-root zxcvbnm
 root mercury
 root bentley
 root desktop
@@ -384,7 +375,6 @@ root designer
 root internet
 root stargate
 root secretar
-root director
 root teiubesc
 root 1q2w3e4r
 root aqswdefr
@@ -412,7 +402,6 @@ root goldfish
 root root2008
 root webadmin
 root metalica
-root security
 root somebody
 root starwars
 root motorola
@@ -541,7 +530,6 @@ jay jay
 abel abel
 bill bill
 juan juan
-alan alan
 alec alec
 coco coco
 mark mark
@@ -602,9 +590,7 @@ albert albert
 albert 123456
 alfred alfred
 alfred 123456
-andrea andrea
 andrea 123456
-sandra 123456
 cedric cedric
 andrea andrea
 angela angela
@@ -618,7 +604,6 @@ carrie carrie
 carson carson
 amanda amanda
 amanda 123456
-sharon sharon
 george george
 sandra sandra
 sandra 123456
@@ -631,7 +616,6 @@ freddy freddy
 joanne joanne
 joseph joseph
 joshua joshua
-judith judith
 juliet juliet
 graham graham
 ingrid ingrid
@@ -663,7 +647,6 @@ thomas thomas
 anita anita123
 cecilia cecilia
 charles charles
-charlie charlie
 albertha 123456
 abigail abigail
 abraham abraham
@@ -960,7 +943,6 @@ jordan jordan
 josh josh
 joyce joyce
 johnny johnny
-joshua joshua
 jude jude
 judith judith
 jule jule

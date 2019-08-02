@@ -71,7 +71,6 @@ admin pfsense
 admin admin123
 admin insecure
 admin password
-admin password
 admin motorola
 admin superuser
 admin ManagementConsole2015

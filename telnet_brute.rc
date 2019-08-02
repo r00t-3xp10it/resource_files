@@ -75,11 +75,11 @@
       # HINT: nmap will use a fake user-agent string (iPhone:Safari) while scanning.
       # HINT: nmap will use stealth scans (SYN ACK) and cloack scan(s) with DECOYS.
       if (framework.datastore['RHOSTS'] == "#{ip_range}.0/24")
-         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 23 --open --script=banner.nse,telnet-ntlm-info.nse,telnet-encryption.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 23 --open --script=banner.nse,telnet-ntlm-info.nse,telnet-encryption.nse,telnet-ntlm-info.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
       elsif (framework.datastore['RANDOM_HOSTS'] == "true")
-         run_single("db_nmap -sS -vvv -Pn -n -T4 -iR #{framework.datastore['LIMMIT']} -p 23 --open --script=banner.nse,telnet-ntlm-info.nse,telnet-encryption.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
+         run_single("db_nmap -sS -vvv -Pn -n -T4 -iR #{framework.datastore['LIMMIT']} -p 23 --open --script=banner.nse,telnet-ntlm-info.nse,telnet-encryption.nse,telnet-ntlm-info.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
       else
-         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 23 --open --script=banner.nse,telnet-ntlm-info.nse,telnet-encryption.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 23 --open --script=banner.nse,telnet-ntlm-info.nse,telnet-encryption.nse,telnet-ntlm-info.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
       end
 
       ## Read the database
@@ -153,7 +153,6 @@
 
     sudo wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse
     sudo cp freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
-    sudo nmap --script-updatedb
 
     sudo wget https://raw.githubusercontent.com/vulnersCom/nmap-vulners/master/vulners.nse
     sudo cp vulners.nse /usr/share/nmap/scripts/vulners.nse
@@ -188,6 +187,7 @@
               run_single("services -c name -S telnet -R")
               run_single("exploit")
          end
+
 
          ## Running freevulnsearch.nse (scan for CVE's)
          print "[?] Scan for possible CVE's? (y/n): "
@@ -232,7 +232,9 @@
 
       ## Writting ['xhost(s)'] to mosquito logfile
       if File.directory?("#{local}/logs")
+         dtr = `date`
          print_status("Logfile stored under: #{local}/logs/telnet_brute.log")
+         run_single("echo \"[#{dtr}] telnet_brute: #{xhost}\" >> logs/mosquito.log")
          ## Store vulns log if exists open sessions
          if (framework.sessions.length > 0)
             run_single("vulns -o #{local}/logs/telnet_brute.csv")

@@ -338,7 +338,9 @@
 
       ## Writting ['xhost(s)'] to mosquito logfile
       if File.directory?("#{local}/logs")
+         dtr = `date`
          print_status("Logfile stored under: #{local}/logs/ms17_010.log")
+         run_single("echo \"[#{dtr}] ms17_010: #{xhost}\" >> logs/mosquito.log")
          ## Store vulns log if exists open sessions
          if (framework.sessions.length > 0)
             run_single("vulns -o #{local}/logs/ms17_010.csv")

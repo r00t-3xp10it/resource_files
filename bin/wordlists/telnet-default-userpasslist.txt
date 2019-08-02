@@ -39,14 +39,12 @@ root vizxv
 admin 4321
 root 54321
 root 12345
-admin 1234
 root zlxx.
 admin 1234
 root linux
 webguest 1
 root GM8182
 user public
-guest guest
 root system
 admin 12345
 admin 22222
@@ -78,9 +76,9 @@ admin Symbol
 amx Amx1234!
 root default
 smc smcadmin
+telnet telnet
 root juantech
 Basisk Basisk
-root dreambox
 root 00000000
 admin avocent
 admin private

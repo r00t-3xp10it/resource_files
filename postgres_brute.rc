@@ -205,7 +205,9 @@
 
       ## Writting ['xhost(s)'] to mosquito logfile
       if File.directory?("#{local}/logs")
+         dtr = `date`
          print_status("Logfile stored under: #{local}/logs/postgres_brute.log")
+         run_single("echo \"[#{dtr}] postgres_brute: #{xhost}\" >> logs/mosquito.log")
          ## Store vulns log if exists open sessions
          if (framework.sessions.length > 0)
             run_single("vulns -o #{local}/logs/postgres_brute.csv")

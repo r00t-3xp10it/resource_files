@@ -4,16 +4,21 @@
 #       |  | .------------------- NMAP-MSF MODULES VERSION
 #       |  | |
 #       |  | |
-version=5.15.4
+version=6.16.4
 
 
 ##
-# Module: CORE + RESOURCE SCRIPTS
-# Update: sudo ./mosquito.sh -u
-# -----------------------------
-#  1) - install.sh updated (terminal displays)
-#  2) - mosquito.sh updated (terminal displays)
-#  3) - mosquito.sh Nmap nse quick scans (new option)
-#  4) - ms17_010.rc updated eternalblue ForceExploit
-#  5) - generic/shell_reverse_tcp added to payload list
+#   Module         Option              Description
+#   ------         ------              -----------
+#   mosquito.sh    nmap quick scans    export of workspace mosquito (xml)
+#   mosquito.sh    nmap quick scans    user input top-ports value (10-10000)
+#   telnet_brute   nº 10               script telnet-ntlm-info.nse added (nse)
+#   wordlists      ---                 deleted wordlists duplicate logins
+#   all rc files   ---                 store rhosts found into mosquito.log
+#
+#   Notes
+#   -----
+#   IF we wish to update the all project, then change the version number to 0.00.0
+#   save this file and run ./mosquito.sh -u that will download core files, resource
+#   scripts, and nmap + metasploit modules/scripts (mosquito.sh will also be updated)
 ##
