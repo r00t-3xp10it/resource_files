@@ -304,7 +304,6 @@
    Rex::sleep(1.0)
    print_status("Module execution finished.")
    print_warning("Logfile stored under: #{local}/logs/geo_location.log")
-   print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location")
    dtr = `date`
    ## Writting ['xhost(s)'] to mosquito logfile
    run_single("echo \"[#{dtr}] geo_location: #{xhost}\" >> logs/mosquito.log")

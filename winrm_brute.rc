@@ -198,7 +198,7 @@
               run_single("set USERPASS_FILE #{framework.datastore['USERPASS_FILE']}")
               run_single("set STOP_ON_SUCCESS true")
               run_single("set VERBOSE true")
-              run_single("set THREADS 10")
+              run_single("set THREADS 30")
               print_line("")
               run_single("services -c port -S 5985 -R")
               run_single("exploit")
