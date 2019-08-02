@@ -17,7 +17,7 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 
 ## Mosquito - Automating reconnaissance and brute force attacks
 
-![mosquito_banner](https://i.imgur.com/hIlqLtk.png)
+![mosquito_banner](https://ibb.co/m6RG7vK)
 
 <br />
 
@@ -153,7 +153,7 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 ![mosquito_banner](http://i67.tinypic.com/a59l50.png)
 
     [execute] sudo ./mosquito.sh
-![mosquito_banner](https://i.imgur.com/hIlqLtk.png)
+![mosquito_banner](https://ibb.co/m6RG7vK)
 
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
