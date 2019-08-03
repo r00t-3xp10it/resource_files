@@ -14,6 +14,9 @@ msf msf
 sysadmin
 netadmin
 webadmin
+user user
+User User
+USER USER
 webmaster
 root root
 anon anon
@@ -41,6 +44,7 @@ sysadmin sysadmin
 postgres postgres
 www-data www-data
 wwwadmin wwwadmin
+anonymous s3cr3t
 technical technical
 anonymous anonymous
 root alpine
@@ -719,9 +723,6 @@ brad brad
 bred bred
 http http
 shop shop
-user user
-User User
-USER USER
 java java
 webs webs
 ming ming
@@ -1022,3 +1023,4 @@ yoshitaka yoshitaka
 heaven heaven
 default default
 albatross albatross
+Administrator s3cr3t

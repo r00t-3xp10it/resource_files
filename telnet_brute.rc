@@ -181,6 +181,7 @@
               run_single("exploit")
               run_single("use auxiliary/scanner/telnet/telnet_login")
               run_single("set USERPASS_FILE #{framework.datastore['USERPASS_FILE']}")
+              run_single("set BRUTEFORCE_SPEED 5")
               run_single("set STOP_ON_SUCCESS true")
               run_single("set THREADS 200")
               print_line("")

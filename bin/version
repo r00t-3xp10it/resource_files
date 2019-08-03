@@ -18,7 +18,7 @@ version=6.16.4
 #
 #   Notes
 #   -----
-#   IF we wish to update the all project, then change the version number to 0.00.0
-#   save this file and run ./mosquito.sh -u that will download core files, resource
-#   scripts, and nmap + metasploit modules/scripts (mosquito.sh will also be updated)
+#   To update the all project edit [version] file and change version number
+#   to: 0.00.0 save the file and run sudo ./mosquito.sh -u (update option).
+#   OR CLONE REPOSITORY: git clone https://github.com/r00t-3xp10it/resource_files.git
 ##

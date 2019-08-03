@@ -1,9 +1,10 @@
 #!/bin/sh
 # Author: r00t-3xp10it
 # mosquito framework v:3.14.3 [STABLE]
+# Suspicious Shell Activity - redteam @2019
 # Automate remote brute force tasks over WAN/LAN networks
 # GitHub: https://github.com/r00t-3xp10it/resource_files
-# Suspicious Shell Activity - redteam @2019
+# count duplicate lines: cat telnet-default-userpasslist.txt | uniq -c
 ##
 resize -s 38 120 > /dev/nul
 
