@@ -31,6 +31,7 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 [7] [Framework help-update-install-execution](https://github.com/r00t-3xp10it/resource_files#framework-help-update-install-execution)<br />
 [8] [Project Referencies url's](https://github.com/r00t-3xp10it/resource_files#referencies)<br />
 [9] [Project Acknowledgment](https://github.com/r00t-3xp10it/resource_files#project-acknowledgment)<br />
+[10] [Project releases description](https://github.com/r00t-3xp10it/resource_files/releases)<br />
 
 ---
 <br />
@@ -171,10 +172,10 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 
 ### Project Acknowledgment
 @fyodor - nmap framework<br />
+@Hhdm - metasploit framework<br />
 @gmedian - vulners.nse script<br />
-@HD Moore - metasploit framework<br />
-@Sean Warnock - http-winrm.nse script<br />
-@Mathias Gut - freevulnsearch.nse script<br />
+@SeanWarnock - http-winrm.nse script<br />
+@MathiasGut - freevulnsearch.nse script<br />
 
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 

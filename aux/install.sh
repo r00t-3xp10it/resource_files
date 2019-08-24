@@ -116,6 +116,17 @@ while getopts ":h,:u," opt; do
                        echo "${RedF}[x]${white} [ERROR] linux_hostrecon.rb Fail to copy to: $Linux_path"${Reset};
                     fi
 
+                    rm -f cve_2019_0708_bluekeep_dos.rb > /dev/nul 2>&1
+                    echo "${BlueF}[*]${white} Downloading cve_2019_0708_bluekeep_dos.rb"${Reset};
+                 wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/cve_2019_0708_bluekeep_dos.rb > /dev/nul 2>&1
+                    echo "${BlueF}[*]${white} Locate metasploit absoluct path"${Reset};
+               Linux_path=$(locate modules/auxiliary/dos/windows/rdp | grep -v '\doc' | grep -v '\documentation' | head -n 1) > /dev/nul 2>&1
+                    echo "${YellowF}[i]${white} Copy Module to metasploit database"${Reset};
+                    sudo cp $IPATH/cve_2019_0708_bluekeep_dos.rb $Linux_path/cve_2019_0708_bluekeep_dos.rb > /dev/nul 2>&1
+                    if [ "$?" -eq "1" ]; then
+                       echo "${RedF}[x]${white} [ERROR] cve_2019_0708_bluekeep_dos.rb Fail to copy to: $Linux_path"${Reset};
+                    fi
+
                     ## reload msfdb
                     echo "${BlueF}[*]${white} ----------------------------------"${Reset};
                     echo "${YellowF}[i]${white} Reloading msfdb (reload_all)"${Reset};
@@ -231,8 +242,10 @@ while getopts ":h,:u," opt; do
                     echo "${YellowF}[i]${white} Updating rpc_brute.rc"${Reset};
                     rm -f rpc_brute.rc > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/rpc_brute.rc > /dev/nul 2>&1
+                    echo "${YellowF}[i]${white} Updating mass_exploiter.rc"${Reset};
+                    rm -f mass_exploiter.rc > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/mass_exploiter.rc > /dev/nul 2>&1
                     cd bin && rm -f backup > /dev/nul 2>&1
-
                     cd .. && cd aux
                     echo "[*] -----------------------"
                     echo "[i] Directory: /resource_files Updated."
@@ -256,17 +269,37 @@ while getopts ":h,:u," opt; do
                        sudo apt-get update && apt-get install geoip-bin > /dev/nul 2>&1
                     fi
 
+                    ## Install http-proxy-brute.py libs
+                    imp=`which pip`
+                    if ! [ "$?" -eq "0" ]; then
+                       sudo apt-get update && apt-get install python-pip && pip install requests > /dev/nul 2>&1
+                    fi
+
                     cd .. && cd bin
                     echo "${YellowF}[i]${white} Updating remote_hosts.txt"${Reset};
                     rm -f remote_hosts.txt > /dev/nul 2>&1
                     wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/remote_hosts.txt > /dev/nul 2>&1
-                    echo "${YellowF}[i]${white} Updating database_Exercise.xml"${Reset};
-                    rm -f database_Exercise.xml > /dev/nul 2>&1
-                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/database_Exercise.xml > /dev/nul 2>&1
+                    echo "${YellowF}[i]${white} Updating database_huge.xml"${Reset};
+                    rm -f database_huge.xml > /dev/nul 2>&1
+                    wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/database_huge.xml > /dev/nul 2>&1
                     cd wordlists
                     echo "${YellowF}[i]${white} Updating multi_services_wordlist.txt"${Reset};
                     rm -f multi_services_wordlist.txt > /dev/nul 2>&1
      wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/wordlists/multi_services_wordlist.txt > /dev/nul 2>&1
+                    echo "${YellowF}[i]${white} Updating ssh-default-userpasslist.txt"${Reset};
+                    rm -f ssh-default-userpasslist.txt > /dev/nul 2>&1
+     wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/wordlists/ssh-default-userpasslist.txt > /dev/nul 2>&1
+                    echo "${YellowF}[i]${white} Updating telnet-default-userpasslist.txt"${Reset};
+                    rm -f telnet-default-userpasslist.txt > /dev/nul 2>&1
+  wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/wordlists/telnet-default-userpasslist.txt > /dev/nul 2>&1
+                    echo "${YellowF}[i]${white} Updating ftp-default-userpasslist.txt"${Reset};
+                    rm -f ftp-default-userpasslist.txt > /dev/nul 2>&1
+     wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/wordlists/ftp-default-userpasslist.txt > /dev/nul 2>&1
+                    rm -f b64-auth-cookies.txt > /dev/nul 2>&1
+     wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/bin/wordlists/b64-auth-cookies.txt > /dev/nul 2>&1
+
+
+
                     cd ..
                     rm -f backup > /dev/nul 2>&1
                     cd ..
@@ -444,6 +477,21 @@ else
    sudo apt-get install curl
    echo "------------------------------------------"
 fi
+pop=`which pip`
+if [ "$?" -eq "0" ]; then
+   echo ${BlueF}[${GreenF}✔${BlueF}]${white} "pip dependencie found => ${GreenF}(no need to install)"${Reset};
+   sleep 2
+else
+   echo ${RedF}[x] "pip dependencie NOT found."${Reset};
+   sleep 2
+   echo ${BlueF}[${YellowF}i${BlueF}]${white} "Downloading pip package from network."${Reset};
+   sleep 1
+   time=$(date | awk {'print $3,$4,$5,$6'})
+   echo "[$time] Installing pip dependencie" >> install.log
+   echo "------------------------------------------"
+   sudo apt-get install python-pip && pip install requests
+   echo "------------------------------------------"
+fi
 
 
 
@@ -524,6 +572,32 @@ if [ "$op" = "y" ] || [ "$op" = "Y" ]; then
           echo ${BlueF}[*]${white} "Copy module to: $Linux_path/linux_hostrecon.rb"${Reset};
           sleep 2
           sudo cp $IPATH/linux_hostrecon.rb $Linux_path/linux_hostrecon.rb
+          ## module settings (install.log)
+          time=$(date | awk {'print $3,$4,$5,$6'})
+          echo "[$time] Installing linux_hostrecon dependencie" >> install.log
+          fresh="yes"
+       fi
+
+    echo ${BlueF}[*]${white} "Query msfdb for cve_2019_0708_bluekeep_dos.rb installation .."${Reset};
+    Linux_path=$(locate modules/auxiliary/dos/windows/rdp | grep -v '\doc' | grep -v '\documentation' | head -n 1)
+    echo ${BlueF}[*]${white} "Path: $Linux_path/cve_2019_0708_bluekeep_dos.rb"${Reset};
+    sleep 2
+
+       if [ -e "$Linux_path/cve_2019_0708_bluekeep_dos.rb" ]; then
+          echo ${BlueF}[${GreenF}✔${BlueF}]${white} "Metasploit Post-module found in msfdb => ${GreenF}(no need to install)"${Reset};
+          sleep 2
+       else
+          echo ${RedF}[x] "Metasploit Post-module NOT found in msfdb."${Reset};
+          sleep 2
+          echo ${YellowF}[i]${white} "Downloading Metasploit post-module from github"${Reset};
+          sleep 2
+          sudo rm -f cve_2019_0708_bluekeep_dos.rb
+          echo "--------------------------------------------------" && echo ""
+          sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/cve_2019_0708_bluekeep_dos.rb
+          echo "--------------------------------------------------"
+          echo ${BlueF}[*]${white} "Copy module to: $Linux_path/cve_2019_0708_bluekeep_dos.rb"${Reset};
+          sleep 2
+          sudo cp $IPATH/cve_2019_0708_bluekeep_dos.rb $Linux_path/cve_2019_0708_bluekeep_dos.rb
           ## module settings (install.log)
           time=$(date | awk {'print $3,$4,$5,$6'})
           echo "[$time] Installing linux_hostrecon dependencie" >> install.log

@@ -94,6 +94,7 @@ root anni2013
 root dreambox
 admin 1111111
 admin cat1029
+root anonymous
 admin tlJwpbo6
 sconsole 12345
 default antslq
@@ -257,6 +258,7 @@ taylor taylor
 sharon sharon
 victor victor
 thomas thomas
+root msfadmin
 anita anita123
 cecilia cecilia
 charles charles

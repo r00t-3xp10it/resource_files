@@ -433,6 +433,7 @@ root director
 root mercedes
 root gigabyte
 root hardcore
+root msfadmin
 root qazwsxedc
 root albatross
 root blablabla
@@ -450,6 +451,7 @@ root webmaster
 root education
 root ubuntu123
 root invisible
+root anonymous
 root qpwoeiruty
 root 1q2w3e4r5t
 root root123321
@@ -471,6 +473,14 @@ administrator password1
 administrator changeme123
 administrator password123
 administrator administrator
+Administrator toor
+Administrator root
+Administrator pass
+Administrator pass1
+Administrator password1
+Administrator changeme123
+Administrator password123
+Administrator Administrator
 sa sa
 sa admin
 sa default

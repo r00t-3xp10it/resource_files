@@ -16,6 +16,7 @@
 # msfconsole -q -x 'setg RESOLVER true;resource /root/geo_location.rc'
 ##
   <ruby>
+      run_single("workspace -a mosquito")
       help = %Q|
                                                 🦟__________       
               _______🦟________________________  ____(_)_  /______🦟
@@ -119,7 +120,6 @@
               |
               print_line(err)
               print_error("please wait, cleaning recent configurations.")
-              print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location")
               run_single("unsetg all")
               run_single("back")
               return nil
@@ -167,7 +167,7 @@
     Remark
     ------
     This resource script also gives to is users the ability to import (to db)
-     a list of hosts contained inside a local text file (one-per-line-entries)
+    a list of hosts contained inside a local text file (one-per-line-entries)
 
     Import a hosts list
     -------------------
@@ -177,7 +177,6 @@
            |
            print_line(err)
            print_error("please wait, cleaning recent configurations.")
-           print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location")
            run_single("unsetg all")
            run_single("back")
            return nil
@@ -233,7 +232,6 @@
             |
             print_line(err)
             print_error("please wait, cleaning recent configurations.")
-            print_warning("https://github.com/r00t-3xp10it/resource_files/wiki/Offensive-Resource_Files--%7C-Geo_Location")
             run_single("unsetg all")
             run_single("back")
             return nil
@@ -249,14 +247,20 @@
       # HINT: If used <setg USE_CURL true> then this script will use curl ipapi.co/#{ip}
       # If not used then this script will use geoiplookup package to retrieve hosts geolocation.
       if (framework.datastore['USE_CURL'] == "true")
-         print_line("Curl ipapi.co Geolocation Reports")
-         print_line("==================================")
+         print_line("Geo-Location")
+         print_line("------------")
          Rex::sleep(1.5)
          print_line("")
          ## Mapping database hosts (loop)
          framework.db.hosts.map(&:address).each do |sHost|
             geo_location = `curl 'https://ipapi.co/#{sHost}/json/'|sed 's|{||g'|sed 's|}||g'|tr -d '",'`
-            print_line("#{geo_location}")
+            spl_range = sHost.split('.')
+            ## Make sure we are NOT geolocating Internal ip(s)
+            if (spl_range[0] == "192" and spl_range[1] == "168")
+               print_line("\n#{sHost} - Not available (Internal IP Address)")
+            else
+               print_line("#{geo_location}")
+            end
             print_line("")
          end
       else
@@ -265,8 +269,8 @@
         ## Use geoiplookup package (default)
         # HINT: ip-tracker.org website list (URL)
         if (framework.datastore['GOOGLE_MAP'] == "true")
-           print_line("Geoiplookup Geolocation Reports")
-            print_line("===============================")
+            print_line("Geo-Location")
+            print_line("------------")
             Rex::sleep(1.5)
             print_line("")
             print_line("Hosts               GeoLocation               IP-TRACKER")
@@ -277,13 +281,19 @@
             # https://www.melissa.com/v2/lookups/iplocation/ip?ip=#{sHost}
             framework.db.hosts.map(&:address).each do |sHost|
                geo_location = `geoiplookup #{sHost}|cut -d ':' -f2|tr -d '\n'`
-               print_line("#{sHost}     #{geo_location}         https://www.ip-tracker.org/locator/ip-lookup.php?ip=#{sHost}")
+               spl_range = sHost.split('.')
+               ## Make sure we are NOT geolocating Internal ip(s)
+               if (spl_range[0] == "192" and spl_range[1] == "168")
+                  print_line("#{sHost}        Not available (Internal IP Address)")
+               else
+                  print_line("#{sHost}     #{geo_location}         https://www.ip-tracker.org/locator/ip-lookup.php?ip=#{sHost}")
+               end
             end
          else
             ## Use geoiplookup package (default)
             # HINT: geoiplookup works offline (its a local database)
-            print_line("Geoiplookup Geolocation Reports")
-            print_line("===============================")
+            print_line("Geo-Location")
+            print_line("------------")
             Rex::sleep(1.5)
             print_line("")
             print_line("Hosts               GeoLocation")
@@ -291,22 +301,35 @@
             ## Mapping database hosts (loop)
             framework.db.hosts.map(&:address).each do |sHost|
                geo_location = `geoiplookup #{sHost}|cut -d ':' -f2|tr -d '\n'`
-               print_line("#{sHost}     #{geo_location}")
+               spl_range = sHost.split('.')
+               ## Make sure we are NOT geolocating Internal ip(s)
+               if (spl_range[0] == "192" and spl_range[1] == "168")
+                  print_line("#{sHost}        Not available (Internal IP Address)")
+               else
+                  print_line("#{sHost}     #{geo_location}")
+               end
             end
          end
          print_line("")
          print_line("")
       end
 
-
+   run_single("workspace -v")
+   print_line("")
    ## Clean recent configs and global vars
+   print_warning("Cleaning global variables.")
+   Rex::sleep(1.5)
    run_single("unsetg all")
-   Rex::sleep(1.0)
-   print_status("Module execution finished.")
-   print_warning("Logfile stored under: #{local}/logs/geo_location.log")
+   run_single("unset all")
+   run_single("workspace -d mosquito")
+
    dtr = `date`
    ## Writting ['xhost(s)'] to mosquito logfile
-   run_single("echo \"[#{dtr}] geo_location: #{xhost}\" >> logs/mosquito.log")
+   if File.directory?("#{local}/logs")
+      print_warning("Logfile stored under: #{local}/logs/geo_location.log")
+      run_single("echo \"[#{dtr}] geo_location: #{xhost}\" >> logs/mosquito.log")
+   end
+
    run_single("back")
 </ruby>
 

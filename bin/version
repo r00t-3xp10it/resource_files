@@ -4,21 +4,28 @@
 #       |  | .------------------- NMAP-MSF MODULES VERSION
 #       |  | |
 #       |  | |
-version=6.16.4
+version=7.17.4
 
 
 ##
-#   Module         Option              Description
-#   ------         ------              -----------
-#   mosquito.sh    nmap quick scans    export of workspace mosquito (xml)
-#   mosquito.sh    nmap quick scans    user input top-ports value (10-10000)
-#   telnet_brute   nº 10               script telnet-ntlm-info.nse added (nse)
-#   wordlists      ---                 deleted wordlists duplicate logins
-#   all rc files   ---                 store rhosts found into mosquito.log
+#   Updated/New          Mosquito Command    Description
+#   -----------          ----------------    -----------
+#   mosquito.sh          exploit             armitage Hail Mary (based) rc script option
+#   install.sh           mosquito.sh -u      download/install mass_exploiter.rc script (new)
+#   mass_exploiter.rc    exploit             armitage Hail Mary (based) resource script (new)
+#   http-proxy-brute.py  exploit             HTTP basic (cookie) authentication brute force (new)
+#   brute_force.rc       2                   added rpc/msrpc service port (55553) to brute_force
+#   ms17_010.rc          3                   RHOSTS multiple ports sellection bugfix (ports: 135|139)
+#   rtsp-url-brute.rc    14                  added 'Use google dorks to find webcams' to rtsp-url-brute
+#   all rc scripts                           Nmap/Metasploit scan/brute-force timeout(s) improved
+#   all rc scripts                           geolocation of alive RHOST(s) found (public ip addr)
+#   all rc scripts                           upgrade command Shell (session) to Meterpreter ?
+#   all rc scripts                           added 'Suggest exploits based on CVE numbers ?'
+#   all rc scripts                           Credentials found displays in 'services' report notes
 #
 #   Notes
 #   -----
-#   To update the all project edit [version] file and change version number
+#   To update the ALL project edit [version] file and change version number
 #   to: 0.00.0 save the file and run sudo ./mosquito.sh -u (update option).
 #   OR CLONE REPOSITORY: git clone https://github.com/r00t-3xp10it/resource_files.git
 ##
