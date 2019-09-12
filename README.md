@@ -3,7 +3,7 @@
 <blockquote>Resource scripts provides an easy way for us to automate repetitive tasks in Metasploit. Conceptually they're just like batch scripts, they contain a set of commands that are automatically and sequentially executed when you load the script in Metasploit. You can create a resource script by chaining together a series of Metasploit console commands or by directly embedding Ruby to do things like call APIs, interact with objects in the database, modules and iterate actions.</blockquote>
 
 **This repository contains various resource files to assiste in exploitation or metasploit database related issues.**<br />
-![pic](http://i68.tinypic.com/21ovkfm.jpg)
+![pic](http://u.cubeupload.com/pedroubuntu10/metasploit1024x480.jpg)
 
 <br />
 
@@ -39,7 +39,7 @@ The resource scripts this repository contains serves as proof of concept (**POC*
 ### Project History
 Mosquito.sh (**BASH**) script was written for the purpose of automating the resource files (**ERB**) contained in this [repository](https://github.com/r00t-3xp10it/resource_files). Each resource file is written to allow users to run them in three different ways, from scan the Local Lan, scan user inputs (**RHOSTS/LHOSTS**) or randomly scan the **WAN** network for possible targets to add to metasploit database.
 
-![mosquito_banner](https://imgur.com/4rEwAZG)
+![mosquito_banner](https://i.imgur.com/Ibrvsjk.png)
 
 **WARNING:** In 'Random search WAN for rhosts' its advice to use default **LIMMIT** values (4 to 5 minuts scan aprox.)
 
