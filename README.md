@@ -148,7 +148,7 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 ![mosquito_banner](https://i.imgur.com/TjoLWrh.png)
 
     [update]  sudo ./mosquito.sh -u
-![mosquito_banner](http://i65.tinypic.com/294mdja.png)
+![mosquito_banner](http://u.cubeupload.com/pedroubuntu10/mosquitoupdate.png)
 
     [install] sudo ./mosquito.sh -i
 ![mosquito_banner](http://i67.tinypic.com/a59l50.png)
