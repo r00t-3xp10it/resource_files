@@ -55,7 +55,7 @@ Mosquito as first step uses nmap to seach-recon hosts information (or possible t
 
 Mosquito allow us to scan Local Lan or WAN networks using nmap (search-recon) and metasploit (recon-exploration-brute-force), but unlike msf the scans performed by nmap will use a fake UserAgent (IPhone/Safari) stealth scans (SYN ack) and Cloak scan(s) with decoys (-D decoy_ip,decoy_ip,ME) that makes forensic IDS analysis more dificult to identify the attack.
 
-![mosquito_banner](http://i68.tinypic.com/1h82tj.png)
+![mosquito_banner](http://u.cubeupload.com/pedroubuntu10/mosquitoIDSevasion.png)
 
 **WARNING:** All this stealth technics will not prevent us from beeing caugth, so its advice to **not** use mosquito inside your home network (Local Lan), but insted find a public hotspot to use and abuse of mosquito framework.
 
@@ -72,7 +72,7 @@ Mosquito also allow us to search-scan-exploit-brute-force multiple targets at th
 
 And each valid credentials found (brute-force) will spawn a shell session to remote host.
 
-![mosquito_banner](http://i65.tinypic.com/280v0hc.png)
+![mosquito_banner](http://u.cubeupload.com/pedroubuntu10/telnetbrutecreds.png)
 ![mosquito_banner](https://i.imgur.com/630IHhF.png)
 
 
@@ -87,7 +87,7 @@ Initialy all resource scripts that this project contains are written to allow is
 nevertheless mosquito users can still improve the existing dictionary(s) by edit them before executing the framework.<br />
 All dictionary files can be found in project working directory under: 'resource_files/bin/worldlists'.
 
-![mosquito_banner](http://i63.tinypic.com/2u7c87b.png)
+![mosquito_banner](http://u.cubeupload.com/pedroubuntu10/dic.png)
 
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
