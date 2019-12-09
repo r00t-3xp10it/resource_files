@@ -147,8 +147,6 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
     [update]  sudo ./mosquito.sh -u
 ![mosquito_banner](http://u.cubeupload.com/pedroubuntu10/mosquitoupdate.png)
 
-![mosquito_banner](https://photos.google.com/share/AF1QipN7O0-nP66JIZMIT4sx5XcxWAjXU4qSCjZX91SaMx-FbSGqEDSzVZQYGhlYoNP40A/photo/AF1QipOhcyjAUBt98UX4sp0e3ivmAQxonQjEVXCRlImK?key=X2l5RFRRWjd2Q3dua0RncUMyQlN0dHdMcWE1bmVR)
-
 
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
