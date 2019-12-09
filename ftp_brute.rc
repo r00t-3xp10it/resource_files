@@ -7,7 +7,7 @@
 # setg SAVE_DB true - Save workspace mosquito to database.xml
 # setg LIMMIT 1000 - Limmit the number of random WAN hosts to search
 # setg RANDOM_HOSTS true - To instruct db_nmap to random search in WAN for hosts with ports open
-# setg RHOSTS 143.191.125.117 176.88.224.115 183.17.237.229 162.246.22.133 - To instruct db_nmap to scan hosts for ports open.
+# setg RHOSTS 143.191.125.117 176.88.224.115 67.222.96.212 183.17.237.229 162.246.22.133 - To instruct db_nmap to scan hosts for ports open.
 # setg USERPASS_FILE /root/my_dicionary.txt - To instruct auxiliarys to use our own dicionary file
 # -
 # [SYNTAX EXAMPLES]

@@ -82,12 +82,12 @@
       ## db_nmap WAN or RHOSTS or LOCAL_LAN scan settings
       # HINT: nmap will use a fake user-agent string (iPhone:Safari) while scanning.
       if (framework.datastore['RHOSTS'] == "#{ip_range}.0/24")
-         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 554,5554,8554,8080 --open --script=banner.nse,hnap-info.nse,rtsp-url-brute.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 554,5554,8554,8080 --open --script=banner.nse,hnap-info.nse,rtsp-url-brute.nse,AXISwebcam-recon.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
       elsif (framework.datastore['RANDOM_HOSTS'] == "true")
-         print_status("Nmap: search for random remote hosts with ports 554:5554:8554 open")
-         run_single("db_nmap -sS -vvv -Pn -n -T4 -iR #{framework.datastore['LIMMIT']} -p 554,5554,8554 --open --script=banner.nse,hnap-info.nse,rtsp-url-brute.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
+         print_status("Nmap: search for random remote hosts with ports 554:5554:8554:50334 open")
+         run_single("db_nmap -sS -vvv -Pn -n -T4 -iR #{framework.datastore['LIMMIT']} -p 554,5554,8554,50334 --open --script=banner.nse,hnap-info.nse,rtsp-url-brute.nse,AXISwebcam-recon.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
       else
-         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 554,5554,8554 --open --script=banner.nse,hnap-info.nse,rtsp-url-brute.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
+         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 554,5554,8554,50334 --open --script=banner.nse,hnap-info.nse,rtsp-url-brute.nse,AXISwebcam-recon.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
       end
 
       if File.directory?("#{local}/logs")
@@ -237,12 +237,13 @@
     7         intitle:"Network Camera NetworkCamera"
     8         intitle:"Live View / – AXIS"
     9         inurl:/view.shtml
-    10        inurl:/view/index2.shtml
+    10        inurl:/view/index.shtml
     11        inurl:view/view.shtml beach
     12        inurl:view/view.shtml street
     13        inurl:appletvid.html
     14        inurl:CgiStart?page=Single
     15        intitle:EvoCam inurl:webcam.html
+    16        inurl:indexFrame.shtml "Axis Video Server"
 
       |
       print_line(dorks)
@@ -266,36 +267,37 @@
 
          ## Runing google dorks
          if google_dork == "1"
-run_single("#{trigger} 'https://www.google.com/search?q=inurl%3A8080+%22live+view%22&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=inurl%3A8080+%22live+view' > /dev/nul 2>&1")
          elsif google_dork == "2"
-run_single("#{trigger} 'https://www.google.com/search?q=inurl%3A8081+%22live+view%22&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=inurl%3A8081+%22live+view' > /dev/nul 2>&1")
          elsif google_dork == "3"
-run_single("#{trigger} 'https://www.google.com/search?q=inurl%3AViewerFrame%3FMode%3DMotion&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=inurl%3AViewerFrame%3FMode%3DMotion' > /dev/nul 2>&1")
          elsif google_dork == "4"
-run_single("#{trigger} 'https://www.google.com/search?q=inurl%3AMultiCameraFrame%3FMode%3DMotion&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=inurl%3AMultiCameraFrame%3FMode%3DMotion' > /dev/nul 2>&1")
          elsif google_dork == "5"
-run_single("#{trigger} 'https://www.google.com/search?q=intitle%3Aliveapplet&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=intitle%3Aliveapplet' > /dev/nul 2>&1")
          elsif google_dork == "6"
-run_single("#{trigger} 'https://www.google.com/search?q=intitle%3A%22live+webcam%22&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=intitle%3A%22live+webcam' > /dev/nul 2>&1")
          elsif google_dork == "7"
-run_single("#{trigger} 'https://www.google.com/search?q=intitle%3A%22Network+Camera+NetworkCamera%22&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=intitle%3A%22Network+Camera+NetworkCamera' > /dev/nul 2>&1")
          elsif google_dork == "8"
-run_single("#{trigger} 'https://www.google.com/search?q=intitle%3A%22Live+View+%2F+%E2%80%93+AXIS%22&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=intitle%3A%22Live+View+%2F+%E2%80%93+AXIS' > /dev/nul 2>&1")
          elsif google_dork == "9"
-run_single("#{trigger} 'https://www.google.com/search?q=inurl%3A%2Fview.shtml&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=inurl%3A%2Fview.shtml' > /dev/nul 2>&1")
          elsif google_dork == "10"
-run_single("#{trigger} 'https://www.google.com/search?q=inurl%3A%2Fview%2Findex2.shtml&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=inurl%3A%2Fview%2Findex.shtml' > /dev/nul 2>&1")
          elsif google_dork == "11"
-run_single("#{trigger} 'https://www.google.com/search?q=inurl%3Aview%2Fview.shtml+street&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
-
+run_single("#{trigger} 'https://www.google.com/search?q=inurl%3Aview%2Fview.shtml+street' > /dev/nul 2>&1")
          elsif google_dork == "12"
-run_single("#{trigger} 'https://www.google.com/search?q=inurl%3Aview%2Fview.shtml+beach&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=inurl%3Aview%2Fview.shtml+beach' > /dev/nul 2>&1")
          elsif google_dork == "13"
-run_single("#{trigger} 'https://www.google.com/search?q=inurl%3Aappletvid.html&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=inurl%3Aappletvid.html' > /dev/nul 2>&1")
          elsif google_dork == "14"
-run_single("#{trigger} 'https://www.google.com/search?q=inurl%3ACgiStart%3Fpage%3DSingle&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=inurl%3ACgiStart%3Fpage%3DSingle' > /dev/nul 2>&1")
          elsif google_dork == "15"
-run_single("#{trigger} 'https://www.google.com/search?q=intitle%3AEvoCam+inurl%3Awebcam.html&ie=utf-8&oe=utf-8&client=firefox-b-e' > /dev/nul 2>&1")
+run_single("#{trigger} 'https://www.google.com/search?q=intitle%3AEvoCam+inurl%3Awebcam.html' > /dev/nul 2>&1")
+         elsif google_dork == "16"
+run_single("#{trigger} 'https://www.google.nl/search?q=inurl:indexFrame.shtml+%22Axis+Video+Server' > /dev/nul 2>&1")
          else
              print_error("[ERROR] Abort: wrong option sellected: #{user_input}")
              Rex::sleep(1.5)

@@ -4,24 +4,14 @@
 #       |  | .------------------- NMAP-MSF MODULES VERSION
 #       |  | |
 #       |  | |
-version=7.17.4
+version=7.18.5
 
 
 ##
-#   Updated/New          Mosquito Command    Description
-#   -----------          ----------------    -----------
-#   mosquito.sh          exploit             armitage Hail Mary (based) rc script option
-#   install.sh           mosquito.sh -u      download/install mass_exploiter.rc script (new)
-#   mass_exploiter.rc    exploit             armitage Hail Mary (based) resource script (new)
-#   http-proxy-brute.py  exploit             HTTP basic (cookie) authentication brute force (new)
-#   brute_force.rc       2                   added rpc/msrpc service port (55553) to brute_force
-#   ms17_010.rc          3                   RHOSTS multiple ports sellection bugfix (ports: 135|139)
-#   rtsp-url-brute.rc    14                  added 'Use google dorks to find webcams' to rtsp-url-brute
-#   all rc scripts                           Nmap/Metasploit scan/brute-force timeout(s) improved
-#   all rc scripts                           geolocation of alive RHOST(s) found (public ip addr)
-#   all rc scripts                           upgrade command Shell (session) to Meterpreter ?
-#   all rc scripts                           added 'Suggest exploits based on CVE numbers ?'
-#   all rc scripts                           Credentials found displays in 'services' report notes
+#   Updated/New           Mosquito Command    Description
+#   -----------           ----------------    -----------
+#   install.sh            mosquito.sh -u      Update project with AXISwebcam-recon.nse script
+#   AXISwebcam-recon.nse  exploit             Detect if target its an AXIS Network Camera transmiting
 #
 #   Notes
 #   -----

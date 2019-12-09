@@ -143,6 +143,14 @@ while getopts ":h,:u," opt; do
                     sleep 2
                     sudo cp $IPATH/http-winrm.nse /usr/share/nmap/scripts/http-winrm.nse
 
+                    echo ${BlueF}[*]${white} "Downloading nmap nse script(s) from github"${Reset};
+                    sleep 2
+                    sudo rm -f AXISwebcam-recon.nse > /dev/nul 2>&1
+                    sudo wget -qq https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/AXISwebcam-recon.nse
+                    echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/AXISwebcam-recon.nse"${Reset};
+                    sleep 2
+                    sudo cp $IPATH/AXISwebcam-recon.nse /usr/share/nmap/scripts/AXISwebcam-recon.nse
+
                     echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
                     sleep 2
                     sudo rm -f freevulnsearch.nse > /dev/nul 2>&1
@@ -642,6 +650,33 @@ if [ "$op" = "y" ] || [ "$op" = "Y" ]; then
        ## module settings (install.log)
        time=$(date | awk {'print $3,$4,$5,$6'})
        echo "[$time] Installing freevulnsearch dependencie" >> install.log
+    fi
+
+
+    echo ${BlueF}[*]${white} "query nmap nse AXISwebcam-recon.nse installation .."${Reset};
+    sleep 2
+    echo ${BlueF}[*]${white} "Path: /usr/share/nmap/scripts/AXISwebcam-recon.nse"${Reset};
+    sleep 1
+    if [ -e "/usr/share/nmap/scripts/AXISwebcam-recon.nse" ]; then
+       echo ${BlueF}[${GreenF}✔${BlueF}]${white} "Nmap nse script found in database => ${GreenF}(no need to install)"${Reset};
+       sleep 2
+    else
+       echo ${RedF}[x] "Nmap nse script NOT found in database."${Reset};
+       sleep 2
+       echo ${BlueF}[*]${white} "Downloading nmap nse script from github"${Reset};
+       sleep 2
+       sudo rm -f AXISwebcam-recon.nse
+       echo "------------------------------------------"
+       sudo wget https://raw.githubusercontent.com/r00t-3xp10it/resource_files/master/aux/AXISwebcam-recon.nse
+       echo "------------------------------------------"
+       echo ${BlueF}[*]${white} "Copy module to: /usr/share/nmap/scripts/AXISwebcam-recon.nse"${Reset};
+       sleep 2
+       sudo cp $IPATH/AXISwebcam-recon.nse /usr/share/nmap/scripts/AXISwebcam-recon.nse
+       echo ${YellowF}[i]${white} "Please wait, Updating nse database .."${Reset};
+       sudo nmap --script-updatedb
+       ## module settings (install.log)
+       time=$(date | awk {'print $3,$4,$5,$6'})
+       echo "[$time] Installing AXISwebcam-recon dependencie" >> install.log
     fi
 
 
