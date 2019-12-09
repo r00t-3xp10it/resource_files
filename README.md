@@ -128,8 +128,6 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 
 **Hint:** This resource scripts requires that the msf database to be empty of hosts and services data. Thats the main reason why this scripts creates a new workspace named **'mosquito'** and stores all data inside that workspace while working, then the resource script deletes the **'mosquito'** workspace in the end of execution and leave *default database intact.
 
-![mosquito_banner](http://i66.tinypic.com/vmuaso.png)
-
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
 ---
@@ -140,7 +138,6 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
 [download]   git clone https://github.com/r00t-3xp10it/resource_files.git
 [permitions] cd resource_files && find ./ -name "*.sh" -exec chmod +x {} \;
 ```
-![mosquito_banner](http://i67.tinypic.com/b6es7l.png)
 
 ### Framework help-update-install-execution
 
@@ -150,11 +147,8 @@ or nmap nse adicional scripts installed, the -i switch in mosquito allow us to d
     [update]  sudo ./mosquito.sh -u
 ![mosquito_banner](http://u.cubeupload.com/pedroubuntu10/mosquitoupdate.png)
 
-    [install] sudo ./mosquito.sh -i
-![mosquito_banner](http://i67.tinypic.com/a59l50.png)
+![mosquito_banner](https://photos.google.com/share/AF1QipN7O0-nP66JIZMIT4sx5XcxWAjXU4qSCjZX91SaMx-FbSGqEDSzVZQYGhlYoNP40A/photo/AF1QipOhcyjAUBt98UX4sp0e3ivmAQxonQjEVXCRlImK?key=X2l5RFRRWjd2Q3dua0RncUMyQlN0dHdMcWE1bmVR)
 
-    [execute] sudo ./mosquito.sh
-![mosquito_banner](http://u.cubeupload.com/pedroubuntu10/mosquitobanner.png)
 
 [jump to top](https://github.com/r00t-3xp10it/resource_files#index)
 
